@@ -1,16 +1,53 @@
-# AI-Assisted Fullstack Development Workflow
+# AI Dev Orchestrator
 
-A 15-phase AI-assisted development workflow powered by Claude Code slash commands. Each phase automatically loads the right agent, skill documents, and context — no manual copy-pasting.
+Claude Code slash commands that wire up the right agent, skill, and context for every phase of fullstack development — automatically.
+
+---
+
+## Why This Exists
+
+This repo was built to fix a specific friction point from the original [`AI-Assisted Fullstack Development Workflow.md`](./AI-Assisted%20Fullstack%20Development%20Workflow.md) — a manual playbook for building fullstack apps phase-by-phase with AI.
+
+**The problem with the manual workflow:**
+
+Every time you ran a phase, you had to:
+- Manually paste the right context (BRD, architecture doc, module section) into the prompt
+- Manually tell the AI which agent role to adopt
+- Manually reference which skill document applied
+- Manually track what had been completed and what to run next
+
+This was repetitive, error-prone, and slow. Forgetting to include a piece of context could silently degrade the output with no warning.
+
+**What this repo fixes:**
+
+Each phase is now a slash command. Type `/phase4b-backend-modules AUTH` and Claude Code automatically:
+- Adopts the correct agent (Backend Engineer)
+- Reads the relevant skill doc (MODULE_TEMPLATE)
+- Loads the right context from `docs/` (brd.md, architecture.md, only the AUTH module section)
+- Knows what to produce
+
+You still provide minimal arguments where needed — module names, page names, optional design rules — but everything else is handled automatically.
+
+**Template dependency:**
+
+The skill documents (`MODULE_TEMPLATE`, `API_STANDARD`) and the phase commands are calibrated to your team's specific starter templates:
+
+- **`api-template/`** — Node.js + TypeScript + Express 5 + Prisma (MongoDB) + Zod + Redis + Swagger + Socket.IO
+- **`app-template/`** — React Router v7 + TypeScript + Tailwind CSS + shadcn/ui + Vite
+
+The generated code assumes these templates as the base. If your team uses a different stack, the skill documents in `skills/` are the right place to adapt the conventions — update `MODULE_TEMPLATE.md` and `API_STANDARD.md` to match your own patterns before running any phases.
 
 ---
 
 ## How It Works
 
-Every phase is a slash command. Type `/phase4b-backend-modules AUTH` and Claude Code automatically:
+Every phase is a slash command. Run a command and Claude Code automatically loads the right agent, skill, and context for that phase — you only supply the minimal argument it needs (a module name, a page name, or nothing at all).
+
+For example, `/phase4b-backend-modules AUTH`:
 
 1. Adopts the Backend Engineer agent
 2. Reads the MODULE_TEMPLATE.md skill doc
-3. Reads your BRD and architecture doc for the AUTH module
+3. Reads your BRD and architecture doc, scoped to the AUTH module
 4. Generates the module code
 
 You review the output, make corrections, and move to the next phase.
