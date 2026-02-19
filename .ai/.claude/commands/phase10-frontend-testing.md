@@ -9,7 +9,13 @@ Read these context files before proceeding:
 - The page component(s) from Phase 9 for this page/module
 - The frontend API module from Phase 8 — mock data factories
 
-Create tests for **$ARGUMENTS**:
+## Determine scope
+
+If `$ARGUMENTS` is **"all"** (case-insensitive), generate tests for **every** page listed in the BRD's **Page Manifest** table. Process them in the same order as Phase 9. Otherwise, generate tests only for **$ARGUMENTS**.
+
+For **each** page in scope, perform ALL of the following steps:
+
+Create tests:
 - Component tests: does the user see the right content? Do interactions (clicks, form submissions, navigation) produce the right outcomes?
 - Hook tests: does the hook return the right data shape? Does it handle loading and error states correctly?
 - Form validation tests: does the user see error messages for invalid input? Can the user submit valid input successfully?
