@@ -63,9 +63,9 @@ You review the output, make corrections, and move to the next phase.
 /phase5-backend-testing <MODULE_NAME> | all
 /phase6-migrations
 /phase7-ui-design <optional: design rules>
-/phase8-frontend-api <MODULE_NAME>
-/phase9-pages <PAGE_NAME>
-/phase10-frontend-testing <MODULE_OR_PAGE_NAME>
+/phase8-frontend-api <MODULE_NAME> | all
+/phase9-pages <PAGE_NAME> | all
+/phase10-frontend-testing <MODULE_OR_PAGE_NAME> | all
 /phase11-e2e
 /phase12-review <optional: what to review>
 /phase13-docs
@@ -77,6 +77,85 @@ You review the output, make corrections, and move to the next phase.
 # Mid-project requirement changes:
 /phase-change add bulk CSV export to REPORTS — finance team needs it for audits
 ```
+
+> Want to skip the manual phase-by-phase flow entirely? See [`/build`](#build--full-project-scaffold-beta) below.
+
+---
+
+## `/build` — Full Project Scaffold `[BETA]`
+
+> **Beta:** `/build` runs all 14 phases sequentially with no review gates, no checkpoints, and no human intervention. Output quality depends entirely on the strength of your initial app concept. Use the per-phase commands when you need control over the output.
+
+`/build` executes every phase from BRD to deployment in a single command — the fastest way to generate a complete project scaffold from an idea.
+
+### How It Works
+
+1. You provide your app concept and optional design rules
+2. Claude runs all 14 phases in order, each phase's output feeding into the next
+3. `/checkpoint` runs between phases to preserve context across the long session
+4. A final build summary is output when Phase 14 completes
+
+### Usage
+
+```
+/build <app concept>
+/build <app concept> ||| <design rules>
+```
+
+The `|||` separator splits your input:
+- Everything **before** `|||` → Phase 1 (app concept for BRD generation)
+- Everything **after** `|||` → Phase 7 (design rules for UI/UX)
+
+### Examples
+
+```
+# Concept only — AI picks design defaults
+/build a SaaS invoicing tool for freelancers with client management, time tracking, and Stripe payments
+
+# With design rules
+/build a SaaS invoicing tool for freelancers with client management, time tracking, and Stripe payments ||| dark mode default, minimal sidebar, mobile first
+
+# Detailed concept — more detail = better BRD = better everything downstream
+/build a multi-tenant project management platform with workspaces, kanban boards, time tracking,
+and team roles (admin, member, viewer). Users invite teammates by email. Slack notifications on
+task assignment. ||| clean dashboard layout, sidebar nav, light mode default
+```
+
+### Before Running
+
+- **Optional:** drop reference images (`.png`, `.jpg`, `.webp`) into `docs/design-references/` — Phase 7 reads them automatically for style extraction
+- **Required:** your project directory should have a working `package.json` — Phase 4a runs `npm install` before `prisma generate`
+
+### What Gets Produced
+
+| Output | Phase |
+|--------|-------|
+| `docs/brd.md` — Business Requirements Document | 1 |
+| `docs/project-plan.md` — Sprint plan and dependency map | 2 |
+| `docs/architecture.md` — Data models, routes, auth strategy | 3 |
+| `prisma/schema/*.prisma` — Prisma model files | 4a |
+| Backend modules — routes, controllers, Zod schemas | 4b |
+| Backend test suites | 5 |
+| `prisma/seed.ts` — Seed data script | 6 |
+| `docs/ui-design.md` — Style guide, wireframes, user flows | 7 |
+| Frontend API modules — hooks, types, service layer | 8 |
+| Page components | 9 |
+| Frontend test suites | 10 |
+| E2E test suites | 11 |
+| Code review report | 12 |
+| README, API docs, onboarding guide | 13 |
+| Dockerfiles, Docker Compose, CI/CD config | 14 |
+
+### Trade-offs vs. Per-Phase Workflow
+
+| | `/build` | Per-phase |
+|---|---|---|
+| Speed | Fast — one command | Slower — phase by phase |
+| Control | None — AI decides everything | Full — review and correct at each gate |
+| Output quality | Good for scaffolding, needs post-review | Higher — human-in-the-loop at every gate |
+| Best for | Prototyping, exploring ideas quickly | Production-grade builds |
+
+**Recommended pattern:** Use `/build` to generate a full scaffold fast, then use per-phase commands to refine, fix, or regenerate specific phases. Run `/resume` after the build completes to see the full phase log and spot anything that needs attention.
 
 ---
 
@@ -100,8 +179,10 @@ You review the output, make corrections, and move to the next phase.
 │   ├── phase12-review.md
 │   ├── phase13-docs.md
 │   ├── phase14-deployment.md
-│   └── resume.md                   # Session resume — project state, stale items, next action
-│   └── phase-change.md             # Log requirement changes & get impact reports
+│   ├── resume.md                   # Session resume — project state, stale items, next action
+│   ├── phase-change.md             # Log requirement changes & get impact reports
+│   ├── build.md                    # [BETA] Full project scaffold — all 14 phases in one command
+│   └── checkpoint.md               # Session summary — context preservation between phases
 │
 ├── agents/                       # AI agent files (9 roles)
 │   ├── business-analyst.md
