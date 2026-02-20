@@ -6,7 +6,7 @@ Claude Code slash commands that wire up the right agent, skill, and context for 
 
 ## Why This Exists
 
-This repo was built to fix a specific friction point from the original [`AI-Assisted Fullstack Development Workflow.md`](./AI-Assisted%20Fullstack%20Development%20Workflow.md) — a manual playbook for building fullstack apps phase-by-phase with AI.
+This repo was built to fix a specific friction point from the original [`AI-Assisted Fullstack Development Workflow.md`](./AI-Assisted Fullstack Development Workflow.md) — a manual playbook for building fullstack apps phase-by-phase with AI.
 
 **The problem with the manual workflow:**
 

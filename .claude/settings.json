@@ -2,6 +2,9 @@
   "permissions": {
     "additionalDirectories": [
       "c:\\Users\\User\\Desktop\\ai-dev-orchestrator\\.ai\\.claude\\commands"
+    ],
+    "allow": [
+      "Bash(git -C /c/Users/User/Desktop/ai-dev-orchestrator branch -a)"
     ]
   }
 }
