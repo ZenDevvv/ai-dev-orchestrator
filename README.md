@@ -137,13 +137,14 @@ task assignment. ||| clean dashboard layout, sidebar nav, light mode default
 | Backend modules — routes, controllers, Zod schemas | 4b |
 | Backend test suites | 5 |
 | `prisma/seed.ts` — Seed data script | 6 |
+| `docs/seed-data.md` — Test accounts and seed data reference | 6 |
 | `docs/ui-design.md` — Style guide, wireframes, user flows | 7 |
 | Frontend API modules — hooks, types, service layer | 8 |
 | Page components | 9 |
 | Frontend test suites | 10 |
 | E2E test suites | 11 |
 | Code review report | 12 |
-| README, API docs, onboarding guide | 13 |
+| README, API docs, onboarding guide, change management guide | 13 |
 | Dockerfiles, Docker Compose, CI/CD config | 14 |
 
 ### Trade-offs vs. Per-Phase Workflow
@@ -376,11 +377,18 @@ Generates behavioral unit tests, integration tests, and Zod validation tests. Pa
 /phase6-migrations
 ```
 
-Agent: Backend Engineer | Skill: `MIGRATION_TEMPLATE` | Reads: `docs/brd.md`, `docs/architecture.md`, Phase 4a schemas, Phase 4b modules
+Agent: Backend Engineer | Skill: `MIGRATION_TEMPLATE` | Reads: `docs/brd.md`, `docs/architecture.md`, Phase 4a schemas, Phase 4b modules | Outputs: `prisma/seed.ts`, `docs/seed-data.md`
 
 Auto-detects database type. **SQL:** generates migration scripts, rollback scripts, and seed data. **MongoDB:** skips migrations (Prisma handles schema), generates Prisma seed scripts for all models with per-environment data (dev/staging/test). Does not generate index verification scripts — `prisma db push` handles indexes.
 
-**Gate:** SQL: migrations run up and down cleanly. MongoDB: seed data passes Zod validation, FK relationships are consistent.
+**Also generates `docs/seed-data.md`** — a quick reference documenting:
+- Auto-generated test account credentials (username/password for each role)
+- Default bootstrap data (organizations, teams, etc.)
+- Environment-specific seed data summary (dev/staging/test)
+- How to reset the database locally
+- Common testing scenarios
+
+**Gate:** SQL: migrations run up and down cleanly. MongoDB: seed data passes Zod validation, FK relationships are consistent. Reference `docs/seed-data.md` is created and test accounts are documented.
 
 ---
 
@@ -494,11 +502,22 @@ Reviews code for security, performance, consistency, missing pieces, and API con
 /phase13-docs
 ```
 
-Agent: Technical Writer | Skill: `DOC_TEMPLATES` | Reads: `docs/brd.md`, `docs/architecture.md`, Phase 4b Zod schemas
+Agent: Technical Writer | Skill: `DOC_TEMPLATES` | Reads: `docs/brd.md`, `docs/architecture.md`, `docs/seed-data.md`, `docs/progress.md`, `docs/changes.md` (if exists), Phase 4b Zod schemas
 
-Generates README, API docs, environment variable docs, onboarding guide, and architecture decision records.
+Generates comprehensive project documentation:
+- **README.md** — project overview, tech stack, setup instructions, project structure
+- **API documentation** — endpoints, request/response examples, auth requirements, error codes
+- **Environment variables documentation** — all required `.env` variables
+- **Developer onboarding guide** — includes test account reference (from `docs/seed-data.md`), running tests, and adding new modules
+- **Architecture decision records** — key decisions and rationale
+- **Change Management Guide** (if applicable) — documents how to use `/phase-change` for mid-project requirement changes, references `docs/changes.md` audit trail
 
-**Gate:** Does the README setup actually work? Do API doc examples match reality?
+**Key integration:** The onboarding guide includes:
+- Setup steps that reference `docs/seed-data.md` for test credentials
+- Instructions for using `/phase-change` to log requirement changes mid-project
+- How the `/phase-change` command automatically updates BRD, architecture, and creates audit trail entries
+
+**Gate:** Does the README setup actually work? Do API doc examples match reality? Is the onboarding guide complete enough for a new developer?
 
 ---
 

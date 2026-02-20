@@ -48,6 +48,67 @@ Generate the following:
 
 📋 REVIEW GATE: Does seed data pass Zod validation for every model? Are FK relationships consistent? Is the data realistic enough for meaningful dev/staging testing?
 
+---
+
+## Generate Seed Data Documentation
+
+After generating seed scripts, create **`docs/seed-data.md`** with the following sections:
+
+### 1. Test Accounts
+Document all auto-generated credentials for each user role:
+```
+| Role | Username | Password | Email |
+|------|----------|----------|-------|
+| Admin | admin | [auto-generated] | admin@example.com |
+| User | user | [auto-generated] | user@example.com |
+```
+Include one example account per role that developers can use immediately for manual testing.
+
+### 2. Default Bootstrap Data
+List any pre-seeded organizations, teams, projects, categories, or other foundational data:
+- Default Organization name and ID
+- Default Teams and their members
+- Any other critical seed data developers need to know about
+
+### 3. Environment-specific Data Summary
+Brief reference showing what's seeded in each environment:
+```
+| Environment | Dataset Size | Purpose |
+|-------------|--------------|---------|
+| dev | Small (~5-10 records) | Local development with edge cases |
+| staging | Medium (~50-100 records) | Production-like testing |
+| test | Minimal (~2-3 records) | Fast test suite runs |
+```
+
+### 4. How to Reset the Database
+Step-by-step instructions for developers to reset their local environment:
+```bash
+# Step 1: Install dependencies (if needed)
+npm install
+
+# Step 2: Push schema to database
+npx prisma db push          # (MongoDB)
+# or
+npx prisma migrate deploy   # (SQL)
+
+# Step 3: Run seed script
+npm run seed
+```
+
+### 5. Test Data Sources & Generation
+Reference where realistic test data comes from:
+- Faker.js for names, emails, dates
+- Fixture files or JSON fixtures
+- Real-world data patterns used
+
+### 6. Common Testing Scenarios Quick Reference
+Examples like:
+- "To test admin features, login as: admin / [password]"
+- "Default organization has 3 teams with 5 members each"
+- "Sample products are in the ACME Corp organization"
+
+---
+
 ## Log Progress
 
 After completing this phase, update `docs/progress.md`:
