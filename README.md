@@ -82,6 +82,7 @@ You review the output, make corrections, and move to the next phase.
 ```
 
 > Want to skip the manual phase-by-phase flow entirely? See [`/build`](#build--full-project-scaffold-beta) below.
+> Already started manually and want to finish in one go? See [`/continue`](#continue--resume-full-build-beta).
 
 ---
 
@@ -163,6 +164,62 @@ task assignment. ||| clean dashboard layout, sidebar nav, light mode default
 
 ---
 
+## `/continue` — Resume Full Build `[BETA]`
+
+> **Beta:** Like `/build`, `/continue` runs remaining phases with no review gates and no human intervention. The difference: it reads `docs/progress.md` first and skips any phase already marked `✅ Complete`.
+
+Use `/continue` when you've started the manual phase-by-phase flow and want to hand off the rest to Claude in one go.
+
+### How It Works
+
+1. Reads `docs/progress.md` to build a completion map
+2. Prints a summary of which phases will be skipped, re-run (stale), or executed
+3. Executes only the remaining phases in order — skipping complete ones, re-running stale ones
+4. Runs `/checkpoint` between phases and outputs a final build summary
+
+### Usage
+
+```
+/continue
+/continue ||| <design rules>
+```
+
+The `|||` separator passes design rules to Phase 7 if it hasn't run yet. If Phase 7 is already complete, the design rules are ignored.
+
+### Examples
+
+```
+# You've finished Phase 1 manually — continue the rest
+/continue
+
+# You've finished Phases 1-3 and want to pass design rules for Phase 7
+/continue ||| dark mode default, minimal sidebar
+```
+
+### Status Output
+
+Before executing, `/continue` prints what it found:
+
+```
+=== CONTINUE BUILD ===
+
+Completed (will skip): 1, 2, 3
+Stale (will re-run):   5
+Pending (will run):    4a, 4b, 6, 7, 8, 9, 10, 11, 12, 13, 14
+
+Starting from: Phase 4a
+```
+
+### When to Use `/continue` vs `/build`
+
+| | `/build` | `/continue` |
+|---|---|---|
+| Starting point | Always Phase 1 | Reads `docs/progress.md` and skips complete phases |
+| Use when | Starting fresh from an idea | You've already run some phases manually |
+| Stale phases | N/A | Re-runs automatically |
+
+---
+
 ## Repository Structure
 
 ```
@@ -192,6 +249,7 @@ task assignment. ||| clean dashboard layout, sidebar nav, light mode default
 │   │   ├── phase-change.md         # Log requirement changes & get impact reports
 │   │   ├── log-decision.md         # Log manual AI overrides to docs/decision-log.md
 │   │   ├── build.md                # [BETA] Full project scaffold — all 14 phases in one command
+│   │   ├── continue.md             # [BETA] Resume build — skips completed phases, runs remaining
 │   │   └── checkpoint.md           # Session summary — context preservation between phases
 │   │
 │   ├── agents/                     # AI agent role definitions (9 roles)
