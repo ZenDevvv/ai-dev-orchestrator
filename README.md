@@ -43,7 +43,9 @@ The generated code assumes these templates as the base. If your team uses a diff
 
 Every phase is a slash command. Run a command and Claude Code automatically loads the right agent, skill, and context for that phase — you only supply the minimal argument it needs (a module name, a page name, or nothing at all).
 
-For example, `/phase4b-backend-modules AUTH`:
+> **Required first step:** Run `/discover` before anything else. It interviews you about your app idea and writes `docs/concept.md` — the input every phase depends on. Phase 1, `/build`, and `/continue` will all hard-stop if this file doesn't exist.
+
+For example, after `/discover` has been run, `/phase4b-backend-modules AUTH`:
 
 1. Adopts the Backend Engineer agent
 2. Reads the MODULE_TEMPLATE.md skill doc
@@ -199,6 +201,8 @@ The required first step before any build. Run it as many times as needed until y
 ## `/continue` — Resume Full Build `[BETA]`
 
 > **Beta:** Like `/build`, `/continue` runs remaining phases with no review gates and no human intervention. The difference: it reads `docs/progress.md` first and skips any phase already marked `✅ Complete`.
+>
+> **Requires:** `docs/concept.md` — run `/discover` first if you haven't already.
 
 Use `/continue` when you've started the manual phase-by-phase flow and want to hand off the rest to Claude in one go.
 
@@ -669,13 +673,14 @@ Generates Dockerfiles, Docker Compose, CI/CD pipeline, env templates, health che
 ## Workflow Order
 
 ```
-Phase 1 — BRD (VERIFY)
-  └── Phase 2 — Planning
-        └── Phase 3 — Architecture
-              ├── Backend Track:  Phase 4a → 4b → 5 → 6    (can run in parallel with Phase 7)
-              └── Design Track:   Phase 7
-                                        ↘
-              Both tracks complete → Phase 8 → 9 → 10 → 11 → 12 → 13 → 14
+/discover (required — run until concept is solid)
+  └── Phase 1 — BRD (VERIFY)
+        └── Phase 2 — Planning
+              └── Phase 3 — Architecture
+                    ├── Backend Track:  Phase 4a → 4b → 5 → 6    (can run in parallel with Phase 7)
+                    └── Design Track:   Phase 7
+                                              ↘
+                    Both tracks complete → Phase 8 → 9 → 10 → 11 → 12 → 13 → 14
 ```
 
 After Phase 3, the backend track and design track can run in parallel (two separate Claude Code sessions).
