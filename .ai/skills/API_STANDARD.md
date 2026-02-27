@@ -96,7 +96,7 @@ Display helpers (`statusBadge`, `levelLabel`, `roleBadge`, etc.) go in `app/lib/
 
 ### Rule 3: Always Follow the Style Guide
 
-Refer to `skills/STYLE_GUIDE.md` for component patterns, color tokens, icon usage, and layout conventions. Every UI element must comply.
+Refer to the Style Guide section (Section 1) in `docs/ui-design.md` for component patterns, color tokens, icon usage, and layout conventions. Every UI element must comply.
 
 | Rule | Do | Don't |
 |---|---|---|

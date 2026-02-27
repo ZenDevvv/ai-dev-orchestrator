@@ -109,6 +109,18 @@ Examples like:
 
 ---
 
+## Mark Downstream Phases as Stale
+
+If this phase is being **re-run** (i.e., a row for phase 6 already exists in `docs/progress.md`), scan for any `✅ Complete` rows in `docs/progress.md` for these downstream phases:
+
+- Phase 13 — Documentation
+
+For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 6 re-run YYYY-MM-DD`
+
+This signals that the documentation (which references `docs/seed-data.md` for test credentials and setup instructions) may be out of date with the new seed data.
+
+---
+
 ## Log Progress
 
 After completing this phase, update `docs/progress.md`:

@@ -6,7 +6,7 @@
 - Prefer stable outcomes over implementation-coupled assertions.
 
 ## File structure
-- Test files live in `sarisarinet-api/tests`.
+- Test files live in `{projectName}-api/tests`.
 - Use one Phase-5 suite file per phase milestone (`phase5-backend.spec.ts`) or split by module when test size grows.
 - Keep helper functions at the top of the suite for consistent request/response setup.
 
@@ -16,19 +16,19 @@
   - `Integration: Route map + auth outcomes via real HTTP`
   - `Zod schema validation boundaries`
 - Test names should follow `WHEN ... THEN ...` behavior language implicitly, e.g.:
-  - `PRODUCT routes enforce owner/eligible auth and system token boundaries`
-  - `INVOICE attachment schema enforces mime-type and max-size limits`
+  - `{MODULE} routes enforce auth and ownership boundaries`
+  - `{MODULE} schema enforces required field and type constraints`
 
 ## Assertions
 - For error responses, assert:
   - HTTP status
-  - `status: "error"`
-  - expected error `message`
-  - numeric `code`
+  - `success: false`
+  - `error.code` string (matching the BRD error code)
+  - expected `error.message`
   - `timestamp` present
 - For success responses, assert:
   - HTTP status
-  - `status: "success"`
+  - `success: true`
   - expected data keys only (do not overfit exact object internals unless required by contract).
 
 ## Auth and authorization tests
@@ -44,8 +44,7 @@
 - Use realistic object-id literals for id-bound schemas.
 
 ## Coverage rules for Phase 5
-- Every Phase-4 module must be included:
-  - `auth`, `profile`, `product`, `expense`, `borrowing`, `sales`, `invoice`, `report`
+- Every Phase-4 module must be included (refer to the BRD module list for the full set).
 - Minimum required per module:
   - unit-level contract checks for controller methods
   - route-level HTTP checks for endpoint/auth behavior

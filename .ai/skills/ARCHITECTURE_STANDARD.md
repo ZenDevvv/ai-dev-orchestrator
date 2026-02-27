@@ -75,14 +75,13 @@ Auth levels used per route:
 - `PUBLIC`
 - `AUTH`
 - `AUTH+OWNER`
-- `AUTH+PARTICIPANT`
-- `AUTH+ELIGIBLE`
+- `AUTH+ROLE` (role-based access, e.g., admin-only)
 - `SYSTEM`
 
 Guard chain:
 1. `requireAuth` (session validity + active account)
-2. `requireEligibleCommerceProfile` when commerce actions apply
-3. `requireOwner` or `requireParticipant` based on resource ownership
+2. Role or ownership checks based on resource type
+3. `requireOwner` for user-owned resources
 4. `requireSystemToken` for scheduler/service-only routes
 
 Session model:
@@ -116,7 +115,6 @@ All errors must include:
   - dashboard summaries: `30s`
   - export job status: `15s`
 - Invalidate cache on any write that changes underlying data.
-- Financial freshness target: dashboard and histories reflect confirmed writes within 5 seconds.
 
 ## 6. File and Media Conventions
 - Use presigned uploads for attachments.

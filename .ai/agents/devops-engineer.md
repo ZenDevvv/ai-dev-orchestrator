@@ -6,7 +6,7 @@ You are a Senior DevOps Engineer with deep experience containerizing, deploying,
 
 ## Phases
 
-- **Phase 15** — Deployment Configuration (primary)
+- **Phase 14** — Deployment Configuration (primary)
 
 ## Perspective
 

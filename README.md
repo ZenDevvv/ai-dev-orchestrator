@@ -76,6 +76,9 @@ You review the output, make corrections, and move to the next phase.
 
 # Mid-project requirement changes:
 /phase-change add bulk CSV export to REPORTS — finance team needs it for audits
+
+# Log a manual override when you correct the AI's output:
+/log-decision "Phase 3 | AI used String[] for User.roles | Changed to separate Role model | Reason: roles need their own permission attributes"
 ```
 
 > Want to skip the manual phase-by-phase flow entirely? See [`/build`](#build--full-project-scaffold-beta) below.
@@ -163,57 +166,71 @@ task assignment. ||| clean dashboard layout, sidebar nav, light mode default
 ## Repository Structure
 
 ```
-├── CLAUDE.md                       # Auto-loaded by Claude Code — project context
-├── .claude/commands/               # Slash commands
-│   ├── phase1-brd.md               # BRD generation
-│   ├── phase2-planning.md
-│   ├── phase3-architecture.md
-│   ├── phase4a-db-schema.md        # Prisma models + prisma generate
-│   ├── phase4b-backend-modules.md  # Zod schemas, routes, controllers
-│   ├── phase5-backend-testing.md
-│   ├── phase6-migrations.md
-│   ├── phase7-ui-design.md
-│   ├── phase8-frontend-api.md
-│   ├── phase9-pages.md
-│   ├── phase10-frontend-testing.md
-│   ├── phase11-e2e.md
-│   ├── phase12-review.md
-│   ├── phase13-docs.md
-│   ├── phase14-deployment.md
-│   ├── resume.md                   # Session resume — project state, stale items, next action
-│   ├── phase-change.md             # Log requirement changes & get impact reports
-│   ├── build.md                    # [BETA] Full project scaffold — all 14 phases in one command
-│   └── checkpoint.md               # Session summary — context preservation between phases
+├── README.md
+├── .claude/
+│   └── settings.json               # Claude Code workspace settings
 │
-├── agents/                       # AI agent files (9 roles)
-│   ├── business-analyst.md
-│   ├── project-manager.md
-│   ├── software-architect.md
-│   ├── backend-engineer.md
-│   ├── qa-engineer.md
-│   ├── ui-designer.md
-│   ├── frontend-engineer.md
-│   ├── technical-writer.md
-│   └── devops-engineer.md
+├── .ai/                            # Orchestrator — add to .gitignore in your project
+│   ├── CLAUDE.md                   # Auto-loaded by Claude Code — project context
+│   ├── .claude/commands/           # Slash commands
+│   │   ├── phase1-brd.md           # BRD generation
+│   │   ├── phase2-planning.md
+│   │   ├── phase3-architecture.md
+│   │   ├── phase4a-db-schema.md    # Prisma models + prisma generate
+│   │   ├── phase4b-backend-modules.md  # Zod schemas, routes, controllers
+│   │   ├── phase5-backend-testing.md
+│   │   ├── phase6-migrations.md
+│   │   ├── phase7-ui-design.md
+│   │   ├── phase8-frontend-api.md
+│   │   ├── phase9-pages.md
+│   │   ├── phase10-frontend-testing.md
+│   │   ├── phase11-e2e.md
+│   │   ├── phase12-review.md
+│   │   ├── phase13-docs.md
+│   │   ├── phase14-deployment.md
+│   │   ├── resume.md               # Session resume — project state, stale items, next action
+│   │   ├── phase-change.md         # Log requirement changes & get impact reports
+│   │   ├── log-decision.md         # Log manual AI overrides to docs/decision-log.md
+│   │   ├── build.md                # [BETA] Full project scaffold — all 14 phases in one command
+│   │   └── checkpoint.md           # Session summary — context preservation between phases
+│   │
+│   ├── agents/                     # AI agent role definitions (9 roles)
+│   │   ├── business-analyst.md
+│   │   ├── project-manager.md
+│   │   ├── software-architect.md
+│   │   ├── backend-engineer.md
+│   │   ├── qa-engineer.md
+│   │   ├── ui-designer.md
+│   │   ├── frontend-engineer.md
+│   │   ├── technical-writer.md
+│   │   └── devops-engineer.md
+│   │
+│   ├── skills/                     # Reusable skill documents
+│   │   ├── BRD_FORMAT.md           # BRD structure, module IDs, GWT criteria
+│   │   ├── MODULE_TEMPLATE.md      # Backend file structure, Zod, controller patterns
+│   │   ├── API_STANDARD.md         # Frontend hooks, service layer, Zod copy rules
+│   │   ├── ARCHITECTURE_STANDARD.md
+│   │   ├── TESTING_CONVENTIONS.md
+│   │   └── ...                     # More skills added as you refine conventions
+│   │
+│   ├── docs/                       # Project artifact templates (filled in as you run phases)
+│   │   ├── brd.md                  # Phase 1 output
+│   │   ├── project-plan.md         # Phase 2 output
+│   │   ├── architecture.md         # Phase 3 output
+│   │   ├── ui-design.md            # Phase 7 output (style guide + wireframes combined)
+│   │   ├── design-references/      # Drop reference images here before running Phase 7
+│   │   ├── seed-data.md            # Phase 6 output — test credentials & seed reference
+│   │   ├── progress.md             # Progress log (auto-updated after each phase)
+│   │   ├── changes.md              # Change audit trail (created by /phase-change)
+│   │   └── decision-log.md         # Manual override log (created by /log-decision)
+│   │
+│   └── AI-Assisted Fullstack Development Workflow.md  # Full playbook reference
 │
-├── skills/                         # Reusable skill documents
-│   ├── BRD_FORMAT.md               # BRD structure, module IDs, GWT criteria
-│   ├── MODULE_TEMPLATE.md          # Backend file structure, Zod, controller patterns
-│   ├── API_STANDARD.md             # Frontend hooks, service layer, Zod copy rules
-│   ├── STYLE_GUIDE.md              # (created per-project in Phase 7)
-│   └── ...                         # More skills added as you refine conventions
-│
-├── docs/                           # Project artifacts (created as you go)
-│   ├── brd.md                      # Phase 1 output
-│   ├── project-plan.md             # Phase 2 output
-│   ├── architecture.md             # Phase 3 output
-│   ├── ui-design.md                # Phase 7 output (wireframes + style guide combined)
-│   ├── design-references/          # Drop reference images here before running Phase 7
-│   ├── progress.md                 # Progress log (auto-updated after each phase)
-│   └── changes.md                  # Change audit trail (created by /phase-change)
-│
-└── .ai/AI-Assisted Fullstack Development Workflow.md  # Full playbook reference
+├── api-template/                   # Node.js + Express + Prisma starter template
+└── app-template/                   # React + Tailwind + shadcn/ui starter template
 ```
+
+> **Note:** The `.ai/` folder is the orchestrator. Your actual project code (backend, frontend, prisma schemas, etc.) lives in the project root, outside `.ai/`. Add `.ai/` to your `.gitignore` so the orchestrator doesn't get committed with your project code.
 
 ---
 
@@ -276,6 +293,25 @@ This command:
 5. **Outputs an impact report** — so you know exactly what to action next
 
 The `docs/changes.md` file is your audit trail — it answers "why does this exist?" months later.
+
+---
+
+## Logging Manual Decisions
+
+When you correct or override AI output during any phase, log it:
+
+```
+/log-decision "Phase 3 | AI used String[] for User.roles | Changed to separate Role model | Reason: roles need their own permission attributes"
+```
+
+Use `|` to separate fields:
+1. **Phase** — which phase you were in
+2. **What AI generated** — brief description of the original output
+3. **What I changed** — what you manually corrected
+4. **Reason** — why you made the change
+5. **Pattern (optional)** — if this keeps happening, note it here
+
+This appends a formatted entry to `docs/decision-log.md`. When the same correction appears twice, encode it into the relevant skill document (`skills/MODULE_TEMPLATE.md`, `skills/ARCHITECTURE_STANDARD.md`, etc.) so the AI won't repeat the mistake on the next phase run.
 
 ---
 

@@ -53,10 +53,10 @@ Most phases consume skills, but some phases *produce* skill documents that later
 | Producer Phase | Skill Produced | Consumer Phases |
 |---|---|---|
 | Phase 3 — Architecture | `ARCHITECTURE_STANDARD.md` (if not already cross-project) | Phases 4a, 4b, 5, 6, 12 |
-| Phase 7 — UI/UX Design | `STYLE_GUIDE.md` (per-project) | Phase 9 |
+| Phase 7 — UI/UX Design | Style Guide section in `docs/ui-design.md` (per-project) | Phase 9 |
 | First run of Phase 5 | `TESTING_CONVENTIONS.md` (if not already cross-project) | Phases 5, 10, 11 |
 
-Cross-project skills (`MODULE_TEMPLATE`, `API_STANDARD`, `TESTING_CONVENTIONS`, etc.) stabilize after 2–3 projects. Per-project skills (`STYLE_GUIDE`) are generated fresh each time.
+Cross-project skills (`MODULE_TEMPLATE`, `API_STANDARD`, `TESTING_CONVENTIONS`, etc.) stabilize after 2–3 projects. Per-project styles (Style Guide in `docs/ui-design.md`) are generated fresh each time.
 
 **Skill Document Template:**
 ```markdown
@@ -84,14 +84,14 @@ Common mistakes to explicitly avoid.
 | 5 — Backend Testing | `TESTING_CONVENTIONS.md` | Behavioral testing approach — test what the user/caller experiences, not implementation details. File structure, naming, coverage rules | ✅ Cross-project |
 | 6 — Migrations | `MIGRATION_TEMPLATE.md` | Migration file naming, index conventions, seed data format | ✅ Cross-project |
 | 8 — Frontend Modules | `API_STANDARD.md` | Zod copy rules, hook patterns, service layer structure, endpoint config | ✅ Cross-project |
-| 9 — Pages | `STYLE_GUIDE.md` | Visual rules extracted from Phase 7 — colors, spacing, typography, component styling. Tailwind + shadcn/ui as the component system | 🔁 Per-project |
+| 9 — Pages | Style Guide section in `docs/ui-design.md` | Visual rules extracted from Phase 7 — colors, spacing, typography, component styling. Tailwind + shadcn/ui as the component system | 🔁 Per-project |
 | 10 — Frontend Testing | `TESTING_CONVENTIONS.md` | Same as Phase 5 — behavioral focus. Test user interactions and outcomes, not component internals | ✅ Cross-project |
 | 11 — E2E Testing | `E2E_PATTERNS.md` | Selector strategy, fixture structure, flow test patterns | ✅ Cross-project |
 | 12 — Code Review | `REVIEW_CHECKLIST.md` | Security checks, performance checks, consistency rules | ✅ Cross-project |
 | 13 — Documentation | `DOC_TEMPLATES.md` | README structure, API doc format, onboarding guide template | ✅ Cross-project |
 | 14 — Deployment | `INFRA_STANDARD.md` | Dockerfile patterns, CI/CD template, env config conventions | ✅ Cross-project |
 
-**Note:** Phase 2 (Project Planning) does not require a skill document — agent flexibility is preferred for planning. Phase 1 uses `BRD_FORMAT.md` for consistent requirement structure. Phase 7 (UI/UX Design) does not consume a skill but *produces* one (`STYLE_GUIDE.md`).
+**Note:** Phase 2 (Project Planning) does not require a skill document — agent flexibility is preferred for planning. Phase 1 uses `BRD_FORMAT.md` for consistent requirement structure. Phase 7 (UI/UX Design) does not consume a separate skill but *produces* the Style Guide — embedded as Section 1 in `docs/ui-design.md` — which Phase 9 uses for all styling decisions.
 
 **Note on Component Library:** This workflow uses Tailwind CSS + shadcn/ui as the design system. This replaces the need for a dedicated shared component library generation phase — the component system already exists. The style guide skill ensures the AI uses it consistently.
 
@@ -443,9 +443,9 @@ TASK: MongoDB is schemaless — skip traditional migrations. Instead:
 | | |
 |---|---|
 | **Agent** | Professional UI Designer |
-| **Skill** | None — this phase *produces* a skill document (`STYLE_GUIDE.md`) used by Phase 9 |
+| **Skill** | None — this phase *produces* the Style Guide, embedded as Section 1 in `docs/ui-design.md`, used by Phase 9 |
 | **Context** | BRD (Page Manifest from user stories) + Phase 3 output (route map) + optional reference screenshots + optional design rules |
-| **Output** | `docs/ui-design.md` (wireframes, flows, states) + `skills/STYLE_GUIDE.md` (code-ready Tailwind/shadcn rules) |
+| **Output** | `docs/ui-design.md` — a single file containing: Style Guide (Section 1) + wireframes, flows, states (Sections 2–7) |
 | **Gate** | Every page in the Page Manifest has a wireframe. Every style guide rule has exact values. |
 
 **Input:** Optionally pass reference screenshots and/or design rules as arguments. Screenshots are analyzed to extract colors, typography, spacing, and component patterns — visual style only, not features. Design rules (e.g., "mobile first", "dark mode default") are applied as hard constraints.
@@ -460,17 +460,9 @@ API Surface: {PHASE 3 — route map}
 Reference Screenshots: {OPTIONAL — images to extract visual style from}
 Design Rules: {OPTIONAL — e.g., "mobile first", "dark mode default"}
 
-OUTPUT 1 — UI Design Document (docs/ui-design.md):
-- Design system summary (color palette, typography, spacing — extracted from
-  screenshots if provided, or sensible defaults)
-- Page inventory pulled from the BRD Page Manifest — do not invent pages
-- Wireframe descriptions or mockups for each page
-- User flow diagrams (mermaid syntax)
-- Component inventory (reusable UI components)
-- Responsive behavior (breakpoints, layout adaptation per breakpoint)
-- State designs for each page: loading, empty, error, populated
+OUTPUT — docs/ui-design.md (single file, two parts):
 
-OUTPUT 2 — Style Guide (skills/STYLE_GUIDE.md):
+SECTION 1 — Style Guide (code-ready, used by Phase 9):
 Using the design system summary, generate a concrete style guide with exact
 Tailwind CSS classes and shadcn/ui variants:
 - Color palette (exact hex values mapped to Tailwind classes)
@@ -481,6 +473,16 @@ Tailwind CSS classes and shadcn/ui variants:
 - Animation/transition standards (exact durations, easing)
 - Dark mode rules (if applicable)
 - Accessibility requirements (contrast ratios, focus states, ARIA patterns)
+
+SECTIONS 2–7 — UI Design Document:
+- Design system summary (color palette, typography, spacing — extracted from
+  screenshots if provided, or sensible defaults)
+- Page inventory pulled from the BRD Page Manifest — do not invent pages
+- Wireframe descriptions or mockups for each page
+- User flow diagrams (mermaid syntax)
+- Component inventory (reusable UI components)
+- Responsive behavior (breakpoints, layout adaptation per breakpoint)
+- State designs for each page: loading, empty, error, populated
 ```
 
 **Why screenshots matter:** AI extracts concrete values (exact colors, spacing proportions, typography choices) from actual visuals far more reliably than generating them from text descriptions. This eliminates the vagueness problem where style guides say "use consistent spacing" instead of "8px base unit, scale of 8/16/24/32/48."

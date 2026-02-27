@@ -29,6 +29,16 @@ Build the page for **$ARGUMENTS**:
 
 💡 After completing the FIRST page, run `/phase12-review` to catch pattern-level issues before generating more pages.
 
+## Mark Downstream Phases as Stale
+
+If this page is being **re-run** (i.e., a row for phase 9 `{PAGE_NAME}` already exists in `docs/progress.md`), scan for any `✅ Complete` rows in `docs/progress.md` for these downstream phases and scopes:
+
+- Phase 10 — scope matches `{PAGE_NAME}`
+
+For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 9 {PAGE_NAME} re-run YYYY-MM-DD`
+
+This signals that frontend tests for this page may be testing a previous version of the page component.
+
 ## Log Progress
 
 After completing this phase, update `docs/progress.md`:
