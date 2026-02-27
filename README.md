@@ -1,56 +1,49 @@
 # AI Dev Orchestrator
 
-Claude Code slash commands that wire up the right agent, skill, and context for every phase of fullstack development — automatically.
+A structured AI-powered development workflow for building fullstack apps from idea to deployment — using Claude Code slash commands that automatically wire up the right agent, skill, and context at every phase.
 
 ---
 
-## Why This Exists
+## What This Is
 
-This repo was built to fix a specific friction point from the original [`AI-Assisted Fullstack Development Workflow.md`](./.ai/AI-Assisted%20Fullstack%20Development%20Workflow.md) — a manual playbook for building fullstack apps phase-by-phase with AI.
+AI Dev Orchestrator turns a rough app idea into a production-ready fullstack project through 14 sequential phases — each one a slash command that adopts the correct agent role, loads the right skill document, and scopes to the exact context it needs.
 
-**The problem with the manual workflow:**
+The workflow starts with `/discover`, an interactive concept refinement session that clarifies your app before any code or requirements are written. Every phase from there builds on the last: BRD → architecture → schema → backend modules → tests → UI design → frontend → deployment.
 
-Every time you ran a phase, you had to:
-- Manually paste the right context (BRD, architecture doc, module section) into the prompt
-- Manually tell the AI which agent role to adopt
-- Manually reference which skill document applied
-- Manually track what had been completed and what to run next
+**Three ways to run it:**
 
-This was repetitive, error-prone, and slow. Forgetting to include a piece of context could silently degrade the output with no warning.
+| Mode | How | Best for |
+|---|---|---|
+| Phase by phase | Run each `/phaseN` command manually, review output, proceed | Production-grade builds with full control |
+| Start manual, finish auto | Run early phases manually, then `/continue` for the rest | When you want to review BRD and architecture before handing off |
+| Full auto | `/discover` then `/build` | Rapid prototyping and scaffolding |
 
-**What this repo fixes:**
+**Stack the phases are calibrated for:**
 
-Each phase is now a slash command. Type `/phase4b-backend-modules AUTH` and Claude Code automatically:
-- Adopts the correct agent (Backend Engineer)
-- Reads the relevant skill doc (MODULE_TEMPLATE)
-- Loads the right context from `docs/` (brd.md, architecture.md, only the AUTH module section)
-- Knows what to produce
+- **Backend:** Node.js + TypeScript + Express 5 + Prisma (MongoDB) + Zod + Redis + Swagger + Socket.IO
+- **Frontend:** React Router v7 + TypeScript + Tailwind CSS + shadcn/ui + Vite
 
-You still provide minimal arguments where needed — module names, page names, optional design rules — but everything else is handled automatically.
-
-**Template dependency:**
-
-The skill documents (`MODULE_TEMPLATE`, `API_STANDARD`) and the phase commands are calibrated to your team's specific starter templates:
-
-- **`templates/api/`** — Node.js + TypeScript + Express 5 + Prisma (MongoDB) + Zod + Redis + Swagger + Socket.IO
-- **`templates/app/`** — React Router v7 + TypeScript + Tailwind CSS + shadcn/ui + Vite
-
-The generated code assumes these templates as the base. If your team uses a different stack, the skill documents in `skills/` are the right place to adapt the conventions — update `MODULE_TEMPLATE.md` and `API_STANDARD.md` to match your own patterns before running any phases.
+If your team uses a different stack, update `skills/MODULE_TEMPLATE.md` and `skills/API_STANDARD.md` before running any phases — those two files are where the conventions live.
 
 ---
 
 ## How It Works
 
-Every phase is a slash command. Run a command and Claude Code automatically loads the right agent, skill, and context for that phase — you only supply the minimal argument it needs (a module name, a page name, or nothing at all).
+Start with `/discover`. It interviews you about your app idea and writes `docs/concept.md` — the structured input that every phase depends on. Phase 1, `/build`, and `/continue` will all hard-stop if this file doesn't exist.
 
-> **Required first step:** Run `/discover` before anything else. It interviews you about your app idea and writes `docs/concept.md` — the input every phase depends on. Phase 1, `/build`, and `/continue` will all hard-stop if this file doesn't exist.
+Once the concept is solid, each phase command handles everything automatically:
 
-For example, after `/discover` has been run, `/phase4b-backend-modules AUTH`:
+- Adopts the correct agent role (Business Analyst, Backend Engineer, QA Engineer, etc.)
+- Reads the relevant skill document for that phase
+- Scopes to exactly the right context from `docs/`
+- Knows what artifact to produce and where to save it
+
+For example, `/phase4b-backend-modules AUTH`:
 
 1. Adopts the Backend Engineer agent
-2. Reads the MODULE_TEMPLATE.md skill doc
+2. Reads `MODULE_TEMPLATE.md`
 3. Reads your BRD and architecture doc, scoped to the AUTH module
-4. Generates the module code
+4. Generates Zod schemas, routes, controllers, and middleware
 
 You review the output, make corrections, and move to the next phase.
 
