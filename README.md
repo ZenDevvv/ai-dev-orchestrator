@@ -316,7 +316,7 @@ This appends a formatted entry to `docs/decision-log.md`. When the same correcti
 
 ---
 
-## The 15 Phases
+## The 14 Phases
 
 ### Phase 1 — Business Requirements
 
@@ -613,8 +613,8 @@ Skills are reusable reference documents encoding your conventions. They survive 
 | `BRD_FORMAT.md`            | ✅ Ready                       | Phase 1           |
 | `MODULE_TEMPLATE.md`       | ✅ Ready                       | Phase 4a, 4b      |
 | `API_STANDARD.md`          | ✅ Ready                       | Phase 8           |
-| `ARCHITECTURE_STANDARD.md` | Created by Phase 3             | Phase 3, 4a, 4b, 12 |
-| `TESTING_CONVENTIONS.md`   | Created by Phase 5             | Phase 5, 10       |
+| `ARCHITECTURE_STANDARD.md` | ✅ Ready                       | Phase 3, 4a, 4b, 12 |
+| `TESTING_CONVENTIONS.md`   | ✅ Ready                       | Phase 5, 10       |
 | Style Guide (in `ui-design.md`) | Created per-project by Phase 7 | Phase 9      |
 | `MIGRATION_TEMPLATE.md`    | Add when ready                 | Phase 6           |
 | `E2E_PATTERNS.md`          | Add when ready                 | Phase 11          |

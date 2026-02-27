@@ -13,6 +13,6 @@ Content will include:
 - Caching strategy (if applicable)
 - File/media handling approach (if applicable)
 
-Input: docs/brd.md + docs/plan.md
+Input: docs/brd.md + docs/project-plan.md
 Referenced by: Phases 4a, 4b, 5, 6, 8, 11, 12, 13, 14
 -->

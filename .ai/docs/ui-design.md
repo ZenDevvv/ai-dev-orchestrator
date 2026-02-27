@@ -15,7 +15,7 @@ Content will include:
 - Responsive behavior (breakpoints, layout adaptation)
 - State designs per page: loading, empty, error, populated
 
-## Part 2 — Style Guide (inline, also exported to skills/STYLE_GUIDE.md)
+## Part 2 — Style Guide (inline, embedded as Section 1 of this file)
 - Color palette (exact hex values mapped to Tailwind classes)
 - Typography scale (font families, sizes, weights — with Tailwind classes)
 - Spacing system (base unit, scale — with Tailwind classes)

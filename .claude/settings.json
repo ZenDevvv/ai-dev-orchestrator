@@ -1,7 +1,11 @@
 {
   "permissions": {
+    "allow": [
+      "Read(//c/Users/User/Desktop/ai-dev-orchestrator/**)"
+    ],
     "additionalDirectories": [
-      ".ai/.claude/commands"
+      ".ai/.claude/commands",
+      "c:\\Users\\User\\Desktop\\ai-dev-orchestrator\\.ai\\.claude"
     ]
   }
 }
