@@ -2,9 +2,24 @@ Adopt the agent defined in `agents/business-analyst.md`. Read it now before proc
 
 Follow the BRD format standard defined in `skills/BRD_FORMAT.md`. Read it now before proceeding.
 
-The user will provide their app concept, user stories, or stakeholder notes as input: $ARGUMENTS
+## Load Concept
 
-Generate a complete Business Requirements Document following the BRD_FORMAT skill exactly:
+Read `docs/concept.md` in full. This is the required input for this phase.
+
+If `docs/concept.md` does not exist, stop immediately and output:
+
+```
+❌ No concept found.
+
+Run /discover first to define your app concept before generating the BRD.
+/discover <your rough app idea>
+```
+
+Do not proceed without `docs/concept.md`.
+
+## Generate BRD
+
+Using the content of `docs/concept.md` as your source of truth, generate a complete Business Requirements Document following the BRD_FORMAT skill exactly:
 - Project overview and objectives
 - User roles and agents (table format)
 - User stories for every user-facing interaction, each with:

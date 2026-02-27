@@ -2,13 +2,28 @@
 
 > **Fast Mode:** No gates. No pauses. No review checkpoints. Continues all remaining phases sequentially from wherever the last completed phase left off.
 
+## Load Concept
+
+Read `docs/concept.md` in full.
+
+If `docs/concept.md` does not exist, stop immediately and output:
+
+```
+❌ No concept found.
+
+/continue requires a defined app concept before running.
+Run /discover first to build your concept, then re-run /continue.
+
+/discover <your rough app idea>
+```
+
+Do not proceed without `docs/concept.md`.
+
 ## Parse Arguments
 
-`$ARGUMENTS` uses `|||` as a delimiter:
-- Everything **before** `|||` = ignored (phases already completed don't need a concept)
-- Everything **after** `|||` = design rules → passed to Phase 7 if it hasn't run yet
-- If no `|||` separator, treat the entire input as design rules (for Phase 7 fallback)
-- If no arguments at all, Phase 7 will use defaults if it runs
+`$ARGUMENTS` is optional design rules passed to Phase 7 if it hasn't run yet:
+- If `$ARGUMENTS` is provided, treat the entire input as design rules for Phase 7
+- If no arguments, Phase 7 will use defaults if it runs
 
 ---
 
@@ -115,7 +130,7 @@ Otherwise: Read `.ai/.claude/commands/phase6-migrations.md` and execute all inst
 ### Phase 7 — UI Design
 Check completion map. If complete → `[ SKIP ] Phase 7 — already complete`.
 Otherwise: Read `.ai/.claude/commands/phase7-ui-design.md` and execute all instructions.
-Input: [design rules extracted from $ARGUMENTS, or empty string if none provided]
+Input: [$ARGUMENTS as design rules, or empty string if none provided]
 
 > Context Checkpoint: run `/checkpoint`
 

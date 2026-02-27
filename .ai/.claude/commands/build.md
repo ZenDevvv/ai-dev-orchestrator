@@ -2,14 +2,28 @@
 
 > **Fast Mode:** No gates. No pauses. No review checkpoints. Execute all 14 phases sequentially without stopping for user input.
 
+## Load Concept
+
+Before doing anything, read `docs/concept.md` in full.
+
+If `docs/concept.md` does not exist, stop immediately and output:
+
+```
+❌ No concept found.
+
+/build requires a defined app concept before running.
+Run /discover first to build your concept, then re-run /build.
+
+/discover <your rough app idea>
+```
+
+Do not proceed without `docs/concept.md`.
+
 ## Parse Arguments
 
-`$ARGUMENTS` uses `|||` as a delimiter:
-- Everything **before** `|||` = app concept → passed to Phase 1
-- Everything **after** `|||` = design rules → passed to Phase 7
-- If no `|||` separator exists, treat the entire input as the app concept with no design rules
-
-Identify and hold these two values before starting Phase 1.
+`$ARGUMENTS` is optional design rules passed to Phase 7:
+- If `$ARGUMENTS` is provided, treat the entire input as design rules for Phase 7
+- If no `$ARGUMENTS`, Phase 7 will use design defaults
 
 ---
 
@@ -28,7 +42,7 @@ Apply these rules for the **entire build** — they override any per-phase instr
 
 ### Phase 1 — BRD
 Read `.ai/.claude/commands/phase1-brd.md` and execute all instructions.
-Input: [app concept extracted from $ARGUMENTS]
+Input: `docs/concept.md` (already loaded above)
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -82,7 +96,7 @@ Read `.ai/.claude/commands/phase6-migrations.md` and execute all instructions.
 
 ### Phase 7 — UI Design
 Read `.ai/.claude/commands/phase7-ui-design.md` and execute all instructions.
-Input: [design rules extracted from $ARGUMENTS, or empty string if none provided]
+Input: [$ARGUMENTS as design rules, or empty string if none provided]
 
 > Context Checkpoint: run `/checkpoint`
 

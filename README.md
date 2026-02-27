@@ -55,7 +55,13 @@ You review the output, make corrections, and move to the next phase.
 ## Sample Usage
 
 ```
-/phase1-brd <your app concept or user stories>
+# Always start here — refine until concept is solid:
+/discover <your rough app idea>
+/discover                          # run again to add or clarify more
+/discover                          # run as many times as needed
+
+# Then proceed phase by phase:
+/phase1-brd
 /phase2-planning
 /phase3-architecture
 /phase4a-db-schema all
@@ -86,15 +92,49 @@ You review the output, make corrections, and move to the next phase.
 
 ---
 
-## `/build` — Full Project Scaffold `[BETA]`
+## `/discover` — App Concept Refinement
 
-> **Beta:** `/build` runs all 14 phases sequentially with no review gates, no checkpoints, and no human intervention. Output quality depends entirely on the strength of your initial app concept. Use the per-phase commands when you need control over the output.
-
-`/build` executes every phase from BRD to deployment in a single command — the fastest way to generate a complete project scaffold from an idea.
+The required first step before any build. Run it as many times as needed until your concept is solid — then proceed to Phase 1 or `/build`.
 
 ### How It Works
 
-1. You provide your app concept and optional design rules
+1. Takes your rough app idea and asks 2–4 targeted clarifying questions via interactive prompts
+2. Writes a structured `docs/concept.md` covering users, features, monetization, integrations, and constraints
+3. Ends with a readiness assessment — tells you what's clear, what's still vague, and whether to run again or proceed
+4. On re-runs, reads existing `docs/concept.md` and asks about gaps — never overwrites confirmed content
+
+### Usage
+
+```
+/discover <your rough app idea>    # first run — seed the concept
+/discover                          # subsequent runs — refine and fill gaps
+```
+
+### Example Flow
+
+```
+/discover a SaaS invoicing tool for freelancers
+# → asks about user roles, monetization, integrations, MVP scope
+# → writes docs/concept.md, reports what's still vague
+
+/discover
+# → reads concept.md, asks follow-up questions about the remaining gaps
+# → updates concept.md, reports: "Ready for Phase 1"
+
+/phase1-brd    # or /build
+```
+
+---
+
+## `/build` — Full Project Scaffold `[BETA]`
+
+> **Beta:** `/build` runs all 14 phases sequentially with no review gates, no checkpoints, and no human intervention. Requires `/discover` to have been run first. Use the per-phase commands when you need control over the output.
+
+`/build` executes every phase from BRD to deployment in a single command — the fastest way to generate a complete project scaffold once your concept is defined.
+
+### How It Works
+
+1. Reads `docs/concept.md` — fails if it doesn't exist (run `/discover` first)
 2. Claude runs all 14 phases in order, each phase's output feeding into the next
 3. `/checkpoint` runs between phases to preserve context across the long session
 4. A final build summary is output when Phase 14 completes
@@ -102,31 +142,23 @@ You review the output, make corrections, and move to the next phase.
 ### Usage
 
 ```
-/build <app concept>
-/build <app concept> ||| <design rules>
+/build                        # uses docs/concept.md, AI picks design defaults
+/build <design rules>         # passes design rules to Phase 7
 ```
-
-The `|||` separator splits your input:
-- Everything **before** `|||` → Phase 1 (app concept for BRD generation)
-- Everything **after** `|||` → Phase 7 (design rules for UI/UX)
 
 ### Examples
 
 ```
-# Concept only — AI picks design defaults
-/build a SaaS invoicing tool for freelancers with client management, time tracking, and Stripe payments
+# Concept already defined via /discover — AI picks design defaults
+/build
 
-# With design rules
-/build a SaaS invoicing tool for freelancers with client management, time tracking, and Stripe payments ||| dark mode default, minimal sidebar, mobile first
-
-# Detailed concept — more detail = better BRD = better everything downstream
-/build a multi-tenant project management platform with workspaces, kanban boards, time tracking,
-and team roles (admin, member, viewer). Users invite teammates by email. Slack notifications on
-task assignment. ||| clean dashboard layout, sidebar nav, light mode default
+# With design rules for Phase 7
+/build dark mode default, minimal sidebar, mobile first
 ```
 
 ### Before Running
 
+- **Required:** run `/discover` until `docs/concept.md` exists and concept is solid
 - **Optional:** drop reference images (`.png`, `.jpg`, `.webp`) into `docs/design-references/` — Phase 7 reads them automatically for style extraction
 - **Required:** your project directory should have a working `package.json` — Phase 4a runs `npm install` before `prisma generate`
 
@@ -193,7 +225,7 @@ The `|||` separator passes design rules to Phase 7 if it hasn't run yet. If Phas
 /continue
 
 # You've finished Phases 1-3 and want to pass design rules for Phase 7
-/continue ||| dark mode default, minimal sidebar
+/continue dark mode default, minimal sidebar
 ```
 
 ### Status Output
@@ -248,6 +280,7 @@ Starting from: Phase 4a
 │   │   ├── resume.md               # Session resume — project state, stale items, next action
 │   │   ├── phase-change.md         # Log requirement changes & get impact reports
 │   │   ├── log-decision.md         # Log manual AI overrides to docs/decision-log.md
+│   │   ├── discover.md             # Iterative concept refinement — required before phase1 or build
 │   │   ├── build.md                # [BETA] Full project scaffold — all 14 phases in one command
 │   │   ├── continue.md             # [BETA] Resume build — skips completed phases, runs remaining
 │   │   └── checkpoint.md           # Session summary — context preservation between phases
@@ -272,6 +305,7 @@ Starting from: Phase 4a
 │   │   └── ...                     # More skills added as you refine conventions
 │   │
 │   ├── docs/                       # Project artifact templates (filled in as you run phases)
+│   │   ├── concept.md              # /discover output — structured app concept, required before Phase 1
 │   │   ├── brd.md                  # Phase 1 output
 │   │   ├── project-plan.md         # Phase 2 output
 │   │   ├── architecture.md         # Phase 3 output
@@ -304,8 +338,8 @@ Starting from: Phase 4a
 
 1. **Clone this repo** into your workspace
 2. **Open in VSCode** with Claude Code installed
-3. **Run Phase 1**: type `/phase1-brd` followed by your app concept
-4. **Review the BRD** carefully — it drives everything downstream
+3. **Run `/discover`**: type `/discover` followed by your rough app idea — answer the questions, run again until concept is solid
+4. **Run `/phase1-brd`**: generates the BRD from `docs/concept.md` — review it carefully, it drives everything downstream
 5. **Continue through phases** in order, using the slash commands
 
 ---
@@ -379,10 +413,12 @@ This appends a formatted entry to `docs/decision-log.md`. When the same correcti
 ### Phase 1 — Business Requirements
 
 ```
-/phase1-brd <your app concept or user stories>
+/phase1-brd
 ```
 
-Agent: Business Analyst | Skill: `BRD_FORMAT` | Output: `docs/brd.md`
+**Requires:** `docs/concept.md` — run `/discover` first.
+
+Agent: Business Analyst | Skill: `BRD_FORMAT` | Reads: `docs/concept.md` | Output: `docs/brd.md`
 
 Generates a complete BRD with module IDs, requirement IDs, Given/When/Then acceptance criteria, error states, **user stories**, and a **Page Manifest**. User stories map every user-facing interaction to a page — this becomes the source of truth for what Phase 7 designs and Phase 9 builds.
 
