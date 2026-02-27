@@ -32,8 +32,8 @@ You still provide minimal arguments where needed — module names, page names, o
 
 The skill documents (`MODULE_TEMPLATE`, `API_STANDARD`) and the phase commands are calibrated to your team's specific starter templates:
 
-- **`api-template/`** — Node.js + TypeScript + Express 5 + Prisma (MongoDB) + Zod + Redis + Swagger + Socket.IO
-- **`app-template/`** — React Router v7 + TypeScript + Tailwind CSS + shadcn/ui + Vite
+- **`templates/api/`** — Node.js + TypeScript + Express 5 + Prisma (MongoDB) + Zod + Redis + Swagger + Socket.IO
+- **`templates/app/`** — React Router v7 + TypeScript + Tailwind CSS + shadcn/ui + Vite
 
 The generated code assumes these templates as the base. If your team uses a different stack, the skill documents in `skills/` are the right place to adapt the conventions — update `MODULE_TEMPLATE.md` and `API_STANDARD.md` to match your own patterns before running any phases.
 
@@ -226,8 +226,9 @@ task assignment. ||| clean dashboard layout, sidebar nav, light mode default
 │   │
 │   └── AI-Assisted Fullstack Development Workflow.md  # Full playbook reference
 │
-├── api-template/                   # Node.js + Express + Prisma starter template
-└── app-template/                   # React + Tailwind + shadcn/ui starter template
+└── templates/
+    ├── api/                        # Node.js + Express + Prisma starter template
+    └── app/                        # React + Tailwind + shadcn/ui starter template
 ```
 
 > **Note:** The `.ai/` folder is the orchestrator. Your actual project code (backend, frontend, prisma schemas, etc.) lives in the project root, outside `.ai/`. Add `.ai/` to your `.gitignore` so the orchestrator doesn't get committed with your project code.
