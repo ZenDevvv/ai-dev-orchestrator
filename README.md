@@ -263,7 +263,7 @@ Starting from: Phase 4a
 ├── .claude/
 │   └── settings.json               # Claude Code workspace settings
 │
-├── .ai/                            # Orchestrator — add to .gitignore in your project
+├── .ai/                            # Orchestrator — add to .gitignore (tool only, not project output)
 │   ├── CLAUDE.md                   # Auto-loaded by Claude Code — project context
 │   ├── .claude/commands/           # Slash commands
 │   │   ├── phase1-brd.md           # BRD generation
@@ -308,7 +308,7 @@ Starting from: Phase 4a
 │   │   ├── TESTING_CONVENTIONS.md
 │   │   └── ...                     # More skills added as you refine conventions
 │   │
-│   ├── docs/                       # Project artifact templates (filled in as you run phases)
+│   ├── docs/                       # Sample only — shows expected output structure and file descriptions
 │   │   ├── concept.md              # /discover output — structured app concept, required before Phase 1
 │   │   ├── brd.md                  # Phase 1 output
 │   │   ├── project-plan.md         # Phase 2 output
@@ -322,29 +322,38 @@ Starting from: Phase 4a
 │   │
 │   └── AI-Assisted Fullstack Development Workflow.md  # Full playbook reference
 │
+├── docs/                           # Generated project artifacts — COMMIT THIS
+│   └── ...                         # Created here at the project root as you run phases
+│
 └── templates/
     ├── api/                        # Node.js + Express + Prisma starter template
     └── app/                        # React + Tailwind + shadcn/ui starter template
 ```
 
-> **Note:** The `.ai/` folder is the orchestrator. Your actual project code (backend, frontend, prisma schemas, etc.) lives in the project root, outside `.ai/`. Add `.ai/` to your `.gitignore` so the orchestrator doesn't get committed with your project code.
+> **What to commit:** `docs/` contains your BRD, architecture, progress log, and all project artifacts — commit and push it. `.ai/` is the orchestrator tool — add it to `.gitignore` so it doesn't get committed with your project code.
+
+> **Templates:** `templates/api/` is a Node.js + Express + Prisma starter and `templates/app/` is a React + Tailwind + shadcn/ui starter. Copy both into the project root before running Phase 4a.
 
 ---
 
 ## Prerequisites
 
 - **VSCode** with [Claude Code](https://marketplace.visualstudio.com/items?itemName=Anthropic.claude-code)
+- **Node.js** v18+
+- **npm** or **bun**
+- **Git**
 - A project idea to build
 
 ---
 
 ## Getting Started
 
-1. **Clone this repo** into your workspace
+1. **Clone this repo** — this repo is your project root. Your backend, frontend, and Prisma schemas all live here alongside `.ai/`
 2. **Open in VSCode** with Claude Code installed
-3. **Run `/discover`**: type `/discover` followed by your rough app idea — answer the questions, run again until concept is solid
-4. **Run `/phase1-brd`**: generates the BRD from `docs/concept.md` — review it carefully, it drives everything downstream
-5. **Continue through phases** in order, using the slash commands
+3. **Copy starter templates** — copy `templates/api/` and `templates/app/` into the project root before running Phase 4a (optional but recommended)
+4. **Run `/discover`**: type `/discover` followed by your rough app idea — answer the questions, run again until concept is solid
+5. **Run `/phase1-brd`**: generates the BRD from `docs/concept.md` — review it carefully, it drives everything downstream
+6. **Continue through phases** in order, using the slash commands
 
 ---
 
@@ -721,7 +730,7 @@ Skills are reusable reference documents encoding your conventions. They survive 
 | `DOC_TEMPLATES.md`         | Add when ready                 | Phase 13          |
 | `INFRA_STANDARD.md`        | Add when ready                 | Phase 14          |
 
-Skills you don't have yet won't block you — the phase commands handle missing skills gracefully. After your first project, extract patterns from what worked into new skill docs.
+Skills you don't have yet won't block you — if a skill file is absent, the phase generates its own conventions from scratch and you can extract them into a skill doc afterward. After your first project, extract patterns from what worked into new skill docs.
 
 ---
 

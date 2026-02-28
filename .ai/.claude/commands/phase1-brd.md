@@ -17,6 +17,20 @@ Run /discover first to define your app concept before generating the BRD.
 
 Do not proceed without `docs/concept.md`.
 
+## Pre-flight Check
+
+Before generating, check the `## Open Questions` section of `docs/concept.md`.
+
+If it contains any unresolved items, output this warning then continue:
+
+```
+⚠️ concept.md has open questions — the BRD may be incomplete in those areas.
+   Consider running /discover again to resolve them before proceeding.
+
+   Open questions found:
+   - [list each item from the Open Questions section]
+```
+
 ## Generate BRD
 
 Using the content of `docs/concept.md` as your source of truth, generate a complete Business Requirements Document following the BRD_FORMAT skill exactly:
@@ -26,28 +40,24 @@ Using the content of `docs/concept.md` as your source of truth, generate a compl
   - Unique story ID (US-NNN format)
   - As a / I want to / So that format
   - Module mapping (which module it belongs to)
-  - Page mapping (which page(s) this story implies)
+  - Page mapping (which page(s) this story implies — names must exactly match rows in the Page Manifest)
   - Priority classification
 - Page Manifest table derived from user stories (page name, related stories, route)
 - Functional requirements grouped by module, each with:
   - Unique module ID (uppercase snake_case: AUTH, USERS, PROJECTS, etc.)
   - Unique requirement IDs (MODULE_ID-NNN format)
   - Description from the user's perspective
-  - Given/When/Then acceptance criteria (minimum 2 per requirement)
+  - Given/When/Then acceptance criteria (minimum 2 per requirement; add more for requirements with multiple error paths)
   - Error states with error codes for every failure path
-  - Priority classification (Must-have / Should-have / Nice-to-have)
-- Module-level error states table for cross-cutting errors
+  - Priority classification: **MVP** (required for launch) or **Post-MVP** (future iteration)
+- Module-level error states table for cross-cutting errors (errors that apply to every endpoint in a module, e.g., 401 Unauthorized, 403 Forbidden, 429 Rate Limited)
 - Non-functional requirements with measurable targets
 - Assumptions and constraints
-- Out of scope items
+- Out of scope items — Post-MVP features are listed here by name only; do not write acceptance criteria for them
 
 Order modules by independence — modules with no dependencies on other modules come first.
 
-Aim for roughly 60% Must-have, 25% Should-have, 15% Nice-to-have.
-
 Save the output to `docs/brd.md`.
-
-⚠️ VERIFICATION GATE: This document drives everything downstream. Review every requirement, every acceptance criterion, every error state before proceeding to Phase 2.
 
 ## Log Progress
 
@@ -60,5 +70,17 @@ After completing this phase, update `docs/progress.md`:
    | Phase | Name | Scope | Status | Date | Notes |
    |-------|------|-------|--------|------|-------|
    ```
-2. Append this row (fill in today's date and a one-line summary):
+2. Append this row (fill in today's actual date and a one-line summary):
    `| 1 | BRD | — | ✅ Complete | YYYY-MM-DD | {summary} |`
+
+## Verification Gate
+
+⚠️ **VERIFY before proceeding to Phase 2.** This document drives everything downstream — invest review time here.
+
+- [ ] Every module has at least 2 requirements
+- [ ] Every requirement has ≥ 2 Given/When/Then criteria
+- [ ] Every requirement has at least 1 error state with an error code
+- [ ] Every page in the Page Manifest is covered by at least 1 user story
+- [ ] Page names in user stories exactly match rows in the Page Manifest
+- [ ] No implementation details in requirements (no DB, framework, or endpoint mentions)
+- [ ] Post-MVP features appear only in the Out of Scope section — not in module bodies
