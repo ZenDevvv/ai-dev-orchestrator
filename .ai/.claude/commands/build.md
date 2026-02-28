@@ -27,6 +27,14 @@ Do not proceed without `docs/concept.md`.
 
 ---
 
+## Context Note
+
+Each phase re-reads its required files (BRD, architecture, module code, etc.) fresh from disk — so document-based context is never lost between phases.
+
+The only thing that can be lost across a long session is **unlogged ad-hoc decisions**: corrections or clarifications made verbally in the chat during a previous phase that were never written to a file. Use `/log-decision` to record any manual overrides so they survive context compression.
+
+---
+
 ## Global Execution Rules
 
 Apply these rules for the **entire build** — they override any per-phase instructions:

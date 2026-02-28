@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Read(//c/Users/User/Desktop/ai-dev-orchestrator/**)",
-      "Bash(ls -la \"c:\\\\Users\\\\User\\\\Desktop\\\\ai-dev-orchestrator\\\\.ai\\\\.claude\\\\commands\"\" 2>/dev/null || echo \"Directory not found \")"
+      "Bash(ls -la \"c:\\\\Users\\\\User\\\\Desktop\\\\ai-dev-orchestrator\\\\.ai\\\\.claude\\\\commands\"\" 2>/dev/null || echo \"Directory not found \")",
+      "Bash(git checkout HEAD -- \"templates/api/app/person\" \"templates/api/prisma/schema/person.prisma\")"
     ],
     "additionalDirectories": [
       ".ai/.claude/commands",
