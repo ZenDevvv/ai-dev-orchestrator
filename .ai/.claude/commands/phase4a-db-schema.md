@@ -14,7 +14,7 @@ For **each** model in scope, perform ALL of the following steps:
 
 ## Per-model generation
 
-Generate the Prisma schema file at `prisma/schema/[entity].prisma` following MODULE_TEMPLATE.md Step 1:
+Generate the Prisma schema file at `templates/api/prisma/schema/[entity].prisma` following MODULE_TEMPLATE.md Step 1:
 
 - Model name in `PascalCase`
 - `id` field as ObjectId (`@id @default(auto()) @map("_id") @db.ObjectId`)
