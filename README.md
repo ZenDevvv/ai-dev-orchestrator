@@ -20,8 +20,15 @@ The workflow starts with `/discover`, an interactive concept refinement session 
 
 **Stack the phases are calibrated for:**
 
-- **Backend:** Node.js + TypeScript + Express 5 + Prisma (MongoDB) + Zod + Redis + Swagger + Socket.IO
+**Core** — scaffolded in every project:
+- **Backend:** Node.js + TypeScript + Express 5 + Prisma (MongoDB) + Zod + Swagger
 - **Frontend:** React Router v7 + TypeScript + Tailwind CSS + shadcn/ui + Vite
+
+**Optional** — included only when the concept requires it:
+- **Redis** — caching, rate limiting, or session storage
+- **Socket.IO** — real-time features (chat, live updates, notifications)
+
+`/discover` captures whether these are needed via the Integrations and Feature Scope categories — phases use that to decide what to scaffold.
 
 If your team uses a different stack, update `skills/MODULE_TEMPLATE.md` and `skills/API_STANDARD.md` before running any phases — those two files are where the conventions live.
 
