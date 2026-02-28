@@ -314,7 +314,7 @@ Starting from: Phase 4a
 │   │   ├── project-plan.md         # Phase 2 output
 │   │   ├── architecture.md         # Phase 3 output
 │   │   ├── ui-design.md            # Phase 7 output (style guide + wireframes combined)
-│   │   ├── design-references/      # Drop reference images here before running Phase 7
+│   │   ├── design-references/      # Phase 7 reads images from docs/design-references/ at project root
 │   │   ├── seed-data.md            # Phase 6 output — test credentials & seed reference
 │   │   ├── progress.md             # Progress log (auto-updated after each phase)
 │   │   ├── changes.md              # Change audit trail (created by /phase-change)
@@ -323,7 +323,8 @@ Starting from: Phase 4a
 │   └── AI-Assisted Fullstack Development Workflow.md  # Full playbook reference
 │
 ├── docs/                           # Generated project artifacts — COMMIT THIS
-│   └── ...                         # Created here at the project root as you run phases
+│   ├── design-references/          # Drop reference images here before running Phase 7
+│   └── ...                         # All other docs created here as you run phases
 │
 └── templates/
     ├── api/                        # Node.js + Express + Prisma starter template
