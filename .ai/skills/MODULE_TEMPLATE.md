@@ -88,7 +88,7 @@ export const __entity__Module = (prisma: PrismaClient): Router => {
 - Define `IController` interface with `getById`, `getAll`, `create`, `update`, `remove`
 - Export `router(route: Router, controller: IController): Router`
 - Set `const path = "/__entity__"`
-- Routes: `GET /:id` (cache 90s, key `cache:__entity__:byId:${id}:${fields}`), `GET /` (cache 60s, key `cache:__entity__:list:${base64(query)}`), `POST /`, `PATCH /:id`, `DELETE /:id`
+- Routes: `GET /:id` (cache 300s, key `cache:__entity__:byId:${id}:${fields}`), `GET /` (cache 60s, key `cache:__entity__:list:${base64(query)}`), `POST /`, `PATCH /:id`, `DELETE /:id`
 - Include `@openapi` JSDoc for each route with tags `[__Entity__]`, `bearerAuth` security
 - `route.use(path, routes); return route;`
 

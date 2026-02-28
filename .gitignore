@@ -1,0 +1,23 @@
+# Orchestrator tool — not project code
+.ai/
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build outputs
+dist/
+build/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+*.suo
+*.user

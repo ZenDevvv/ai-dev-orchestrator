@@ -17,17 +17,9 @@ import { hidePasswordMiddleware } from "./middleware/passwordSanitise";
 import { io, app, server } from "./lib/socket";
 import { templateModule } from "./app/template";
 import { personModule } from "./app/person";
-import { roleModule } from "./app/role";
 import { userModule } from "./app/user";
 import { authModule } from "./app/auth";
 import { notificationModule } from "./app/notification";
-import { systemLogModule } from "./app/systemLog";
-import { metricsModule } from "./app/metrics";
-import { organizationModule } from "./app/organization";
-import { courseModule } from "./app/course";
-import { facultyModule } from "./app/faculty";
-import { programModule } from "./app/program";
-import { categoryModule } from "./app/category";
 
 // Log uncaught exceptions and unhandled promise rejections
 process.on("uncaughtException", (err) => {
@@ -81,17 +73,9 @@ try {
 	// Initialize route modules
 	const template = templateModule(prisma);
 	const person = personModule(prisma);
-	const role = roleModule(prisma);
 	const user = userModule(prisma);
 	const auth = authModule(prisma);
 	const notification = notificationModule(prisma);
-	const systemlog = systemLogModule(prisma);
-	const metrics = metricsModule(prisma);
-	const organization = organizationModule(prisma);
-	const course = courseModule(prisma);
-	const faculty = facultyModule(prisma);
-	const program = programModule(prisma);
-	const category = categoryModule(prisma);
 
 	// Health check endpoint
 	app.get("/", (req: Request, res: Response) => {
@@ -169,17 +153,9 @@ try {
 	// Register routes
 	app.use(config.baseApiPath, template);
 	app.use(config.baseApiPath, person);
-	app.use(config.baseApiPath, role);
 	app.use(config.baseApiPath, user);
 	app.use(config.baseApiPath, auth);
 	app.use(config.baseApiPath, notification);
-	app.use(config.baseApiPath, systemlog);
-	app.use(config.baseApiPath, metrics);
-	app.use(config.baseApiPath, organization);
-	app.use(config.baseApiPath, course);
-	app.use(config.baseApiPath, faculty);
-	app.use(config.baseApiPath, program);
-	app.use(config.baseApiPath, category);
 
 	server.listen(config.port, async () => {
 		await connectAllDatabases();

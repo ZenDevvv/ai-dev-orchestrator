@@ -7,6 +7,29 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.4.0] — 2026-02-28
+
+### Added
+- **`FRONTEND_TESTING.md` skill** — full frontend testing conventions for Phase 10: 4-state coverage rules, RTL query priority order, component/hook/form/accessibility patterns with code examples, and anti-patterns table. Phase 10 previously shared `TESTING_CONVENTIONS.md` which was backend-focused.
+- **`PLANNING_CONVENTIONS.md` skill** — project planning conventions for Phase 2: dependency-based module ordering, estimation baselines (per task type), risk scoring (likelihood × impact), sprint structure rules, output format templates (module table, sprint plan, risk register, critical path), and anti-patterns.
+- **Root `.gitignore`** — excludes `.ai/`, `node_modules/`, `.env`, `dist/`, `build/`, and common OS/editor artifacts. Previously undocumented that `.ai/` should be gitignored.
+- **`.env.example` in `templates/api/`** — documents all required and optional environment variables: `DATABASE_URL`, `JWT_*`, `CORS_ORIGINS`, `REDIS_URL`, `CLOUDINARY_*`, `LOGTAIL_SOURCE_TOKEN`.
+- **`.env.example` in `templates/app/`** — documents `VITE_API_BASE_URL` and `VITE_APP_NAME`.
+
+### Changed
+- **`CLAUDE.md`** — replaced README pointer with a full quick-reference card: phase sequence with one-line descriptions, three run modes, key file paths, error recovery steps, and skills table. Designed to orient Claude in non-Claude Code environments with a single file reference.
+- **`/discover` command** — formally adopts the Business Analyst agent role. Now reads `.ai/agents/business-analyst.md` at session start, inheriting the BA's priorities (user-centric, error states, no implementation suggestions) and anti-patterns.
+- **`/build` and `/continue` commands** — replaced inaccurate context-loss warning (which implied BRD decisions could be forgotten) with an accurate context note: document-based context is never lost because each phase re-reads its required files from disk. The only real risk is unlogged ad-hoc chat decisions — addressed by `/log-decision`.
+- **`MODULE_TEMPLATE.md`** — fixed cache TTL contradiction. `getById` route TTL changed from `90s` to `300s` to align with `ARCHITECTURE_STANDARD.md` (`300s` for detail views, `60s` for list views). Both files now agree.
+- **`templates/api/` starter** — removed real-project modules that leaked from source project: `app/metrics/`, `app/systemLog/` and their corresponding Prisma schemas (`metrics.prisma`, `system-log.prisma`). Core starter now contains only `auth`, `user`, `person`, `notification`, and `template` modules. `index.ts` updated to match.
+- **README Skills table** — updated `TESTING_CONVENTIONS.md` entry to reflect Phase 5 only (backend). Phase 10 now uses `FRONTEND_TESTING.md`.
+- **README Phase 2 entry** — updated skill reference from `—` to `PLANNING_CONVENTIONS`.
+
+### Why
+The audit identified two skill gaps that degraded output quality on first run (Phase 2 had no conventions, Phase 10 borrowed backend-only conventions), a cache TTL contradiction that produced inconsistent module behavior, missing developer onboarding files (no `.gitignore`, no `.env.example`), and template pollution from a real project that could mislead Phase 4b. The `CLAUDE.md` expansion enables the orchestrator to be used outside Claude Code with a single context file instead of the full README.
+
+---
+
 ## [1.3.0] — 2026-02-28
 
 ### Changed
