@@ -7,6 +7,21 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.3.0] — 2026-02-28
+
+### Changed
+- **`/discover` command** — restructured around two explicit modes: `Seed + Refine` (when `$ARGUMENTS` is present) and `Refine only` (no arguments). Both modes always end with refinement questions — the command never just writes and stops.
+- **`/discover` exit condition** — when all categories are fully defined, outputs `=== CONCEPT COMPLETE ===` instead of asking questions. This is how users know to stop running `/discover` and proceed to Phase 1.
+- **`/discover` error state** — running `/discover` with no arguments and no `docs/concept.md` now fails with a clear message instead of silently doing nothing.
+- **`/discover` gap analysis** — extended from 6 to 8 categories. Added **Design Preferences** (visual style, layout, device targets) and **Technical Stack** (stack preferences, hosting target, existing tech constraints).
+- **`/discover` contradiction handling** — if new input contradicts confirmed content in `docs/concept.md`, Claude flags the conflict with `AskUserQuestion` and requires explicit confirmation before overwriting. No more silent overwrites.
+- **`docs/concept.md` template** — added `## Technical Stack` section with default stack pre-filled (Node.js + Express + Prisma + MongoDB / React Router v7 + Tailwind + shadcn/ui). Users confirm defaults or specify a custom stack.
+
+### Why
+The previous command had no clear "done" signal — users didn't know when to stop running `/discover`. The two-mode split makes intent explicit: you seed with an argument, you refine without one. The `CONCEPT COMPLETE` exit condition closes the loop. Adding Design Preferences and Technical Stack to gap analysis ensures those categories are probed before Phase 1, where discovering them late would require architecture rework.
+
+---
+
 ## [1.2.0] — 2026-02-27
 
 ### Added
