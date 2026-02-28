@@ -162,7 +162,7 @@ The required first step before any build. Run it as many times as needed until y
 
 - **Required:** run `/discover` until `docs/concept.md` exists and concept is solid
 - **Optional:** drop reference images (`.png`, `.jpg`, `.webp`) into `docs/design-references/` — Phase 7 reads them automatically for style extraction
-- **Required:** your project directory should have a working `package.json` — Phase 4a runs `npm install` before `prisma generate`
+- **Required:** `templates/api/` must have a working `package.json` — Phase 4a runs `npm install` inside `templates/api/` before running `prisma generate`
 
 ### What Gets Produced
 
@@ -263,7 +263,7 @@ Starting from: Phase 4a
 ├── .claude/
 │   └── settings.json               # Claude Code workspace settings
 │
-├── .ai/                            # Orchestrator — add to .gitignore in your project
+├── .ai/                            # Orchestrator — add to .gitignore (tool only, not project output)
 │   ├── CLAUDE.md                   # Auto-loaded by Claude Code — project context
 │   ├── .claude/commands/           # Slash commands
 │   │   ├── phase1-brd.md           # BRD generation
@@ -308,13 +308,13 @@ Starting from: Phase 4a
 │   │   ├── TESTING_CONVENTIONS.md
 │   │   └── ...                     # More skills added as you refine conventions
 │   │
-│   ├── docs/                       # Project artifact templates (filled in as you run phases)
+│   ├── docs/                       # Sample only — shows expected output structure and file descriptions
 │   │   ├── concept.md              # /discover output — structured app concept, required before Phase 1
 │   │   ├── brd.md                  # Phase 1 output
 │   │   ├── project-plan.md         # Phase 2 output
 │   │   ├── architecture.md         # Phase 3 output
 │   │   ├── ui-design.md            # Phase 7 output (style guide + wireframes combined)
-│   │   ├── design-references/      # Drop reference images here before running Phase 7
+│   │   ├── design-references/      # Phase 7 reads images from docs/design-references/ at project root
 │   │   ├── seed-data.md            # Phase 6 output — test credentials & seed reference
 │   │   ├── progress.md             # Progress log (auto-updated after each phase)
 │   │   ├── changes.md              # Change audit trail (created by /phase-change)
@@ -322,29 +322,39 @@ Starting from: Phase 4a
 │   │
 │   └── AI-Assisted Fullstack Development Workflow.md  # Full playbook reference
 │
+├── docs/                           # Generated project artifacts (BRD, architecture, progress) — COMMIT THIS
+│   ├── design-references/          # Drop reference images here before running Phase 7
+│   └── ...                         # All other docs created here as you run phases
+│
 └── templates/
-    ├── api/                        # Node.js + Express + Prisma starter template
-    └── app/                        # React + Tailwind + shadcn/ui starter template
+    ├── api/                        # Backend project — phases write Prisma schemas, modules, Zod here
+    └── app/                        # Frontend project — phases write hooks, pages, services here
 ```
 
-> **Note:** The `.ai/` folder is the orchestrator. Your actual project code (backend, frontend, prisma schemas, etc.) lives in the project root, outside `.ai/`. Add `.ai/` to your `.gitignore` so the orchestrator doesn't get committed with your project code.
+> **What to commit:** `docs/` and `templates/` contain your project artifacts — commit and push them. `.ai/` is the orchestrator tool — add it to `.gitignore` so it doesn't get committed with your project code.
+
+> **Templates:** `templates/api/` is the backend project root and `templates/app/` is the frontend project root. All generated code lands directly inside these folders — no copying required. The `.ai/` folder is the orchestrator; leave it untouched.
 
 ---
 
 ## Prerequisites
 
 - **VSCode** with [Claude Code](https://marketplace.visualstudio.com/items?itemName=Anthropic.claude-code)
+- **Node.js** v18+
+- **npm** or **bun**
+- **Git**
 - A project idea to build
 
 ---
 
 ## Getting Started
 
-1. **Clone this repo** into your workspace
+1. **Fork this repo** — `templates/api/` is your backend project and `templates/app/` is your frontend project. All generated backend code (Prisma schemas, modules, Zod) goes into `templates/api/`. All generated frontend code (hooks, pages, services) goes into `templates/app/`. `.ai/` is the orchestrator — do not modify it. `docs/` is generated at the repo root.
 2. **Open in VSCode** with Claude Code installed
-3. **Run `/discover`**: type `/discover` followed by your rough app idea — answer the questions, run again until concept is solid
-4. **Run `/phase1-brd`**: generates the BRD from `docs/concept.md` — review it carefully, it drives everything downstream
-5. **Continue through phases** in order, using the slash commands
+3. **Starter templates** — `templates/api/` and `templates/app/` are ready to use as-is — phases write directly into them. No copying required.
+4. **Run `/discover`**: type `/discover` followed by your rough app idea — answer the questions, run again until concept is solid
+5. **Run `/phase1-brd`**: generates the BRD from `docs/concept.md` — review it carefully, it drives everything downstream
+6. **Continue through phases** in order, using the slash commands
 
 ---
 
@@ -721,7 +731,7 @@ Skills are reusable reference documents encoding your conventions. They survive 
 | `DOC_TEMPLATES.md`         | Add when ready                 | Phase 13          |
 | `INFRA_STANDARD.md`        | Add when ready                 | Phase 14          |
 
-Skills you don't have yet won't block you — the phase commands handle missing skills gracefully. After your first project, extract patterns from what worked into new skill docs.
+Skills you don't have yet won't block you — if a skill file is absent, the phase generates its own conventions from scratch and you can extract them into a skill doc afterward. After your first project, extract patterns from what worked into new skill docs.
 
 ---
 

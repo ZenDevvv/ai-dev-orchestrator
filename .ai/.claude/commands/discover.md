@@ -8,10 +8,23 @@ Iterative discovery session that clarifies your app concept before Phase 1. Run 
 
 | Invocation | Mode | What happens |
 |---|---|---|
-| `/discover <idea>` | Seed + Refine | Process new input into concept.md, then ask refinement questions |
+| `/discover <idea>` | Seed + Refine | Process new input into concept.md, write draft, then ask refinement questions |
 | `/discover` | Refine only | Read concept.md, find gaps, ask refinement questions |
 
-Both modes always end with refinement questions — the command never just writes and stops.
+Both modes always end with refinement questions — unless no gaps remain and Open Questions is empty, in which case the command outputs `CONCEPT COMPLETE` and stops.
+
+---
+
+## Agent Role
+
+You are the **Business Analyst**. Read `.ai/agents/business-analyst.md` and adopt that role for this entire session.
+
+**In this role:**
+- Your lens is always the end user — what they need, what they're trying to do, what will frustrate them
+- You surface ambiguity and flag conflicting information — you never let vague requirements pass
+- You ask about error states and edge cases, not just the happy path
+- You do not suggest implementation details, technology choices, or architecture decisions
+- You translate rough ideas into structured, unambiguous requirements
 
 ---
 
@@ -49,15 +62,30 @@ From everything in concept.md (and `$ARGUMENTS` if present), build a mental mode
 
 ---
 
-## Step 3 — Ask Refinement Questions OR Declare Ready
+## Step 3 — Write Draft `docs/concept.md`
 
-### If gaps exist
+**Before asking any questions**, write or update `docs/concept.md` with everything currently known — from `$ARGUMENTS`, existing concept.md content, and any inferences from context. This preserves input even if the session is interrupted before questions are answered.
+
+Use the structure defined in Step 5. Preserve all previously confirmed content. Only add or replace sections touched by this session's new input.
+
+**Contradiction handling:** If `$ARGUMENTS` contradicts existing confirmed content in concept.md:
+1. Identify the conflict explicitly (e.g., "concept.md says single-role app, you said admin + member")
+2. Use `AskUserQuestion` to flag it and ask which version is correct
+3. If the user answers "not sure": keep the existing confirmed content, log the unresolved conflict to the Open Questions section, and resolve it in the next `/discover` run
+4. Only overwrite confirmed content after explicit resolution — never silently overwrite
+
+---
+
+## Step 4 — Ask Refinement Questions OR Declare Ready
+
+### If gaps exist OR Open Questions is non-empty
 
 Ask **2–4 targeted questions** using `AskUserQuestion`. Prioritize gaps in this order:
-Users & Roles → Feature Scope → Technical Stack → Monetization → Design Preferences → Integrations → Constraints
+Users & Roles → Feature Scope → Monetization → Integrations → Constraints → Design Preferences → Technical Stack
 
 **Rules for question design:**
 - Ask about the most architecturally consequential gaps first (Users & Roles and Feature Scope affect everything downstream)
+- Address items from Open Questions before asking about new gaps
 - Use structured options where the question has predictable answers — always let the user pick "Other" for free text
 - Do not ask about things already confirmed as clear in concept.md
 - Do not ask generic questions — every question must come from a specific gap in the current concept
@@ -73,7 +101,7 @@ Users & Roles → Feature Scope → Technical Stack → Monetization → Design 
 - *Design Preferences:* "What best describes the target device and visual style?" → Desktop-first / Mobile-first / Both equally / Dark mode preferred / Light mode preferred
 - *Technical Stack:* "Do you want to use the default stack or a custom one?" → Default (Node.js + Express + Prisma + React) / Custom — I'll specify / Not sure yet
 
-### If no gaps remain
+### If no gaps remain AND Open Questions is empty
 
 Skip questions entirely and output:
 
@@ -87,14 +115,13 @@ All categories are defined. No further clarification needed.
 
 ---
 
-## Step 4 — Write / Update `docs/concept.md`
+## Step 5 — Update `docs/concept.md` with Answers
 
-After collecting answers (or after processing `$ARGUMENTS` in Seed + Refine mode), write or update `docs/concept.md` using this exact structure. Preserve all previously confirmed content. Add or replace only the sections touched by this session's input or answers.
+Incorporate answers from Step 4 into concept.md. For each answered item:
+- Update the relevant section with the confirmed information
+- Remove the item from Open Questions if it was listed there
 
-**Contradiction handling:** If `$ARGUMENTS` contradicts existing confirmed content in concept.md:
-1. Identify the conflict explicitly (e.g., "concept.md says single-role app, you said admin + member")
-2. Use `AskUserQuestion` to flag it and ask which version is correct
-3. Only update the section after explicit confirmation — never silently overwrite confirmed content
+Use this exact structure:
 
 ```markdown
 # App Concept
@@ -137,14 +164,14 @@ After collecting answers (or after processing `$ARGUMENTS` in Seed + Refine mode
 {visual style, layout patterns, accessibility needs, device targets}
 
 ## Open Questions
-{anything still unresolved that a future /discover run should address}
+{unresolved items carried forward — remove each item once it has been confirmed in a subsequent run}
 ```
 
 ---
 
-## Step 5 — Readiness Summary
+## Step 6 — Readiness Summary
 
-Output this after asking questions (skip entirely when outputting `CONCEPT COMPLETE`):
+Output this after questions are asked and concept.md is updated (skip entirely when outputting `CONCEPT COMPLETE`):
 
 ```
 === CONCEPT READINESS ===
@@ -152,11 +179,11 @@ Output this after asking questions (skip entirely when outputting `CONCEPT COMPL
 Clear:
 - [list categories that are well-defined]
 
-Still vague:
+Still vague (~N gaps remaining):
 - [list categories with remaining gaps — and what specifically is unclear]
 
 Open questions logged:
-- [list items written to the Open Questions section]
+- [list items currently in the Open Questions section]
 
-→ Run /discover again to resolve remaining gaps.
+→ Run /discover again to resolve remaining gaps (~N more runs estimated).
 ```

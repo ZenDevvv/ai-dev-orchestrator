@@ -27,13 +27,21 @@ Do not proceed without `docs/concept.md`.
 
 ---
 
+## Context Note
+
+Each phase re-reads its required files (BRD, architecture, module code, etc.) fresh from disk — so document-based context is never lost between phases.
+
+The only thing that can be lost across a long session is **unlogged ad-hoc decisions**: corrections or clarifications made verbally in the chat during a previous phase that were never written to a file. Use `/log-decision` to record any manual overrides so they survive context compression.
+
+---
+
 ## Global Execution Rules
 
 Apply these rules for the **entire build** — they override any per-phase instructions:
 
 1. **Skip all gates** — ignore every `⚠️ VERIFICATION GATE`, `📋 REVIEW GATE`, and `🧪 TEST GATE`. Do not pause. Continue to the next phase automatically.
 2. **Skip all review prompts** — ignore every `💡 After completing the FIRST module/page, run /phase12-review...` suggestion.
-3. **npm install before prisma generate** — in Phase 4a, run `npm install` in the project directory before running `npx prisma generate`.
+3. **npm install before prisma generate** — in Phase 4a, run `npm install` inside `templates/api/` before running `npx prisma generate`.
 4. **Context checkpoint between phases** — after each phase completes, run `/checkpoint` to produce a session summary before starting the next phase.
 
 ---
@@ -65,7 +73,7 @@ Read `.ai/.claude/commands/phase3-architecture.md` and execute all instructions.
 ### Phase 4a — DB Schema
 Read `.ai/.claude/commands/phase4a-db-schema.md` and execute all instructions.
 Scope: `all`
-Before running `npx prisma generate`, first run `npm install` in the project directory.
+Before running `npx prisma generate`, first run `npm install` inside `templates/api/`.
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -180,7 +188,7 @@ Artifacts:
 Next steps:
 1. Review docs/progress.md for the full phase log
 2. Set up your .env file from the generated .env.example
-3. Run: npm install && npx prisma db push && npx prisma db seed
+3. Run from `templates/api/`: npm install && npx prisma db push && npx prisma db seed
 4. Start the dev server and verify the app runs
 5. Run /phase12-review to do a manual quality pass on anything that needs attention
 ```
