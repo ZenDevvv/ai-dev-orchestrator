@@ -23,11 +23,9 @@ Using the backend Zod schemas as the single source of truth, generate the fronte
 3. Generate API endpoint configuration (Step 1)
 4. Generate service layer functions (Step 2)
 5. Generate custom React Query hooks (Step 3)
-6. Generate mock data factories using the copied Zod schemas
-
 Run through the Quick Reference Checklist at the bottom of API_STANDARD.md.
 
-📋 REVIEW GATE: Do the copied Zod schemas exactly match the backend? Are mock data factories producing realistic data?
+📋 REVIEW GATE: Do the copied Zod schemas exactly match the backend? Are hook signatures correct and types properly inferred?
 
 ## Mark Downstream Phases as Stale
 
