@@ -10,7 +10,7 @@ Read these context files before proceeding:
 
 ## Determine scope
 
-If `$ARGUMENTS` is **"all"** (case-insensitive), generate **every** frontend API module listed in the architecture doc's data models / route map. Process them in dependency order — modules with no FK dependencies first, then modules that depend on them, and so on. Otherwise, generate only the frontend API module for **$ARGUMENTS**.
+If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, generate **every** frontend API module listed in the architecture doc's data models / route map. Process them in dependency order — modules with no FK dependencies first, then modules that depend on them, and so on. Otherwise, generate only the frontend API module for **$ARGUMENTS**.
 
 For **each** module in scope, perform ALL of the following steps:
 

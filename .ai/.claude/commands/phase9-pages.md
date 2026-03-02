@@ -8,7 +8,7 @@ Read these context files before proceeding:
 
 ## Determine scope
 
-If `$ARGUMENTS` is **"all"** (case-insensitive), generate **every** page listed in the BRD's **Page Manifest** table. Process them in order as they appear in the manifest. Otherwise, generate only the page for **$ARGUMENTS**.
+If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, generate **every** page listed in the BRD's **Page Manifest** table. Process them in order as they appear in the manifest. Otherwise, generate only the page for **$ARGUMENTS**.
 
 For **each** page in scope, perform ALL of the following steps:
 
