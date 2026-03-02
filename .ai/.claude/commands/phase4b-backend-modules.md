@@ -10,7 +10,7 @@ Read these context files before proceeding:
 
 ## Determine scope
 
-If `$ARGUMENTS` is **"all"** (case-insensitive), generate **every** module listed in the architecture doc's route map. Process them in dependency order — models with no FK dependencies first, then models that depend on them, and so on. Otherwise, generate only the module for **$ARGUMENTS**.
+If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, generate **every** module listed in the architecture doc's route map. Process them in dependency order — models with no FK dependencies first, then models that depend on them, and so on. Otherwise, generate only the module for **$ARGUMENTS**.
 
 For **each** module in scope, perform ALL of the following steps:
 
