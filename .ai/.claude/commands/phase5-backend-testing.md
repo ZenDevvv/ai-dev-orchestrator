@@ -10,7 +10,7 @@ Read these context files before proceeding:
 
 ## Determine scope
 
-If `$ARGUMENTS` is **"all"** (case-insensitive), generate tests for **every** backend module created in Phase 4. Process them in the same dependency order used during generation. Otherwise, generate tests only for the **$ARGUMENTS** module.
+If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, generate tests for **every** backend module created in Phase 4. Process them in the same dependency order used during generation. Otherwise, generate tests only for the **$ARGUMENTS** module.
 
 For **each** module in scope, read the backend module code (generated in Phase 4) and perform ALL of the following steps:
 

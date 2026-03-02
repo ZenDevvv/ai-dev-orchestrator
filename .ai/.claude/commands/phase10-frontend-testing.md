@@ -11,7 +11,7 @@ Read these context files before proceeding:
 
 ## Determine scope
 
-If `$ARGUMENTS` is **"all"** (case-insensitive), generate tests for **every** page listed in the BRD's **Page Manifest** table. Process them in the same order as Phase 9. Otherwise, generate tests only for **$ARGUMENTS**.
+If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, generate tests for **every** page listed in the BRD's **Page Manifest** table. Process them in the same order as Phase 9. Otherwise, generate tests only for **$ARGUMENTS**.
 
 For **each** page in scope, perform ALL of the following steps:
 

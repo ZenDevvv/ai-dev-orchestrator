@@ -8,7 +8,7 @@ Read these context files before proceeding:
 
 ## Determine scope
 
-If `$ARGUMENTS` is **"all"** (case-insensitive), generate Prisma schema files for **every** model listed in the architecture doc's data models section. Process them in dependency order — models with no FK dependencies first, then models that depend on them. Otherwise, generate only the schema file for **$ARGUMENTS**.
+If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, generate Prisma schema files for **every** model listed in the architecture doc's data models section. Process them in dependency order — models with no FK dependencies first, then models that depend on them. Otherwise, generate only the schema file for **$ARGUMENTS**.
 
 For **each** model in scope, perform ALL of the following steps:
 
