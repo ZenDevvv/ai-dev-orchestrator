@@ -70,15 +70,15 @@ Append a row to `docs/progress.md`:
 
 `| — | Change | {CHG-NNN}: {feature name} | 🔄 Changed | YYYY-MM-DD | {one-line summary of what changed and why} |`
 
-## Step 5b — Mark Stale Phases in Progress Log
+## Step 6 — Mark Stale Phases in Progress Log
 
-For each phase listed under "Phases to Re-run" in the impact report (Step 6), scan `docs/progress.md` for any `✅ Complete` rows matching that phase and scope. For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: {CHG-NNN} YYYY-MM-DD`
+For each phase listed under "Phases to Re-run" in the impact report (Step 7), scan `docs/progress.md` for any `✅ Complete` rows matching that phase and scope. For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: {CHG-NNN} YYYY-MM-DD`
 
 This ensures `/resume` can surface exactly what needs re-running without the user manually tracking it.
 
 If `docs/progress.md` does not exist or has no matching rows for the affected phases, skip this step.
 
-## Step 6 — Output the impact report
+## Step 7 — Output the impact report
 
 Print a clear summary for the user:
 

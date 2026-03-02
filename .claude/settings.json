@@ -4,7 +4,8 @@
       "Read(//c/Users/User/Desktop/ai-dev-orchestrator/**)",
       "Bash(ls -la \"c:\\\\Users\\\\User\\\\Desktop\\\\ai-dev-orchestrator\\\\.ai\\\\.claude\\\\commands\"\" 2>/dev/null || echo \"Directory not found \")",
       "Bash(git checkout HEAD -- \"templates/api/app/person\" \"templates/api/prisma/schema/person.prisma\")",
-      "Bash(find \"c:\\\\Users\\\\User\\\\Desktop\\\\ai-dev-orchestrator\\\\.ai\\\\.claude\\\\commands\" -type f -name \"*.md\" -exec grep -Hn \"template\\\\|copy\\\\|project root\" {} ;)"
+      "Bash(find \"c:\\\\Users\\\\User\\\\Desktop\\\\ai-dev-orchestrator\\\\.ai\\\\.claude\\\\commands\" -type f -name \"*.md\" -exec grep -Hn \"template\\\\|copy\\\\|project root\" {} ;)",
+      "Read(//c/Users/User/Desktop/ai-dev-orchestrator/.ai/skills 2>/dev/**)"
     ],
     "additionalDirectories": [
       ".ai/.claude/commands",
