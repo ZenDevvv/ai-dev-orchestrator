@@ -3,7 +3,7 @@ Adopt the agent defined in `agents/frontend-engineer.md`. Read it now before pro
 Read these context files before proceeding:
 - BRD: `docs/brd.md` — focus on the relevant module requirements for: $ARGUMENTS
 - UI Design: `docs/ui-design.md` — the wireframe for this specific page AND the Style Guide section (Section 1) for all styling decisions
-- The frontend API module from Phase 8 — hook signatures, types, mock data factories
+- The frontend API module from Phase 8 — hook signatures, types, and Zod schemas
 - Design references: check `docs/design-references/` for any image files (`.png`, `.jpg`, `.jpeg`, `.webp`, `.gif`) and read them. Use these as a visual consistency check when implementing the page — the generated UI should reflect the same visual style extracted from these images in Phase 7.
 
 ## Determine scope
@@ -17,7 +17,6 @@ Build the page for **$ARGUMENTS**:
 - Use Tailwind CSS for styling, following the Style Guide section of `docs/ui-design.md` exactly
 - Use shadcn/ui components where applicable
 - Import and use the generated hooks from Phase 8 for data fetching
-- Use mock data for development/preview
 - Implement all states: loading, empty, error, populated
 - Include form validation using the frontend Zod schemas
 - Implement responsive behavior per the Style Guide
