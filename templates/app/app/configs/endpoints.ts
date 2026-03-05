@@ -51,54 +51,6 @@ export const API_ENDPOINTS = {
 		DELETE: "/product-type/:id", // Soft delete
 	},
 
-	DELIVERY_REQUEST: {
-		GET_ALL: "/delivery-request",
-		GET_BY_ID: "/delivery-request/:id",
-		CREATE: "/delivery-request",
-		UPDATE: "/delivery-request/:id",
-		DELETE: "/delivery-request/:id", // Soft delete
-		BULK_ITEM_UPDATE: "/delivery-request/:id/bulk",
-	},
-
-	DELIVERY_ORDER: {
-		GET_ALL: "/delivery-order",
-		GET_BY_ID: "/delivery-order/:id",
-		CREATE: "/delivery-order",
-		UPDATE: "/delivery-order/:id",
-		DELETE: "/delivery-order/:id", // Soft delete
-	},
-
-	DELIVERY_RECEIPT: {
-		GET_ALL: "/delivery-receipt",
-		GET_BY_ID: "/delivery-receipt/:id",
-		CREATE: "/delivery-receipt",
-		UPDATE: "/delivery-receipt/:id",
-		DELETE: "/delivery-receipt/:id", // Soft delete
-	},
-
-	DELIVERY_ORDER_ITEM: {
-		GET_ALL: "/delivery-order-item",
-		GET_BY_ID: "/delivery-order-item/:id",
-		CREATE: "/delivery-order-item",
-		UPDATE: "/delivery-order-item/:id",
-		DELETE: "/delivery-order-item/:id", // Soft delete
-	},
-
-	TRANSACTION: {
-		GET_ALL: "/transaction",
-		GET_BY_ID: "/transaction/:id",
-		CREATE: "/transaction",
-		UPDATE: "/transaction/:id",
-		DELETE: "/transaction/:id", // Soft delete
-	},
-
-	TRANSACTION_ITEM: {
-		GET_ALL: "/transaction-item",
-		GET_BY_ID: "/transaction-item/:id",
-		CREATE: "/transaction-item",
-		UPDATE: "/transaction-item/:id",
-		DELETE: "/transaction-item/:id", // Soft delete
-	},
 
 	BATCH: {
 		GET_ALL: "/batch",
@@ -124,14 +76,6 @@ export const API_ENDPOINTS = {
 		DELETE: "/supplier-item/:id", // Soft delete
 	},
 
-	DEPARTMENT: {
-		GET_ALL: "/department",
-		GET_BY_ID: "/department/:id",
-		CREATE: "/department",
-		UPDATE: "/department/:id",
-		DELETE: "/department/:id", // Soft delete
-	},
-
 	ORGANIZATION: {
 		GET_ALL: "/organization",
 		GET_BY_ID: "/organization/:id",
@@ -151,7 +95,6 @@ export const API_ENDPOINTS = {
 	STOCK_RECORD: {
 		GET_ALL: "/stock-record",
 		GET_BY_ID: "/stock-record/:id",
-		GET_AGGREGATE: "/stock-record/:id/department",
 		CREATE: "/stock-record",
 		UPDATE: "/stock-record/:id",
 		DELETE: "/stock-record/:id", // Soft delete

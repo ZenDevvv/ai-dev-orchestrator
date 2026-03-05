@@ -56,6 +56,15 @@ npm run dev
 
 Set the API base URL in `app/lib/api-client.ts` or via environment variable.
 
+## Playwright E2E
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
+Playwright runs against a local dev server using `npm run dev:e2e`.
+
 ## Scripts
 
 | Command | Description |
@@ -66,6 +75,8 @@ Set the API base URL in `app/lib/api-client.ts` or via environment variable.
 | `npm run typecheck` | Run TypeScript type checking |
 | `npm run lint` | Run ESLint |
 | `npm run format` | Format with ESLint |
+| `npm run frontend:check` | Typecheck + production build sanity check |
+| `npm run test:e2e` | Run Playwright E2E tests |
 
 ## License
 

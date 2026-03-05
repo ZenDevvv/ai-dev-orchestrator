@@ -1,175 +1,30 @@
-import {
-	LayoutDashboard,
-	Package,
-	ShoppingCart,
-	Send,
-	Barcode,
-	FileText,
-	Settings,
-	ChevronRight,
-	Building2,
-	Package2,
-	User,
-	Factory,
-	Layers,
-	Tag,
-	Building,
-	Users,
-	UserRound,
-} from "lucide-react";
+import { User } from "lucide-react";
 
 import {
 	Sidebar,
 	SidebarContent,
-	SidebarGroup,
-	SidebarGroupContent,
-	SidebarGroupLabel,
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
 	SidebarHeader,
 	SidebarFooter,
 	SidebarTrigger,
-	SidebarSeparator,
 	useSidebar,
 } from "@/components/ui/sidebar";
-import { Link, useLocation, useNavigate, useParams } from "react-router";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useNavigate } from "react-router";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import avatarFlat from "@/assets/images/avatarFlat.png";
 import { useAuth } from "~/hooks/use-auth";
 import osparLogo from "@/assets/images/ospar.jpg";
 
 export function AppSidebar() {
 	const navigate = useNavigate();
-	const { pathname } = useLocation();
 	const sidebar = useSidebar();
 	const { user } = useAuth();
 
-	const isManagement = user.department.code === "PPPMG";
-	const isOffice = user.department.code === "PPPOF";
-
-	const navItems = [
-		{
-			title: "Overview",
-			items: [
-				{
-					title: "Dashboard",
-					href: `/dashboard`,
-					icon: LayoutDashboard,
-				},
-			],
-		},
-		{
-			title: "Inventory",
-			items: [
-				...(isManagement
-					? [
-							{
-								title: "Products",
-								href: `/inventory/products`,
-								icon: Package,
-							},
-						]
-					: []),
-				{
-					title: "Stock Record",
-					href: `/inventory/stock-records`,
-					icon: Layers,
-				},
-				{
-					title: "Batch Record",
-					href: `/inventory/batch-records`,
-					icon: Tag,
-				},
-				{
-					title: "Stock Movements",
-					href: `/inventory/movement`,
-					icon: Send,
-				},
-			],
-		},
-		{
-			title: "Operations",
-			items: [
-				// ...(!isManagement
-				// 	? [
-				// 			{
-				// 				title: "Delivery Request",
-				// 				href: `/delivery-requests`,
-				// 				icon: Building2,
-				// 			},
-				// 		]
-				// 	: []),
-				{
-					title: "Delivery Request",
-					href: `/delivery-requests`,
-					icon: Building2,
-				},
-				{
-					title: "Delivery Orders",
-					href: `/delivery-orders`,
-					icon: ShoppingCart,
-				},
-				{
-					title: "Delivery Receipt",
-					href: `/delivery-receipt`,
-					icon: Package2,
-				},
-			],
-		},
-		{
-			title: "Management",
-			items: [
-				...(isManagement
-					? [
-							{
-								title: "Supplier",
-								href: `/suppliers`,
-								icon: Factory,
-							},
-						]
-					: []),
-
-				...(isManagement
-					? [
-							{
-								title: "Departments",
-								href: `/departments`,
-								icon: Building,
-							},
-						]
-					: []),
-				...(isOffice
-					? [
-							{
-								title: "Users",
-								href: `/users`,
-								icon: Users,
-							},
-						]
-					: []),
-				...(isManagement || isOffice
-					? [
-							{
-								title: "Patients",
-								href: `/patients`,
-								icon: UserRound,
-							},
-						]
-					: []),
-				{
-					title: "Reports",
-					href: `/reports`,
-					icon: FileText,
-				},
-				{
-					title: "Settings",
-					href: "/settings",
-					icon: Settings,
-				},
-			],
-		},
-	];
+	const displayName =
+		[user?.person?.personalInfo?.firstName, user?.person?.personalInfo?.lastName]
+			.filter(Boolean)
+			.join(" ") ||
+		user?.userName ||
+		"User";
 
 	return (
 		<Sidebar collapsible="icon">
@@ -182,44 +37,14 @@ export function AppSidebar() {
 								<img src={osparLogo} alt="" />
 							</div>
 							<div className="flex flex-col">
-								<span className="font-semibold text-sm">OSPAR Inventory</span>
-								<span className="text-xs text-muted-foreground">
-									{user?.department.name}
-								</span>
+								<span className="font-semibold text-sm">Template App</span>
 							</div>
 						</div>
 					)}
 					<SidebarTrigger className="cursor-pointer" />
 				</div>
 			</SidebarHeader>
-			<SidebarContent>
-				{navItems.map((section, index) => (
-					<>
-						{index > 0 && !sidebar.open && (
-							<SidebarSeparator className="bg-gray-100/20 max-w-10 mx-auto" />
-						)}
-						<SidebarGroup key={section.title}>
-							{sidebar.open && <SidebarGroupLabel>{section.title}</SidebarGroupLabel>}
-							<SidebarGroupContent>
-								<SidebarMenu>
-									{section.items.map((item) => (
-										<SidebarMenuItem key={item.href}>
-											<SidebarMenuButton
-												asChild
-												isActive={pathname === item.href}>
-												<Link to={item.href}>
-													<item.icon className="size-4" />
-													<span>{item.title}</span>
-												</Link>
-											</SidebarMenuButton>
-										</SidebarMenuItem>
-									))}
-								</SidebarMenu>
-							</SidebarGroupContent>
-						</SidebarGroup>
-					</>
-				))}
-			</SidebarContent>
+			<SidebarContent />
 			<SidebarFooter className="border-t border-sidebar-border p-2 py-4">
 				<button
 					onClick={() => navigate(`/profile/user/${user?.id}`)}
@@ -233,10 +58,7 @@ export function AppSidebar() {
 						</Avatar>
 						{sidebar.open && (
 							<div className="flex flex-col text-sm">
-								<span className="font-medium">
-									{user.person.personalInfo.firstName}{" "}
-									{user.person.personalInfo.lastName}
-								</span>
+								<span className="font-medium">{displayName}</span>
 							</div>
 						)}
 						<User className="ml-auto size-4 text-muted-foreground" />

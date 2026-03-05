@@ -24,7 +24,6 @@ export const NotificationSchema = z.object({
 	category: z.string().min(1),
 	title: z.string().min(1),
 	description: z.string().min(1),
-	departmentId: z.string().refine((val) => isValidObjectId(val)),
 	recipients: RecipientsSchema.optional(),
 	metadata: z.any().optional(),
 	isDeleted: z.boolean(),
@@ -50,7 +49,6 @@ export type CreateNotification = z.infer<typeof CreateNotificationSchema>;
 // Update Notification Schema (partial, excluding immutable fields and relations)
 export const UpdateNotificationSchema = NotificationSchema.omit({
 	id: true,
-	departmentId: true,
 	createdAt: true,
 	updatedAt: true,
 	isDeleted: true,

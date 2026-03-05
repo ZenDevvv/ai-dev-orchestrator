@@ -306,6 +306,8 @@ Starting from: Phase 4a
 │   │   ├── API_STANDARD.md         # Frontend hooks, service layer, Zod copy rules
 │   │   ├── ARCHITECTURE_STANDARD.md
 │   │   ├── TESTING_CONVENTIONS.md
+│   │   ├── FRONTEND_TESTING.md
+│   │   ├── E2E_PATTERNS.md
 │   │   └── ...                     # More skills added as you refine conventions
 │   │
 │   ├── docs/                       # Sample only — shows expected output structure and file descriptions
@@ -598,11 +600,11 @@ Builds one page at a time using Tailwind + shadcn/ui, following the style guide 
 
 **Example:** `/phase10-frontend-testing DashboardPage`
 
-Agent: QA Engineer | Skill: `TESTING_CONVENTIONS` | Reads: `docs/brd.md` (acceptance criteria), Phase 9 page, Phase 8 mock data
+Agent: QA Engineer | Skill: `FRONTEND_TESTING` | Reads: `docs/brd.md` (acceptance criteria), Phase 9 page, Phase 8 mock data
 
-Generates behavioral component tests, hook tests, form validation tests, and accessibility tests.
+Generates behavioral frontend tests with Playwright (user-visible flows, state coverage, validation, and accessibility checks).
 
-**Gate:** Run tests. Confirm they pass AND the test quality is good.
+**Gate:** Run `npm run typecheck`, `npm run build`, and `npm run test:e2e` in `templates/app/`.
 
 ---
 
@@ -723,10 +725,11 @@ Skills are reusable reference documents encoding your conventions. They survive 
 | `MODULE_TEMPLATE.md`       | ✅ Ready                       | Phase 4a, 4b      |
 | `API_STANDARD.md`          | ✅ Ready                       | Phase 8           |
 | `ARCHITECTURE_STANDARD.md` | ✅ Ready                       | Phase 3, 4a, 4b, 12 |
-| `TESTING_CONVENTIONS.md`   | ✅ Ready                       | Phase 5, 10       |
+| `TESTING_CONVENTIONS.md`   | Ready                          | Phase 5           |
+| `FRONTEND_TESTING.md`      | Ready                          | Phase 10          |
 | Style Guide (in `ui-design.md`) | Created per-project by Phase 7 | Phase 9      |
 | `MIGRATION_TEMPLATE.md`    | Add when ready                 | Phase 6           |
-| `E2E_PATTERNS.md`          | Add when ready                 | Phase 11          |
+| `E2E_PATTERNS.md`          | Ready                          | Phase 11          |
 | `REVIEW_CHECKLIST.md`      | Add when ready                 | Phase 12          |
 | `DOC_TEMPLATES.md`         | Add when ready                 | Phase 13          |
 | `INFRA_STANDARD.md`        | Add when ready                 | Phase 14          |
@@ -742,3 +745,4 @@ Skills you don't have yet won't block you — if a skill file is absent, the pha
 **Add a agent:** Create a `.md` file in `agents/` (Identity → Perspective → Priorities → What You Produce → What You Do Not Do).
 
 **Refine over time:** When you correct the AI's output, note what you changed. If the same correction happens twice, add a rule to the relevant skill doc.
+

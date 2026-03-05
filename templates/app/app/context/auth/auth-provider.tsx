@@ -45,7 +45,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
 			setUser(response.user);
 
-			return response;
+			return response.user;
 		} catch (error: any) {
 			console.error("Login error:", error);
 			setError(error.message || "Login failed. Please try again.");
