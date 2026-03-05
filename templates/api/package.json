@@ -1,5 +1,5 @@
 {
-	"name": "msa-template-1bis",
+	"name": "msa-template",
 	"version": "1.0.122",
 	"main": "dist/lib-entry.js",
 	"scripts": {
@@ -27,7 +27,7 @@
 	"prisma": {
 		"seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
 	},
-	"author": "1BIS",
+	"author": "Template Maintainers",
 	"license": "MIT",
 	"description": "A modular microservice template built with TypeScript, Express, and Prisma (MongoDB). It includes service scaffolding tools, consistent query utilities with data grouping, Zod validation, structured logging, comprehensive seeding system, and Swagger/OpenAPI documentation.",
 	"keywords": [
@@ -68,7 +68,6 @@
 		"ioredis": "^5.7.0",
 		"jsonwebtoken": "^9.0.2",
 		"mongoose": "^8.18.1",
-		"msa-template-1bis": "^1.0.122",
 		"multer": "^2.0.1",
 		"socket.io": "^4.8.1",
 		"swagger-jsdoc": "^6.2.8",

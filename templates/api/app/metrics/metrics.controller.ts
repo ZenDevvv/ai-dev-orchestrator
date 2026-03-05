@@ -635,26 +635,8 @@ export const controller = (prisma: PrismaClient) => {
 							break;
 
 						case "stockStatus":
-							// For products, calculate stock levels
-							if (modelName.toLowerCase() === "product") {
-								const products = await model.findMany({
-									where: whereClause,
-									select: { quantity: true, reorderLevel: true },
-								});
-
-								result.stockStatus = {
-									inStock: products.filter(
-										(p: any) =>
-											p.quantity > (p.reorderLevel || 0) && p.quantity > 0,
-									).length,
-									lowStock: products.filter(
-										(p: any) =>
-											p.quantity <= (p.reorderLevel || 10) && p.quantity > 0,
-									).length,
-									outOfStock: products.filter((p: any) => p.quantity === 0)
-										.length,
-								};
-							}
+							// Generic templates should not include stock-domain aggregation logic.
+							result.stockStatus = {};
 							break;
 
 						case "resolved":

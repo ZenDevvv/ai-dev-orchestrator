@@ -8,13 +8,6 @@ import { PaginationSchema } from "./common.zod";
 
 export const Role = z.enum(["user", "admin", "viewer"]);
 
-export const SubRole = z.enum([
-	"student",
-	"instructor",
-	"org_admin",
-	"superadmin"
-]);
-
 export const UserStatus = z.enum(["active", "inactive", "suspended", "archived"]);
 
 // ─── User Model Schema ──────────────────────────────────────────────
@@ -35,7 +28,7 @@ export const UserSchema = z.object({
 	email: z.string().email("Invalid email format"),
 	password: z.string(),
 	role: Role,
-	subRole: z.array(SubRole),
+	subRole: z.array(z.string()).optional().default([]),
 	status: UserStatus.default("active"),
 	isDeleted: z.boolean().default(false),
 	lastLogin: z.coerce.date().optional(),

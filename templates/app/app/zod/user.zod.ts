@@ -5,15 +5,8 @@ import type { Pagination } from "~/types/pagination";
 export const RoleEnum = z.enum(["superadmin", "viewer", "admin", "user"]);
 export type Role = z.infer<typeof RoleEnum>;
 
-export const SubRoleEnum = z.enum([
-	"staff",
-	"guard",
-	"vendor",
-	"operator",
-	"manager",
-	"guest",
-]);
-export type SubRole = z.infer<typeof SubRoleEnum>;
+export const SubRoleSchema = z.array(z.string()).optional().default([]);
+export type SubRole = z.infer<typeof SubRoleSchema>;
 
 export const StatusEnum = z.enum(["active", "inactive", "suspended", "archived"]);
 export type Status = z.infer<typeof StatusEnum>;
@@ -23,9 +16,9 @@ export const createUserSchema = z.object({
 	avatar: z.string().optional(),
 	userName: z.string().min(1),
 	email: z.string().email(),
-	password: z.string().min(8).optional(), 
+	password: z.string().min(8).optional(),
 	role: RoleEnum,
-	subRole: SubRoleEnum.optional(),
+	subRole: SubRoleSchema,
 	organizationId: z.string().optional(),
 	loginMethod: z.string().min(1),
 });

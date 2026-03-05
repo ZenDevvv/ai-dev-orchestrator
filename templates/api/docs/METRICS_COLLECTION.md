@@ -253,7 +253,6 @@ You can include any model-specific filter in the filter object:
 
 - **isActive**: Boolean - Filter by active status
 - **status**: String - Filter by status field
-- **categoryId**: String - Filter by category ID
 - Any other field on the model
 
 **Note**: `isDeleted: false` is automatically applied to all queries.
@@ -262,13 +261,12 @@ You can include any model-specific filter in the filter object:
 
 ```json
 {
-	"model": "Product",
+	"model": "User",
 	"data": ["count", "stockStatus"],
 	"filter": {
 		"dateFrom": "2025-01-01",
 		"dateTo": "2025-12-31",
-		"isActive": true,
-		"categoryId": "507f1f77bcf86cd799439011"
+		"isActive": true
 	}
 }
 ```
@@ -301,17 +299,17 @@ You can include any model-specific filter in the filter object:
 
 ## Use Cases
 
-1. **Time-Based Product Tracking**: Track weekly, monthly, and annual product counts
+1. **Time-Based Entity Tracking**: Track weekly, monthly, and annual counts
 2. **Dashboard Widgets**: Generate single-model metrics for dashboard cards
-3. **Stock Monitoring**: Monitor product stock levels and status
+3. **Status Monitoring**: Monitor record status distributions
 4. **User Activity**: Track user counts and status distributions
 5. **Alert Management**: Monitor resolved vs unresolved alerts
-6. **Transaction Analytics**: Aggregate transaction amounts and counts
+6. **Aggregate Analytics**: Aggregate amounts and counts
 7. **Filtered Reports**: Generate reports with specific date ranges and filters
 
 ## Notes
 
-- **Model names are case-insensitive**: "Product", "product", and "PRODUCT" all work
+- **Model names are case-insensitive**: "User", "user", and "USER" all work
 - **Automatic filtering**: All queries automatically exclude deleted records (`isDeleted: false`)
 - **Date filtering**: Uses the `createdAt` field by default
 - **Flexible data types**:

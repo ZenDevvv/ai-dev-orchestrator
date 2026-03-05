@@ -123,18 +123,18 @@ export const router = (route: Router, controller: IController): Router => {
 	 *                 additionalProperties: true
 	 *           examples:
 	 *             timeBasedMetrics:
-	 *               summary: Time-based product metrics
+	 *               summary: Time-based model metrics
 	 *               value:
-	 *                 model: "Product"
-	 *                 data: ["todayProducts", "thisWeekProducts", "thisMonthProducts", "thisQuarterProducts", "thisYearProducts"]
+	 *                 model: "User"
+	 *                 data: ["todayUsers", "thisWeekUsers", "thisMonthUsers", "thisQuarterUsers", "thisYearUsers"]
 	 *                 filter:
 	 *                   dateFrom: "2025-01-01"
 	 *                   dateTo: "2025-12-31"
 	 *             legacyTimeMetrics:
 	 *               summary: Legacy time-based metrics (last N days)
 	 *               value:
-	 *                 model: "Product"
-	 *                 data: ["weeklyProducts", "monthlyProducts", "annualProducts"]
+	 *                 model: "User"
+	 *                 data: ["weeklyUsers", "monthlyUsers", "annualUsers"]
 	 *             standardMetrics:
 	 *               summary: Standard metrics with filters
 	 *               value:

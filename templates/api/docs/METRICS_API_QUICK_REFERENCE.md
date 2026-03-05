@@ -187,7 +187,7 @@ POST /api/metrics/collect
 
 ## Tips
 
-1. **Model names are case-insensitive**: Use "Product", "product", or "PRODUCT"
+1. **Model names are case-insensitive**: Use "User", "user", or "USER"
 2. **One model per request**: Focus on specific metrics for a single model
 3. **Combine multiple data types**: Request multiple metrics in one call
 4. **Date filters**: Use `dateFrom` and `dateTo` in the filter object

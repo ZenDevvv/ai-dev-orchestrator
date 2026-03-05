@@ -13,7 +13,7 @@ model User {
   email    String  @unique
   password String
   role     Role
-  subRole  SubRole[]
+  subRole  String[] @default([])
 
   status      UserStatus @default(active)
   isDeleted   Boolean    @default(false)
@@ -60,9 +60,3 @@ enum Role {
   viewer
 }
 
-enum SubRole {
-  student
-  instructor
-  org_admin
-  superadmin
-}

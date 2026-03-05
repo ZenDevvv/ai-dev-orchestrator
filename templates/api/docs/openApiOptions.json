@@ -3,19 +3,19 @@
 	"definition": {
 		"openapi": "3.1.0",
 		"info": {
-			"title": "1BIS Backend API",
+			"title": "Template Backend API",
 			"version": "1.0.0",
-			"description": "Welcome to the 1BIS API documentation. This is a RESTful API that allows you to interact with the 1BIS backend services.",
+			"description": "Welcome to the template API documentation. This is a RESTful API for template backend services.",
 			"contact": {
-				"name": "1BIS Support",
-				"email": "support@1bis.com",
-				"url": "https://1bis.com/support"
+				"name": "Template Support",
+				"email": "support@example.com",
+				"url": "https://example.com/support"
 			},
 			"license": {
 				"name": "MIT",
 				"url": "https://opensource.org/licenses/MIT"
 			},
-			"termsOfService": "https://1bis.com/terms"
+			"termsOfService": "https://example.com/terms"
 		},
 		"servers": [
 			{
@@ -23,7 +23,7 @@
 				"description": "Development server"
 			},
 			{
-				"url": "https://api.1bis.com/api",
+				"url": "https://api.example.com/api",
 				"description": "Production server"
 			}
 		],
@@ -33,7 +33,7 @@
 				"description": "Template management operations",
 				"externalDocs": {
 					"description": "Find out more about templates",
-					"url": "https://1bis.com/docs/templates"
+					"url": "https://example.com/docs/templates"
 				}
 			},
 			{

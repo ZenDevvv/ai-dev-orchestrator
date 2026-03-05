@@ -1,6 +1,6 @@
 # Security Features
 
-This document outlines the comprehensive security features implemented in the 1BIS API template.
+This document outlines the comprehensive security features implemented in the API template.
 
 ## 🔒 Security Middleware Stack
 
