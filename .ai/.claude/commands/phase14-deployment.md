@@ -27,3 +27,21 @@ Record completion with:
 - `Scope`: `—`
 - `Status`: `✅ Complete`
 - `Notes`: one-line summary
+
+## Final Search And Next Steps
+
+After logging Phase 14 complete, run a final search pass before ending:
+- Re-read `docs/progress.md` and identify any stale/changed/incomplete phases.
+- Search the repo for unresolved markers: `TODO`, `FIXME`, `TBD`, `HACK`, `XXX`.
+- Confirm `.env.example` exists for both:
+  - `templates/api/.env.example`
+  - `templates/app/.env.example`
+
+Then output:
+- `Final search findings` (concrete issues found, or "No blockers found")
+- `Recommended next steps (prioritized)` with `P0` first, then `P1`
+- `Baseline runbook`:
+  1. Review `docs/progress.md`
+  2. Configure `.env` from `.env.example`
+  3. Run backend bootstrap (`npm install`, `npx prisma db push`, `npx prisma db seed`)
+  4. Start app/services and run smoke checks

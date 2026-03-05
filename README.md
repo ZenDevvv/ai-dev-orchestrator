@@ -269,7 +269,7 @@ Use `/fix-bugs` after `/build`, `/continue`, or any phase run that leaves compil
 ### How It Works
 
 1. Reads project context (`docs/progress.md`, `docs/brd.md`, `docs/architecture.md`) to keep fixes aligned with the current design
-2. Runs checks in dependency order (backend, frontend mocked checks, then live integration where applicable)
+2. Runs checks in strict order: API build -> API tests -> app typecheck -> app build -> mocked E2E -> live E2E
 3. Applies minimal targeted patches and immediately re-runs the failed check
 4. Repeats automatically until all required checks pass
 5. Appends a `Bug Fix` row to `docs/progress.md` with pass/fail outcome and check summary

@@ -214,7 +214,21 @@ When Phase 14 is done:
    - `Status`: `🏁 Finished`
    - `Timestamp`: `{BUILD_END_TS}`
    - `Notes`: `/build finished (started: {BUILD_START_TS})`
-3. Output a final summary:
+3. Run a post-build search to determine next actions:
+   - Re-read `docs/progress.md` and collect any rows marked stale/changed/incomplete.
+   - Search the repo for unresolved implementation markers:
+     - `TODO`
+     - `FIXME`
+     - `TBD`
+     - `HACK`
+     - `XXX`
+   - Check whether environment templates exist for both runtimes:
+     - `templates/api/.env.example`
+     - `templates/app/.env.example`
+   - Build a prioritized list:
+     - `P0` blockers: failed checks, stale phases, missing required env/config.
+     - `P1` quality: review, refactor, test hardening, docs cleanup.
+4. Output a final summary:
 
 ```
 === BUILD COMPLETE ===
@@ -234,7 +248,17 @@ Artifacts:
 - [test files]              - Unit, integration, component, E2E
 - [deployment config]       - Dockerfiles, CI/CD, .env templates
 
-Next steps:
+Post-build search findings:
+- [List concrete findings from progress scan and repo marker search. If none, say "No blockers found."]
+
+Recommended next steps (prioritized):
+1. [Highest-priority P0 item from findings; if none, say "No P0 blockers."]
+2. [Next P0/P1 item]
+3. [Next item]
+4. [Next item]
+5. [Next item]
+
+Baseline runbook (always include):
 1. Review docs/progress.md for the full phase log
 2. Set up your .env file from the generated .env.example
 3. Run from `templates/api/`: npm install && npx prisma db push && npx prisma db seed
