@@ -65,14 +65,11 @@ This signals that generated code depending on the Prisma schema may be out of da
 
 ## Log Progress
 
-After all schemas are generated and `prisma generate` succeeds, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append one row (fill in today's date and a one-line summary):
-   `| 4a | DB Schema | {scope} | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {N} models, prisma generate OK |`
+Record completion with:
+- `Phase`: `4a`
+- `Name`: `DB Schema`
+- `Scope`: `{scope}`
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary (for example: `{N} models, prisma generate OK`)

@@ -51,14 +51,11 @@ This signals that frontend tests for this page may be testing a previous version
 
 ## Log Progress
 
-After completing this phase, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append one row per completed page (fill in today's date and a one-line summary):
-   `| 9 | Pages | {PAGE_NAME} | ? Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+For each completed page, record completion with:
+- `Phase`: `9`
+- `Name`: `Pages`
+- `Scope`: `{PAGE_NAME}`
+- `Status`: `? Complete`
+- `Notes`: one-line summary

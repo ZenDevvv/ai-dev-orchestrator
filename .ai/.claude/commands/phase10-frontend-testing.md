@@ -41,14 +41,11 @@ If any command fails, stop and fix the page/tests before proceeding.
 
 ## Log Progress
 
-After completing this phase, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append one row per tested page (fill in today's date and a one-line summary):
-   `| 10 | Frontend Testing | {PAGE_NAME} | ? Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+For each tested page, record completion with:
+- `Phase`: `10`
+- `Name`: `Frontend Testing`
+- `Scope`: `{PAGE_NAME}`
+- `Status`: `? Complete`
+- `Notes`: one-line summary

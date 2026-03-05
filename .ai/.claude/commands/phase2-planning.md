@@ -17,14 +17,11 @@ Save the output to `docs/project-plan.md`.
 
 ## Log Progress
 
-After completing this phase, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append this row (fill in today's date and a one-line summary):
-   `| 2 | Planning | — | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+Record completion with:
+- `Phase`: `2`
+- `Name`: `Planning`
+- `Scope`: `—`
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary of planning output

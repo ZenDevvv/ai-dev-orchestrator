@@ -19,14 +19,11 @@ Generate the following:
 
 ## Log Progress
 
-After completing this phase, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append this row (fill in today's date and a one-line summary):
-   `| 14 | Deployment | — | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+Record completion with:
+- `Phase`: `14`
+- `Name`: `Deployment`
+- `Scope`: `—`
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary

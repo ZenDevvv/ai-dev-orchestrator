@@ -121,4 +121,4 @@ Phase 1 is the most consequential phase — every downstream artifact (architect
 - **9 agent role definitions**: Business Analyst, Project Manager, Software Architect, Backend Engineer, QA Engineer, UI Designer, Frontend Engineer, Technical Writer, DevOps Engineer.
 - **5 skill documents**: `BRD_FORMAT.md`, `MODULE_TEMPLATE.md`, `API_STANDARD.md`, `ARCHITECTURE_STANDARD.md`, `TESTING_CONVENTIONS.md`.
 - **Starter templates**: `templates/api/` (Node.js + Express + Prisma + Zod + Redis + Swagger + Socket.IO) and `templates/app/` (React Router v7 + TypeScript + Tailwind + shadcn/ui + Vite).
-- **`docs/progress.md`** — auto-updated after every phase with status (`✅ Complete`, `⚠️ Stale`, `🔄 Changed`), date, and notes.
+- **`docs/progress.md`** — auto-updated after every phase with status (`✅ Complete`, `⚠️ Stale`, `🔄 Changed`), timestamp, and notes.

@@ -51,14 +51,11 @@ This signals that tests, frontend API modules, and pages depending on this modul
 
 ## Log Progress
 
-After completing each module, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append one row per completed module (fill in today's date and a one-line summary):
-   `| 4b | Backend Module | {MODULE_NAME} | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+For each completed module, record completion with:
+- `Phase`: `4b`
+- `Name`: `Backend Module`
+- `Scope`: `{MODULE_NAME}`
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary
