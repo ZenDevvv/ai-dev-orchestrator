@@ -1,9 +1,6 @@
 import { z } from "zod";
 import type { Person } from "./person.zod";
-import type { Transaction } from "./transaction.zod";
-import type { Department } from "./department.zod";
 import type { Pagination } from "~/types/pagination";
-import { de } from "zod/v4/locales";
 
 export const RoleEnum = z.enum(["superadmin", "viewer", "admin", "user"]);
 export type Role = z.infer<typeof RoleEnum>;
@@ -28,7 +25,7 @@ export const createUserSchema = z.object({
 	avatar: z.string().optional(),
 	userName: z.string().min(1),
 	email: z.string().email(),
-	password: z.string().min(8).optional(), // Optional for updates, required for create in practice
+	password: z.string().min(8).optional(), 
 	role: RoleEnum,
 	subRole: SubRoleEnum.optional(),
 	organizationId: z.string().optional(),
@@ -44,7 +41,6 @@ export const userSchema = createUserSchema
 		id: z.string(),
 		status: StatusEnum.default("active"),
 		isDeleted: z.boolean().default(false),
-		departmentId: z.string().nullable().optional(),
 		lastLogin: z.date().nullable().optional(),
 		createdAt: z.date(),
 		updatedAt: z.date(),
@@ -55,8 +51,6 @@ export type User = z.infer<typeof userSchema>;
 
 export type UserWithRelation = User & {
 	person: Person;
-	transactions: Transaction[];
-	department: Department;
 };
 
 export type GetAllUsers = {

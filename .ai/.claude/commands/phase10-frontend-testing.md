@@ -1,13 +1,13 @@
 Adopt the agent defined in `agents/qa-engineer.md`. Read it now before proceeding.
 
-You write behavioral tests — test what the user sees and experiences, not component internals.
+You write behavioral tests - test what the user sees and experiences, not component internals.
 
-Read `skills/TESTING_CONVENTIONS.md` if it exists — follow its conventions for file structure, naming, and assertion patterns.
+Read `skills/FRONTEND_TESTING.md` and follow its conventions for frontend behavioral testing.
 
 Read these context files before proceeding:
-- BRD: `docs/brd.md` — focus on the acceptance criteria for: $ARGUMENTS
+- BRD: `docs/brd.md` - focus on the acceptance criteria for: $ARGUMENTS
 - The page component(s) from Phase 9 for this page/module
-- The frontend API module from Phase 8 — mock data factories
+- The frontend API module from Phase 8 - mock data factories
 
 ## Determine scope
 
@@ -15,16 +15,26 @@ If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, genera
 
 For **each** page in scope, perform ALL of the following steps:
 
-Create tests:
-- Component tests: does the user see the right content? Do interactions (clicks, form submissions, navigation) produce the right outcomes?
-- Hook tests: does the hook return the right data shape? Does it handle loading and error states correctly?
-- Form validation tests: does the user see error messages for invalid input? Can the user submit valid input successfully?
-- Accessibility tests: can the user navigate by keyboard? Are ARIA labels present?
+Create Playwright tests in `templates/app/tests/e2e/`:
+- Validate visible content and critical interactions from the user's perspective
+- Validate loading, empty, error, and populated states (stub network responses where needed)
+- Validate form validation behavior and user-facing error messages
+- Validate keyboard accessibility and basic ARIA behavior for key flows
 
 A good test reads like: "when the user clicks submit with an empty name field, they see a validation error."
 A bad test reads like: "expect setError to have been called with {name: 'required'}."
 
-🧪 TEST GATE: Run the tests. Confirm they pass AND the test quality is good.
+## Mandatory Test Gate
+
+Run these commands in `templates/app/`:
+
+```bash
+npm run typecheck
+npm run build
+npm run test:e2e
+```
+
+If any command fails, stop and fix the page/tests before proceeding.
 
 ## Log Progress
 
@@ -38,4 +48,4 @@ After completing this phase, update `docs/progress.md`:
    |-------|------|-------|--------|------|-------|
    ```
 2. Append one row per tested page (fill in today's date and a one-line summary):
-   `| 10 | Frontend Testing | {PAGE_NAME} | ✅ Complete | YYYY-MM-DD | {summary} |`
+   `| 10 | Frontend Testing | {PAGE_NAME} | ? Complete | YYYY-MM-DD | {summary} |`

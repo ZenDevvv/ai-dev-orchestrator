@@ -23,7 +23,6 @@ model ActivityLog {
   page         Page?
   action       String
   description  String
-  departmentId String?  @db.ObjectId
   entityType   String?
   archive      Archive?
   isDeleted    Boolean  @default(false)

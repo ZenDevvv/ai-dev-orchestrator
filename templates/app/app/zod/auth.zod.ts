@@ -120,7 +120,6 @@ export const IdentificationSchema = z
 export const RegisterSchema = z.object({
 	email: z.string().email("Invalid email format"),
 	orgId: z.string().optional().nullable(),
-	departmentId: z.string().optional().nullable(),
 	password: z.string().min(6, "Password must be at least 6 characters long"),
 	userName: z
 		.string()

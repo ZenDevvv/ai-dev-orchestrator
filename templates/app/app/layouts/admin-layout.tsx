@@ -9,7 +9,7 @@ export default function AdminLayout() {
 	if (isLoading) {
 		return <div className="h-screen flex justify-center items-center">Loading...</div>;
 	}
-	
+
 	return (
 		<main className="h-screen bg-sidebar">
 			<SidebarProvider>

@@ -12,7 +12,6 @@ export async function logActivity(
 		userId: string;
 		action: string;
 		description: string;
-		departmentId?: string;
 		page?: { url: string; title: string };
 	},
 ) {
@@ -36,7 +35,6 @@ export async function logActivity(
 			action: payload.action,
 			page: payload.page,
 			description: payload.description,
-			departmentId: payload.departmentId,
 		};
 
 		// Fire-and-forget logging

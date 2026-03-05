@@ -254,7 +254,6 @@ You can include any model-specific filter in the filter object:
 - **isActive**: Boolean - Filter by active status
 - **status**: String - Filter by status field
 - **categoryId**: String - Filter by category ID
-- **departmentId**: String - Filter by department ID
 - Any other field on the model
 
 **Note**: `isDeleted: false` is automatically applied to all queries.
