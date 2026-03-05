@@ -367,16 +367,16 @@ Starting from: Phase 4a
 Every phase automatically logs its completion to `docs/progress.md`:
 
 ```
-| Phase | Name            | Scope       | Status      | Date       | Timestamp           | Notes                            |
-|-------|-----------------|-------------|-------------|------------|---------------------|----------------------------------|
-| BUILD | Build Run       | all         | 🚀 Started  | 2026-02-18 | 2026-02-18 09:02:11 | /build started                   |
-| 1     | BRD             | —           | ✅ Complete | 2026-02-18 | 2026-02-18 09:08:35 | 5 modules, 32 requirements       |
-| 2     | Planning        | —           | ✅ Complete | 2026-02-18 | 2026-02-18 09:15:09 | 3 sprints, 4 risks flagged       |
-| 4a    | DB Schema       | all         | ✅ Complete | 2026-02-19 | 2026-02-19 10:03:27 | 6 models, prisma generate OK     |
-| 4b    | Backend Module  | AUTH        | ✅ Complete | 2026-02-19 | 2026-02-19 10:24:18 | Login, register, JWT             |
-| 4b    | Backend Module  | USERS       | ✅ Complete | 2026-02-19 | 2026-02-19 10:41:52 | CRUD + avatar upload             |
-| 5     | Backend Testing | AUTH        | ⚠️ Stale     | 2026-02-19 | 2026-02-19 11:10:03 | Tests OK | Stale: phase 4b AUTH re-run 2026-02-20 14:32:40 |
-| BUILD | Build Run       | all         | 🏁 Finished | 2026-02-20 | 2026-02-20 16:47:19 | /build finished (started: 2026-02-18 09:02:11) |
+| Phase | Name            | Scope       | Status      | Timestamp           | Notes                            |
+|-------|-----------------|-------------|-------------|---------------------|----------------------------------|
+| BUILD | Build Run       | all         | 🚀 Started  | 2026-02-18 09:02:11 | /build started                   |
+| 1     | BRD             | —           | ✅ Complete | 2026-02-18 09:08:35 | 5 modules, 32 requirements       |
+| 2     | Planning        | —           | ✅ Complete | 2026-02-18 09:15:09 | 3 sprints, 4 risks flagged       |
+| 4a    | DB Schema       | all         | ✅ Complete | 2026-02-19 10:03:27 | 6 models, prisma generate OK     |
+| 4b    | Backend Module  | AUTH        | ✅ Complete | 2026-02-19 10:24:18 | Login, register, JWT             |
+| 4b    | Backend Module  | USERS       | ✅ Complete | 2026-02-19 10:41:52 | CRUD + avatar upload             |
+| 5     | Backend Testing | AUTH        | ⚠️ Stale     | 2026-02-19 11:10:03 | Tests OK | Stale: phase 4b AUTH re-run 2026-02-20 14:32:40 |
+| BUILD | Build Run       | all         | 🏁 Finished | 2026-02-20 16:47:19 | /build finished (started: 2026-02-18 09:02:11) |
 ```
 
 **Status values:**

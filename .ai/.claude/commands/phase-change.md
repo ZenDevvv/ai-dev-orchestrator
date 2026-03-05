@@ -66,9 +66,14 @@ Be specific. "Phase 4 (REPORTS module)" is correct. "Phase 4" alone is not enoug
 
 ## Step 5 — Log to progress
 
-Append a row to `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-`| — | Change | {CHG-NNN}: {feature name} | 🔄 Changed | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {one-line summary of what changed and why} |`
+Log the change event with:
+- `Phase`: `—`
+- `Name`: `Change`
+- `Scope`: `{CHG-NNN}: {feature name}`
+- `Status`: `🔄 Changed`
+- `Notes`: one-line summary of what changed and why
 
 ## Step 6 — Mark Stale Phases in Progress Log
 

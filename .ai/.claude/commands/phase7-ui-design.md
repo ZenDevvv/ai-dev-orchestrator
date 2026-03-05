@@ -98,14 +98,11 @@ This signals that pages and tests built against the previous style guide or wire
 
 ## Log Progress
 
-After completing this phase, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append this row (fill in today's date and a one-line summary):
-   `| 7 | UI Design | — | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+Record completion with:
+- `Phase`: `7`
+- `Name`: `UI Design`
+- `Scope`: `—`
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary

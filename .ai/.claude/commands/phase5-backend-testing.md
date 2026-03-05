@@ -30,14 +30,11 @@ If `skills/TESTING_CONVENTIONS.md` doesn't exist yet, extract the testing patter
 
 ## Log Progress
 
-After completing each module's tests, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append one row per tested module (fill in today's date and a one-line summary):
-   `| 5 | Backend Testing | {MODULE_NAME} | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+For each tested module, record completion with:
+- `Phase`: `5`
+- `Name`: `Backend Testing`
+- `Scope`: `{MODULE_NAME}`
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary

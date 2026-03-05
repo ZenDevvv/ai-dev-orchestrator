@@ -26,14 +26,11 @@ Review the code for:
 
 ## Log Progress
 
-After completing this phase, update `docs/progress.md`:
+Follow the canonical logging spec in `docs/progress.md`.
 
-1. If `docs/progress.md` does not exist, create it with this header:
-   ```
-   # Project Progress
-
-   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
-   |-------|------|-------|--------|------|-----------|-------|
-   ```
-2. Append one row per review run (fill in checkpoint name and a one-line summary):
-   `| 12 | Code Review | {checkpoint or scope} | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`
+For each review run, record completion with:
+- `Phase`: `12`
+- `Name`: `Code Review`
+- `Scope`: `{checkpoint or scope}`
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary
