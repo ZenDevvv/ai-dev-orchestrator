@@ -65,27 +65,31 @@ Then infer likely failure origin from phase ownership:
 
 Run checks based on scope:
 
-### Backend scope (`all` or `backend`)
-Run from `templates/api/`:
-```bash
-npm run build
-npm run test
-```
+### Deterministic check order
 
-### Frontend scope (`all` or `frontend`)
-Run from `templates/app/`:
-```bash
-npm run typecheck
-npm run build
-npm run test:e2e -- --grep @phase10-mocked
-```
+Use these check IDs and run them in this exact order:
 
-### Live integration (`all`)
-1. Ensure backend API is running and reachable.
-2. Run from `templates/app/`:
-```bash
-npm run test:e2e -- --grep @phase11-live
-```
+- **C1 (API build):** in `templates/api/` -> `npm run build`
+- **C2 (API tests):** in `templates/api/` -> `npm run test`
+- **C3 (APP typecheck):** in `templates/app/` -> `npm run typecheck`
+- **C4 (APP build):** in `templates/app/` -> `npm run build`
+- **C5 (Mocked E2E):** in `templates/app/` -> `npm run test:e2e -- --grep @phase10-mocked`
+- **C6 (Live E2E):** in `templates/app/` -> `npm run test:e2e -- --grep @phase11-live`
+
+### Scope to pipeline mapping
+
+- `backend` -> C1 -> C2
+- `frontend` -> C3 -> C4 -> C5
+- `all` -> C1 -> C2 -> C3 -> C4 -> C5 -> C6
+- `phase:<N>` -> run owning checks first, then complete the full `all` pipeline:
+  - `phase:4a|4b|5|6` -> start C1
+  - `phase:8|9|10` -> start C3
+  - `phase:11` -> start C6 (then run C1..C5 if stale/failed)
+  - `phase:12|13|14` -> start C1
+
+### Live integration requirement
+
+Before C6, ensure backend API is running and reachable.
 
 If live tests fail due to environment unavailability (server, DB, credentials), treat as infrastructure blocker and report clearly.
 
@@ -95,19 +99,17 @@ If live tests fail due to environment unavailability (server, DB, credentials), 
 
 Repeat until all required checks pass:
 
-1. Run check matrix in dependency order:
-   - backend build -> backend tests
-   - frontend typecheck -> frontend build -> phase10 mocked e2e
-   - phase11 live e2e (if scope is `all`)
+1. Run checks in pipeline order for the chosen scope.
 2. On first failure:
    - isolate failing file(s) and root cause
    - apply minimal fix
-   - re-run failed command
-   - if it passes, continue with remaining commands
+   - re-run the failed check ID only (e.g., C4)
+   - if it passes, continue from the next check ID in sequence
 3. If the same failure repeats twice:
    - reassess root cause at architecture/contract layer
    - patch upstream source of truth, then re-run dependent checks
-4. Track touched areas by phase ownership (4b/8/9/10/11/etc.) for logging.
+4. If an upstream check fails after a downstream fix, restart from the earliest failed check ID and proceed forward.
+5. Track touched areas by phase ownership (4b/8/9/10/11/etc.) for logging.
 
 ---
 

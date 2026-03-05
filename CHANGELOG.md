@@ -7,6 +7,18 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.5.1] — 2026-03-05
+
+### Changed
+- **`/fix-bugs` execution model** — now uses a deterministic check pipeline with explicit order and IDs: API build -> API tests -> app typecheck -> app build -> mocked E2E -> live E2E.
+- **`/fix-bugs` retry behavior** — after a patch, reruns the failed check first, then continues forward in sequence; upstream regressions restart from the earliest failed check.
+- **README `/fix-bugs` section** — updated to document the strict check order.
+
+### Why
+This removes ambiguity during auto-stabilization runs and makes bug-fix sessions repeatable across projects.
+
+---
+
 ## [1.5.0] — 2026-03-05
 
 ### Added

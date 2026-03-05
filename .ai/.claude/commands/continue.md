@@ -228,6 +228,21 @@ Otherwise: read `.ai/.claude/commands/phase14-deployment.md` and execute all ins
 
 When Phase 14 is done (or skipped), output:
 
+Before output, run a post-run search to determine next actions:
+- Re-read `docs/progress.md` and collect any rows marked stale/changed/incomplete.
+- Search the repo for unresolved implementation markers:
+  - `TODO`
+  - `FIXME`
+  - `TBD`
+  - `HACK`
+  - `XXX`
+- Check whether environment templates exist for both runtimes:
+  - `templates/api/.env.example`
+  - `templates/app/.env.example`
+- Build a prioritized list:
+  - `P0` blockers: failed checks, stale phases, missing required env/config.
+  - `P1` quality: review, refactor, test hardening, docs cleanup.
+
 ```
 === CONTINUE COMPLETE ===
 
@@ -248,7 +263,17 @@ Artifacts:
 - [test files]              - Unit, integration, component, E2E
 - [deployment config]       - Dockerfiles, CI/CD, .env templates
 
-Next steps:
+Post-run search findings:
+- [List concrete findings from progress scan and repo marker search. If none, say "No blockers found."]
+
+Recommended next steps (prioritized):
+1. [Highest-priority P0 item from findings; if none, say "No P0 blockers."]
+2. [Next P0/P1 item]
+3. [Next item]
+4. [Next item]
+5. [Next item]
+
+Baseline runbook (always include):
 1. Review docs/progress.md for the full phase log
 2. Set up your .env file from the generated .env.example
 3. Run: npm install && npx prisma db push && npx prisma db seed
