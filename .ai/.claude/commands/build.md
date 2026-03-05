@@ -42,9 +42,11 @@ Apply these rules for the **entire build** - they override any per-phase instruc
 1. **Skip all gates** - ignore every verification/review/test gate prompt. Do not pause; continue to the next phase automatically.
 2. **Skip all review prompts** - ignore every "after first module/page run /phase12-review" suggestion.
 3. **npm install before prisma generate** - in Phase 4a, run `npm install` inside `templates/api/` before running `npx prisma generate`.
-4. **Context checkpoint between phases** - after each phase completes, run `/checkpoint`.
-5. **Mandatory frontend sanity checks** - after Phases 8, 9, 10, and 11, run from `templates/app/`: `npm run typecheck && npm run build`. If either command fails, stop and fix before proceeding.
-6. **Mandatory Playwright check** - after Phase 11, run from `templates/app/`: `npm run test:e2e`. If it fails, stop and fix before proceeding.
+4. **Frontend bootstrap before frontend phases** - before Phase 8, run in `templates/app/`: `npm install` and `npx playwright install chromium`.
+5. **Context checkpoint between phases** - after each phase completes, run `/checkpoint`.
+6. **Mandatory frontend sanity checks** - after Phases 8, 9, 10, and 11, run from `templates/app/`: `npm run typecheck && npm run build`. If either command fails, stop and fix before proceeding.
+7. **Mandatory Phase 10 mocked Playwright check** - after Phase 10, run from `templates/app/`: `npm run test:e2e -- --grep @phase10-mocked`. If it fails, stop and fix before proceeding.
+8. **Mandatory Phase 11 live Playwright check** - after Phase 11, run from `templates/app/`: `npm run test:e2e -- --grep @phase11-live`. If it fails, stop and fix before proceeding.
 
 ---
 
@@ -116,6 +118,9 @@ Input: [$ARGUMENTS as design rules, or empty string if none provided]
 Read `.ai/.claude/commands/phase8-frontend-api.md` and execute all instructions.
 Scope: `all`
 
+Before Phase 8 starts, run from `templates/app/`:
+`npm install && npx playwright install chromium`
+
 Then run from `templates/app/`:
 `npm run typecheck && npm run build`
 
@@ -139,7 +144,7 @@ Read `.ai/.claude/commands/phase10-frontend-testing.md` and execute all instruct
 Scope: `all`
 
 Then run from `templates/app/`:
-`npm run typecheck && npm run build`
+`npm run typecheck && npm run build && npm run test:e2e -- --grep @phase10-mocked`
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -149,7 +154,7 @@ Then run from `templates/app/`:
 Read `.ai/.claude/commands/phase11-e2e.md` and execute all instructions.
 
 Then run from `templates/app/`:
-`npm run typecheck && npm run build && npm run test:e2e`
+`npm run typecheck && npm run build && npm run test:e2e -- --grep @phase11-live`
 
 > Context Checkpoint: run `/checkpoint`
 

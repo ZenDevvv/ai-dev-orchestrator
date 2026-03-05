@@ -7,24 +7,29 @@ Read these context files before proceeding:
 - Architecture: `docs/architecture.md` - route map
 - UI Design: `docs/ui-design.md` - user flow diagrams
 
-Create Playwright E2E test suites in `templates/app/tests/e2e/`:
+Create Playwright E2E integration test suites in `templates/app/tests/e2e/`:
 - Cover each user flow from the UI design
 - Cover happy-path tests for all critical journeys
 - Cover edge-case and error-path tests from BRD error states
 - Cover cross-module integration tests (create -> list -> edit -> delete)
 - Cover auth flow tests (login, logout, unauthorized access, role-based access)
+- Tag each Phase 11 integration test title with `@phase11-live`
+
+Phase 11 is live-backend integration testing. Do not mock core API calls in this phase.
 
 ## Mandatory Test Gate
+
+Before running the gate, ensure the backend API is running and reachable by the frontend.
 
 Run these commands in `templates/app/`:
 
 ```bash
 npm run typecheck
 npm run build
-npm run test:e2e
+npm run test:e2e -- --grep @phase11-live
 ```
 
-All E2E flows must pass against a running backend or mocked E2E test environment.
+All E2E flows must pass against a running backend.
 
 ## Log Progress
 
@@ -38,4 +43,4 @@ After completing this phase, update `docs/progress.md`:
    |-------|------|-------|--------|------|-------|
    ```
 2. Append this row (fill in today's date and a one-line summary):
-   `| 11 | E2E Tests | — | ? Complete | YYYY-MM-DD | {summary} |`
+   `| 11 | E2E Tests | - | ? Complete | YYYY-MM-DD | {summary} |`

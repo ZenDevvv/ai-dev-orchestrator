@@ -2,17 +2,18 @@
 
 ## Purpose
 
-Defines stable Playwright patterns for Phase 11 end-to-end coverage so generated frontend code is validated by real user flows before deployment phases.
+Defines stable Phase 11 Playwright integration patterns so generated frontend code is validated against a live backend before deployment phases.
 
 ## Rules
 
 1. Use Playwright (`@playwright/test`) for all E2E suites.
 2. Keep all E2E specs under `templates/app/tests/e2e/`.
-3. Prefer user-facing selectors first (`getByRole`, `getByLabel`, visible text) before CSS selectors.
-4. Every critical flow must include at least one happy-path test and one error-path test.
-5. Capture runtime regressions by failing tests on uncaught `pageerror` events.
-6. Do not assert on implementation details (no internal React state assertions).
-7. Use deterministic test data or controlled API stubs for flaky external dependencies.
+3. Tag every Phase 11 integration test title with `@phase11-live`.
+4. Prefer user-facing selectors first (`getByRole`, `getByLabel`, visible text) before CSS selectors.
+5. Every critical flow must include at least one happy-path test and one error-path test.
+6. Capture runtime regressions by failing tests on uncaught `pageerror` events.
+7. Do not assert on implementation details (no internal React state assertions).
+8. Run against a live backend for core API flows. Do not mock the main module APIs in Phase 11.
 
 ## Baseline Setup
 
@@ -41,7 +42,7 @@ From `templates/app/`, run:
 ```bash
 npm run typecheck
 npm run build
-npm run test:e2e
+npm run test:e2e -- --grep @phase11-live
 ```
 
 All three must pass before considering Phase 11 complete.
