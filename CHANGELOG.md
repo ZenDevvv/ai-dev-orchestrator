@@ -7,6 +7,21 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.5.0] — 2026-03-05
+
+### Added
+- **`/fix-bugs` command** — new post-build stabilization command at `.ai/.claude/commands/fix-bugs.md` that runs an automated triage + patch loop until required checks pass (or reports hard blockers).
+- **README command guide** — added a dedicated `/fix-bugs` section with usage, behavior, and best-use cases.
+
+### Changed
+- **Quick reference (`.ai/CLAUDE.md`)** — phase sequence, run modes, and error-recovery guidance now include `/fix-bugs all` for automated post-build cleanup.
+- **README command map** — `.ai/.claude/commands/` listing now includes `fix-bugs.md`.
+
+### Why
+`/build` and `/continue` optimize for speed, which can leave projects with cross-phase regressions. A dedicated stabilization command creates a consistent, repeatable way to patch and validate until the scaffold is runnable.
+
+---
+
 ## [1.4.0] — 2026-02-28
 
 ### Added

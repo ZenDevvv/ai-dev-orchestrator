@@ -87,10 +87,12 @@ You review the output, make corrections, and move to the next phase.
 
 # Log a manual override when you correct the AI's output:
 /log-decision "Phase 3 | AI used String[] for User.roles | Changed to separate Role model | Reason: roles need their own permission attributes"
+/fix-bugs all                     # auto-fix compile/test failures until required checks pass
 ```
 
 > Want to skip the manual phase-by-phase flow entirely? See [`/build`](#build--full-project-scaffold-beta) below.
 > Already started manually and want to finish in one go? See [`/continue`](#continue--resume-full-build-beta).
+> Build finished but checks are failing? Run `/fix-bugs all` after `/build` or `/continue`.
 
 ---
 
@@ -258,6 +260,37 @@ Starting from: Phase 4a
 
 ---
 
+## `/fix-bugs` - Automated Post-Build Stabilization `[BETA]`
+
+> **Beta:** `/fix-bugs` runs an automatic triage + patch loop to resolve build/test failures until required checks pass, or until a hard blocker is reached.
+
+Use `/fix-bugs` after `/build`, `/continue`, or any phase run that leaves compilation or test failures.
+
+### How It Works
+
+1. Reads project context (`docs/progress.md`, `docs/brd.md`, `docs/architecture.md`) to keep fixes aligned with the current design
+2. Runs checks in dependency order (backend, frontend mocked checks, then live integration where applicable)
+3. Applies minimal targeted patches and immediately re-runs the failed check
+4. Repeats automatically until all required checks pass
+5. Appends a `Bug Fix` row to `docs/progress.md` with pass/fail outcome and check summary
+
+### Usage
+
+```
+/fix-bugs all
+/fix-bugs backend
+/fix-bugs frontend
+/fix-bugs phase:9
+```
+
+### Best Use Cases
+
+- `/build` completed but `typecheck`, `build`, or tests fail
+- Multiple cross-phase regressions after regenerating modules/pages
+- You want one command to stabilize the generated scaffold before manual review
+
+---
+
 ## Repository Structure
 
 ```
@@ -289,6 +322,7 @@ Starting from: Phase 4a
 │   │   ├── discover.md             # Iterative concept refinement — required before phase1 or build
 │   │   ├── build.md                # [BETA] Full project scaffold — all 14 phases in one command
 │   │   ├── continue.md             # [BETA] Resume build — skips completed phases, runs remaining
+│   │   ├── fix-bugs.md             # [BETA] Automated stabilization loop until checks pass
 │   │   └── checkpoint.md           # Session summary — context preservation between phases
 │   │
 │   ├── agents/                     # AI agent role definitions (9 roles)
