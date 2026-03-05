@@ -40,7 +40,9 @@ export const router = (route: Router, controller: IController): Router => {
 	 *                 role:
 	 *                   type: string
 	 *                 subRole:
-	 *                   type: string
+	 *                   type: array
+	 *                   items:
+	 *                     type: string
 	 *                 status:
 	 *                   type: string
 	 *                 person:

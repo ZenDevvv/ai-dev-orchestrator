@@ -206,7 +206,7 @@ export const validateQueryParams = (req: Request, logger: Logger): ValidationRes
 			return {
 				isValid: false,
 				errorResponse: buildErrorResponse(
-					"groupBy must be a string (e.g., category or category.name)",
+					"groupBy must be a string (e.g., status or role)",
 					400,
 				),
 			};

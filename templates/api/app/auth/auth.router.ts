@@ -44,9 +44,10 @@ export const router = (route: Router, controller: IController): Router => {
 	 *           enum: [superadmin, viewer, admin, guest]
 	 *           description: User role
 	 *         subRole:
-	 *           type: string
-	 *           enum: [staff, guard, vendor, operator, manager, guest]
-	 *           description: User sub-role (optional)
+	 *           type: array
+	 *           items:
+	 *             type: string
+	 *           description: User sub-roles (optional, defaults to empty array)
 	 *         firstName:
 	 *           type: string
 	 *           minLength: 1
@@ -142,9 +143,10 @@ export const router = (route: Router, controller: IController): Router => {
 	 *           type: string
 	 *           description: User role
 	 *         subRole:
-	 *           type: string
-	 *           nullable: true
-	 *           description: User sub-role
+	 *           type: array
+	 *           items:
+	 *             type: string
+	 *           description: User sub-roles
 	 *         avatar:
 	 *           type: string
 	 *           nullable: true

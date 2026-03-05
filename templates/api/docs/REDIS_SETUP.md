@@ -243,7 +243,7 @@ console.log(stats);
 Use consistent, hierarchical key naming:
 
 - `user:{userId}:profile`
-- `public:products:category:{categoryId}`
+- `public:resources:list:{resourceKey}`
 - `session:{sessionId}`
 
 ### 2. TTL Strategy

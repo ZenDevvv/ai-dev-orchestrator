@@ -130,10 +130,7 @@ export const RegisterSchema = z.object({
 			"Username can only contain letters, numbers, underscores, and hyphens",
 		),
 	role: z.enum(["user", "admin", "superadmin", "viewer"]),
-	subRole: z
-		.enum(["staff", "guard", "vendor", "operator", "manager", "guest"])
-		.optional()
-		.nullable(),
+	subRole: z.array(z.string()).optional().default([]),
 
 	// Person-related fields matching Prisma model
 	personalInfo: PersonalInfoSchema,

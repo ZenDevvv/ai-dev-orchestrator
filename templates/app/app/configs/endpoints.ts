@@ -27,30 +27,6 @@ export const API_ENDPOINTS = {
 		DELETE: "/person/:id", // Soft delete
 	},
 
-	PRODUCT: {
-		GET_ALL: "/product",
-		GET_BY_ID: "/product/:id",
-		CREATE: "/product",
-		UPDATE: "/product/:id",
-		DELETE: "/product/:id", // Soft delete
-	},
-
-	CATEGORY: {
-		GET_ALL: "/category",
-		GET_BY_ID: "/category/:id",
-		CREATE: "/category",
-		UPDATE: "/category/:id",
-		DELETE: "/category/:id", // Soft delete
-	},
-
-	PRODUCT_TYPE: {
-		GET_ALL: "/product-type",
-		GET_BY_ID: "/product-type/:id",
-		CREATE: "/product-type",
-		UPDATE: "/product-type/:id",
-		DELETE: "/product-type/:id", // Soft delete
-	},
-
 	ORGANIZATION: {
 		GET_ALL: "/organization",
 		GET_BY_ID: "/organization/:id",

@@ -1,6 +1,6 @@
 # Postman Collection Setup Guide
 
-This guide will help you set up and use the Postman collection for the OneBis API.
+This guide will help you set up and use the Postman collection for the Template API.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ This guide will help you set up and use the Postman collection for the OneBis AP
 
 - Open Postman
 - Click "Import" button
-- Select the `Sure One.postman_collection.json` file from the project root
+- Select your exported Postman collection file from the project root
 
 ### 2. Set Environment Variables
 
@@ -37,7 +37,7 @@ This creates:
 - Default Organization (ID: `67c7064d13d130902d5877cb`)
 - Default Person (ID: `67c7064d13d130902d5877cc`)
 - Default User (ID: `67c7064d13d130902d5877ca`)
-    - Email: `maik@1BIS.com`
+    - Email: `admin@example.com`
     - Password: `123456`
     - Role: `super_admin`
 
@@ -64,7 +64,7 @@ This creates:
 	"password": "password123",
 	"userName": "dar",
 	"role": "admin",
-	"subRole": "staff",
+	"subRole": [],
 	"firstName": "John",
 	"lastName": "Doe",
 	"organizationId": "67c7064d13d130902d5877cb",
@@ -119,7 +119,7 @@ This creates:
 
 ```json
 {
-	"email": "maik@1BIS.com",
+	"email": "admin@example.com",
 	"password": "123456"
 }
 ```
@@ -197,7 +197,7 @@ This creates:
 - `userName`: Unique username
 - `password`: Hashed password
 - `role`: `super_admin`, `admin`, or `user`
-- `subRole`: `staff`, `guard`, `vendor`, `operator`, `manager`, `guest`, `facilityUser`
+- `subRole`: Array of strings (optional, defaults to `[]`)
 - `status`: `active`, `inactive`, `suspended`, `archived`
 - `personId`: Reference to Person model
 - `organizationId`: Reference to Organization model
