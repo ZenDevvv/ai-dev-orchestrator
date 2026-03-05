@@ -27,6 +27,27 @@ Do not proceed without `docs/concept.md`.
 
 ---
 
+## Build Run Logging
+
+Before starting Phase 1, initialize run logging in `docs/progress.md`:
+
+1. If `docs/progress.md` does not exist, create it with this header:
+   ```
+   # Project Progress
+
+   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
+   |-------|------|-------|--------|------|-----------|-------|
+   ```
+2. Capture the build start date/time:
+   - `BUILD_START_DATE` as `YYYY-MM-DD`
+   - `BUILD_START_TS` as `YYYY-MM-DD HH:mm:ss`
+3. Append this row immediately:
+   `| BUILD | Build Run | all | 🚀 Started | {BUILD_START_DATE} | {BUILD_START_TS} | /build started |`
+
+Keep `BUILD_START_TS` available until the run completes so the finish row can reference it.
+
+---
+
 ## Context Note
 
 Each phase re-reads its required files (BRD, architecture, module code, etc.) fresh from disk, so document-based context is never lost between phases.
@@ -184,7 +205,14 @@ Read `.ai/.claude/commands/phase14-deployment.md` and execute all instructions.
 
 ## Build Complete
 
-When Phase 14 is done, output a final summary:
+When Phase 14 is done:
+
+1. Capture finish date/time:
+   - `BUILD_END_DATE` as `YYYY-MM-DD`
+   - `BUILD_END_TS` as `YYYY-MM-DD HH:mm:ss`
+2. Append this row to `docs/progress.md`:
+   `| BUILD | Build Run | all | 🏁 Finished | {BUILD_END_DATE} | {BUILD_END_TS} | /build finished (started: {BUILD_START_TS}) |`
+3. Output a final summary:
 
 ```
 === BUILD COMPLETE ===

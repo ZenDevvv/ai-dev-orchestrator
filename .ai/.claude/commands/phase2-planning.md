@@ -23,8 +23,8 @@ After completing this phase, update `docs/progress.md`:
    ```
    # Project Progress
 
-   | Phase | Name | Scope | Status | Date | Notes |
-   |-------|------|-------|--------|------|-------|
+   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
+   |-------|------|-------|--------|------|-----------|-------|
    ```
 2. Append this row (fill in today's date and a one-line summary):
-   `| 2 | Planning | — | ✅ Complete | YYYY-MM-DD | {summary} |`
+   `| 2 | Planning | — | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`

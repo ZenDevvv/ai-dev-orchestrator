@@ -115,7 +115,7 @@ If this phase is being **re-run** (i.e., a row for phase 6 already exists in `do
 
 - Phase 13 — Documentation
 
-For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 6 re-run YYYY-MM-DD`
+For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 6 re-run YYYY-MM-DD HH:mm:ss`
 
 This signals that the documentation (which references `docs/seed-data.md` for test credentials and setup instructions) may be out of date with the new seed data.
 
@@ -129,8 +129,8 @@ After completing this phase, update `docs/progress.md`:
    ```
    # Project Progress
 
-   | Phase | Name | Scope | Status | Date | Notes |
-   |-------|------|-------|--------|------|-------|
+   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
+   |-------|------|-------|--------|------|-----------|-------|
    ```
 2. Append this row (fill in today's date and a one-line summary):
-   `| 6 | Migrations | — | ✅ Complete | YYYY-MM-DD | {summary} |`
+   `| 6 | Migrations | — | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`

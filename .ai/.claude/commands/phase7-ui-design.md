@@ -92,7 +92,7 @@ If this phase is being **re-run** (i.e., a row for phase 7 already exists in `do
 - Phase 10 — all pages
 - Phase 11
 
-For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 7 re-run YYYY-MM-DD`
+For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 7 re-run YYYY-MM-DD HH:mm:ss`
 
 This signals that pages and tests built against the previous style guide or wireframes may no longer match the updated design.
 
@@ -104,8 +104,8 @@ After completing this phase, update `docs/progress.md`:
    ```
    # Project Progress
 
-   | Phase | Name | Scope | Status | Date | Notes |
-   |-------|------|-------|--------|------|-------|
+   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
+   |-------|------|-------|--------|------|-----------|-------|
    ```
 2. Append this row (fill in today's date and a one-line summary):
-   `| 7 | UI Design | — | ✅ Complete | YYYY-MM-DD | {summary} |`
+   `| 7 | UI Design | — | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`

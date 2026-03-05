@@ -18,7 +18,9 @@ Then produce a structured session summary using the format below. Keep it concis
 
 ## Phase Progress
 
-Group all rows from `docs/progress.md` into three sections:
+For phase-state calculations, ignore non-phase meta rows where `Phase` is not one of: `1, 2, 3, 4a, 4b, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14` (for example: `BUILD` run rows, `—` change rows).
+
+Group all phase rows from `docs/progress.md` into three sections:
 
 ### ✅ Complete
 List phases that are done and not stale.

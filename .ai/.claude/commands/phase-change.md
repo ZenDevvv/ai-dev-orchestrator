@@ -68,11 +68,11 @@ Be specific. "Phase 4 (REPORTS module)" is correct. "Phase 4" alone is not enoug
 
 Append a row to `docs/progress.md`:
 
-`| — | Change | {CHG-NNN}: {feature name} | 🔄 Changed | YYYY-MM-DD | {one-line summary of what changed and why} |`
+`| — | Change | {CHG-NNN}: {feature name} | 🔄 Changed | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {one-line summary of what changed and why} |`
 
 ## Step 6 — Mark Stale Phases in Progress Log
 
-For each phase listed under "Phases to Re-run" in the impact report (Step 7), scan `docs/progress.md` for any `✅ Complete` rows matching that phase and scope. For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: {CHG-NNN} YYYY-MM-DD`
+For each phase listed under "Phases to Re-run" in the impact report (Step 7), scan `docs/progress.md` for any `✅ Complete` rows matching that phase and scope. For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: {CHG-NNN} YYYY-MM-DD HH:mm:ss`
 
 This ensures `/resume` can surface exactly what needs re-running without the user manually tracking it.
 
