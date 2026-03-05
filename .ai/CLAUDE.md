@@ -35,6 +35,7 @@ Phase 1 and `/build` hard-stop if `docs/concept.md` doesn't exist.
 /phase12-review        → code review report
 /phase13-docs          → README, API docs, onboarding guide
 /phase14-deployment    → Dockerfiles, CI/CD, .env templates
+/fix-bugs all          -> automated stabilization loop (optional, post-build)
 ```
 
 **Module-level phases** (4b, 5, 8, 9, 10): run one module or page at a time. Pass `all` to process every module in dependency order.
@@ -48,6 +49,7 @@ Phase 1 and `/build` hard-stop if `docs/concept.md` doesn't exist.
 | Phase by phase | Run each `/phaseN` manually | Production builds — review at every gate |
 | Start manual, finish auto | Run early phases manually, then `/continue` | Review BRD + architecture, hand off the rest |
 | Full auto | `/build` | Rapid prototyping |
+| Auto stabilize | `/fix-bugs all` | Post-build cleanup until checks pass |
 
 ---
 
@@ -74,7 +76,7 @@ Phase 1 and `/build` hard-stop if `docs/concept.md` doesn't exist.
 **Phase failed or produced bad output:**
 → Check `docs/progress.md` for the last known state
 → Run `/resume` to re-orient: it shows complete, stale, and pending phases
-→ Fix the output manually, then re-run the phase command
+→ Run `/fix-bugs all` for automatic triage + patch loops, or fix manually and re-run the phase command
 
 **Phase marked ⚠️ Stale:**
 → Re-run that phase command — it regenerates from current inputs
