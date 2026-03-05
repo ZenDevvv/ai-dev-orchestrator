@@ -45,7 +45,7 @@ If this page is being **re-run** (i.e., a row for phase 9 `{PAGE_NAME}` already 
 
 - Phase 10 - scope matches `{PAGE_NAME}`
 
-For each found row, update the Status cell from `? Complete` to `?? Stale` and append to its Notes cell: `| Stale: phase 9 {PAGE_NAME} re-run YYYY-MM-DD`
+For each found row, update the Status cell from `? Complete` to `?? Stale` and append to its Notes cell: `| Stale: phase 9 {PAGE_NAME} re-run YYYY-MM-DD HH:mm:ss`
 
 This signals that frontend tests for this page may be testing a previous version of the page component.
 
@@ -57,8 +57,8 @@ After completing this phase, update `docs/progress.md`:
    ```
    # Project Progress
 
-   | Phase | Name | Scope | Status | Date | Notes |
-   |-------|------|-------|--------|------|-------|
+   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
+   |-------|------|-------|--------|------|-----------|-------|
    ```
 2. Append one row per completed page (fill in today's date and a one-line summary):
-   `| 9 | Pages | {PAGE_NAME} | ? Complete | YYYY-MM-DD | {summary} |`
+   `| 9 | Pages | {PAGE_NAME} | ? Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`

@@ -45,7 +45,7 @@ If this module is being **re-run** (i.e., a row for phase 4b `{MODULE_NAME}` alr
 - Phase 9 — any pages listed in the BRD Page Manifest that are served by this module
 - Phase 10 — tests for any pages affected above
 
-For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 4b {MODULE_NAME} re-run YYYY-MM-DD`
+For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 4b {MODULE_NAME} re-run YYYY-MM-DD HH:mm:ss`
 
 This signals that tests, frontend API modules, and pages depending on this module's Zod schemas may be out of date.
 
@@ -57,8 +57,8 @@ After completing each module, update `docs/progress.md`:
    ```
    # Project Progress
 
-   | Phase | Name | Scope | Status | Date | Notes |
-   |-------|------|-------|--------|------|-------|
+   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
+   |-------|------|-------|--------|------|-----------|-------|
    ```
 2. Append one row per completed module (fill in today's date and a one-line summary):
-   `| 4b | Backend Module | {MODULE_NAME} | ✅ Complete | YYYY-MM-DD | {summary} |`
+   `| 4b | Backend Module | {MODULE_NAME} | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {summary} |`

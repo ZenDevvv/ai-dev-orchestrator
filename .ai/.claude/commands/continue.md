@@ -32,6 +32,7 @@ Do not proceed without `docs/concept.md`.
 Read `docs/progress.md` in full.
 
 Build a completion map from the rows:
+- Ignore non-phase meta rows where `Phase` is not one of: `1, 2, 3, 4a, 4b, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14` (for example: `BUILD` run rows, `—` change rows).
 - A **single-run phase** (1, 2, 3, 4a, 6, 7, 11, 12, 13, 14) is **complete** if it has a `? Complete` row and no `?? Stale` row for the same phase number.
 - A **per-item phase** (4b, 5, 8, 9, 10) is **complete** when the row with scope `all` is marked `? Complete`, OR when every individual scope row for that phase is `? Complete` and none are `?? Stale`.
 - Any phase with a `?? Stale` row is **not complete** and must be re-run.

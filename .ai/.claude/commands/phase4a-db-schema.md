@@ -59,7 +59,7 @@ If this phase is being **re-run** (i.e., a row for phase 4a already exists in `d
 - Phase 6
 - Phase 8 — all modules
 
-For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 4a re-run YYYY-MM-DD`
+For each found row, update the Status cell from `✅ Complete` to `⚠️ Stale` and append to its Notes cell: `| Stale: phase 4a re-run YYYY-MM-DD HH:mm:ss`
 
 This signals that generated code depending on the Prisma schema may be out of date and needs to be regenerated.
 
@@ -71,8 +71,8 @@ After all schemas are generated and `prisma generate` succeeds, update `docs/pro
    ```
    # Project Progress
 
-   | Phase | Name | Scope | Status | Date | Notes |
-   |-------|------|-------|--------|------|-------|
+   | Phase | Name | Scope | Status | Date | Timestamp | Notes |
+   |-------|------|-------|--------|------|-----------|-------|
    ```
 2. Append one row (fill in today's date and a one-line summary):
-   `| 4a | DB Schema | {scope} | ✅ Complete | YYYY-MM-DD | {N} models, prisma generate OK |`
+   `| 4a | DB Schema | {scope} | ✅ Complete | YYYY-MM-DD | YYYY-MM-DD HH:mm:ss | {N} models, prisma generate OK |`

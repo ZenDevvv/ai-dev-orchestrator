@@ -139,7 +139,9 @@ The required first step before any build. Run it as many times as needed until y
 1. Reads `docs/concept.md` — fails if it doesn't exist (run `/discover` first)
 2. Claude runs all 14 phases in order, each phase's output feeding into the next
 3. `/checkpoint` runs between phases to preserve context across the long session
-4. A final build summary is output when Phase 14 completes
+4. Writes a `BUILD Started` row to `docs/progress.md` immediately when `/build` starts
+5. Writes a `BUILD Finished` row to `docs/progress.md` when Phase 14 completes, so you can see full run timing
+6. A final build summary is output when Phase 14 completes
 
 ### Usage
 
@@ -365,20 +367,24 @@ Starting from: Phase 4a
 Every phase automatically logs its completion to `docs/progress.md`:
 
 ```
-| Phase | Name            | Scope       | Status      | Date       | Notes                            |
-|-------|-----------------|-------------|-------------|------------|----------------------------------|
-| 1     | BRD             | —           | ✅ Complete | 2026-02-18 | 5 modules, 32 requirements       |
-| 2     | Planning        | —           | ✅ Complete | 2026-02-18 | 3 sprints, 4 risks flagged       |
-| 4a    | DB Schema       | all         | ✅ Complete | 2026-02-19 | 6 models, prisma generate OK     |
-| 4b    | Backend Module  | AUTH        | ✅ Complete | 2026-02-19 | Login, register, JWT             |
-| 4b    | Backend Module  | USERS       | ✅ Complete | 2026-02-19 | CRUD + avatar upload             |
-| 5     | Backend Testing | AUTH        | ⚠️ Stale   | 2026-02-19 | Tests OK | Stale: phase 4b AUTH re-run 2026-02-20 |
+| Phase | Name            | Scope       | Status      | Date       | Timestamp           | Notes                            |
+|-------|-----------------|-------------|-------------|------------|---------------------|----------------------------------|
+| BUILD | Build Run       | all         | 🚀 Started  | 2026-02-18 | 2026-02-18 09:02:11 | /build started                   |
+| 1     | BRD             | —           | ✅ Complete | 2026-02-18 | 2026-02-18 09:08:35 | 5 modules, 32 requirements       |
+| 2     | Planning        | —           | ✅ Complete | 2026-02-18 | 2026-02-18 09:15:09 | 3 sprints, 4 risks flagged       |
+| 4a    | DB Schema       | all         | ✅ Complete | 2026-02-19 | 2026-02-19 10:03:27 | 6 models, prisma generate OK     |
+| 4b    | Backend Module  | AUTH        | ✅ Complete | 2026-02-19 | 2026-02-19 10:24:18 | Login, register, JWT             |
+| 4b    | Backend Module  | USERS       | ✅ Complete | 2026-02-19 | 2026-02-19 10:41:52 | CRUD + avatar upload             |
+| 5     | Backend Testing | AUTH        | ⚠️ Stale     | 2026-02-19 | 2026-02-19 11:10:03 | Tests OK | Stale: phase 4b AUTH re-run 2026-02-20 14:32:40 |
+| BUILD | Build Run       | all         | 🏁 Finished | 2026-02-20 | 2026-02-20 16:47:19 | /build finished (started: 2026-02-18 09:02:11) |
 ```
 
 **Status values:**
 - `✅ Complete` — phase finished and not invalidated by subsequent changes
 - `⚠️ Stale` — phase was completed but a dependency was re-run or a change was logged that requires re-running this phase
 - `🔄 Changed` — written by `/phase-change` to record a requirement change
+- `🚀 Started` — written by `/build` when a full build run starts
+- `🏁 Finished` — written by `/build` when that full build run completes
 
 Run `/resume` at the start of any session to see a summary of complete, stale, and pending phases — and the exact next command to run.
 
