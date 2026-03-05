@@ -603,8 +603,9 @@ Builds one page at a time using Tailwind + shadcn/ui, following the style guide 
 Agent: QA Engineer | Skill: `FRONTEND_TESTING` | Reads: `docs/brd.md` (acceptance criteria), Phase 9 page, Phase 8 mock data
 
 Generates behavioral frontend tests with Playwright (user-visible flows, state coverage, validation, and accessibility checks).
+Phase 10 uses **mocked network responses** (frontend-only validation) and should not depend on a live backend.
 
-**Gate:** Run `npm run typecheck`, `npm run build`, and `npm run test:e2e` in `templates/app/`.
+**Gate:** Run `npm run typecheck`, `npm run build`, and `npm run test:e2e -- --grep @phase10-mocked` in `templates/app/`.
 
 ---
 
@@ -617,8 +618,9 @@ Generates behavioral frontend tests with Playwright (user-visible flows, state c
 Agent: QA Engineer | Skill: `E2E_PATTERNS` | Reads: `docs/brd.md`, `docs/architecture.md`, `docs/ui-design.md`
 
 Generates E2E test suites covering user flows, happy paths, error paths, cross-module integration, and auth flows.
+Phase 11 is **live-backend integration testing** and should run against a reachable backend API.
 
-**Gate:** All E2E flows pass against a running backend.
+**Gate:** Run `npm run typecheck`, `npm run build`, and `npm run test:e2e -- --grep @phase11-live` in `templates/app/` against a running backend.
 
 ---
 

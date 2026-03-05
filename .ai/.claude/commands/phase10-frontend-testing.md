@@ -15,11 +15,14 @@ If `$ARGUMENTS` is **"all"** (case-insensitive) or is empty/not provided, genera
 
 For **each** page in scope, perform ALL of the following steps:
 
-Create Playwright tests in `templates/app/tests/e2e/`:
+Create mocked Playwright tests in `templates/app/tests/e2e/`:
 - Validate visible content and critical interactions from the user's perspective
-- Validate loading, empty, error, and populated states (stub network responses where needed)
+- Validate loading, empty, error, and populated states by stubbing network responses with `page.route`
 - Validate form validation behavior and user-facing error messages
 - Validate keyboard accessibility and basic ARIA behavior for key flows
+- Tag each Phase 10 test with `@phase10-mocked` in the test title
+
+This phase is frontend-only. Do not require a live backend for Phase 10 tests.
 
 A good test reads like: "when the user clicks submit with an empty name field, they see a validation error."
 A bad test reads like: "expect setError to have been called with {name: 'required'}."
@@ -31,7 +34,7 @@ Run these commands in `templates/app/`:
 ```bash
 npm run typecheck
 npm run build
-npm run test:e2e
+npm run test:e2e -- --grep @phase10-mocked
 ```
 
 If any command fails, stop and fix the page/tests before proceeding.

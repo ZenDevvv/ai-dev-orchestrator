@@ -65,6 +65,16 @@ npm run test:e2e
 
 Playwright runs against a local dev server using `npm run dev:e2e`.
 
+Suggested scoped runs:
+
+```bash
+# Frontend-only mocked coverage (Phase 10)
+npm run test:e2e -- --grep @phase10-mocked
+
+# Live-backend integration coverage (Phase 11)
+npm run test:e2e -- --grep @phase11-live
+```
+
 ## Scripts
 
 | Command | Description |
