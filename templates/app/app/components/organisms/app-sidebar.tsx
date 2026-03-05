@@ -12,7 +12,6 @@ import { useNavigate } from "react-router";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import avatarFlat from "@/assets/images/avatarFlat.png";
 import { useAuth } from "~/hooks/use-auth";
-import osparLogo from "@/assets/images/ospar.jpg";
 
 export function AppSidebar() {
 	const navigate = useNavigate();
@@ -34,7 +33,7 @@ export function AppSidebar() {
 					{sidebar.open && (
 						<div className="flex items-center gap-2">
 							<div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-								<img src={osparLogo} alt="" />
+								<img src={avatarFlat} alt="" />
 							</div>
 							<div className="flex flex-col">
 								<span className="font-semibold text-sm">Template App</span>

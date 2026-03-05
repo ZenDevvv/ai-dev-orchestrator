@@ -131,7 +131,7 @@ export const RegisterSchema = z.object({
 		),
 	role: z.enum(["user", "admin", "superadmin", "viewer"]),
 	subRole: z
-		.enum(["patient", "staff", "guard", "vendor", "operator", "manager", "guest"])
+		.enum(["staff", "guard", "vendor", "operator", "manager", "guest"])
 		.optional()
 		.nullable(),
 

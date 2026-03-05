@@ -51,31 +51,6 @@ export const API_ENDPOINTS = {
 		DELETE: "/product-type/:id", // Soft delete
 	},
 
-
-	BATCH: {
-		GET_ALL: "/batch",
-		GET_BY_ID: "/batch/:id",
-		CREATE: "/batch",
-		UPDATE: "/batch/:id",
-		DELETE: "/batch/:id", // Soft delete
-	},
-
-	SUPPLIER: {
-		GET_ALL: "/supplier",
-		GET_BY_ID: "/supplier/:id",
-		CREATE: "/supplier",
-		UPDATE: "/supplier/:id",
-		DELETE: "/supplier/:id", // Soft delete
-	},
-
-	SUPPLIER_ITEM: {
-		GET_ALL: "/supplier-item",
-		GET_BY_ID: "/supplier-item/:id",
-		CREATE: "/supplier-item",
-		UPDATE: "/supplier-item/:id",
-		DELETE: "/supplier-item/:id", // Soft delete
-	},
-
 	ORGANIZATION: {
 		GET_ALL: "/organization",
 		GET_BY_ID: "/organization/:id",
@@ -84,19 +59,4 @@ export const API_ENDPOINTS = {
 		DELETE: "/organization/:id", // Soft delete
 	},
 
-	STOCK_ITEM: {
-		GET_ALL: "/stock-item",
-		GET_BY_ID: "/stock-item/:id",
-		CREATE: "/stock-item",
-		UPDATE: "/stock-item/:id",
-		DELETE: "/stock-item/:id", // Soft delete
-	},
-
-	STOCK_RECORD: {
-		GET_ALL: "/stock-record",
-		GET_BY_ID: "/stock-record/:id",
-		CREATE: "/stock-record",
-		UPDATE: "/stock-record/:id",
-		DELETE: "/stock-record/:id", // Soft delete
-	},
 };
