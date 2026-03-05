@@ -12,8 +12,6 @@ export const SubRoleEnum = z.enum([
 	"operator",
 	"manager",
 	"guest",
-	"approver",
-	"super",
 ]);
 export type SubRole = z.infer<typeof SubRoleEnum>;
 
