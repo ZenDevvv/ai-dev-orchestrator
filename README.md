@@ -132,34 +132,43 @@ The required first step before any build. Run it as many times as needed until y
 
 ## `/build` — Full Project Scaffold `[BETA]`
 
-> **Beta:** `/build` runs all 14 phases sequentially with no review gates, no checkpoints, and no human intervention. Requires `/discover` to have been run first. Use the per-phase commands when you need control over the output.
+> **Beta:** `/build` runs all 14 phases sequentially in guarded mode by default. Pass `--fast-mode` to skip review and verification gates. Requires `/discover` to have been run first.
 
 `/build` executes every phase from BRD to deployment in a single command — the fastest way to generate a complete project scaffold once your concept is defined.
 
 ### How It Works
 
 1. Reads `docs/concept.md` — fails if it doesn't exist (run `/discover` first)
-2. Claude runs all 14 phases in order, each phase's output feeding into the next
-3. `/checkpoint` runs between phases to preserve context across the long session
-4. Writes a `BUILD Started` row to `docs/progress.md` immediately when `/build` starts
-5. Writes a `BUILD Finished` row to `docs/progress.md` when Phase 14 completes, so you can see full run timing
-6. A final build summary is output when Phase 14 completes
+2. Parses `$ARGUMENTS` into run mode and optional Phase 7 design rules (`--fast-mode` and optional `|||` delimiter)
+3. Runs all 14 phases in order, honoring gates in guarded mode (or skipping non-mandatory gates in fast mode)
+4. Runs `/checkpoint` between phases to preserve context across the long session
+5. Writes a `BUILD Started` row to `docs/progress.md` immediately when `/build` starts
+6. Writes a `BUILD Finished` row to `docs/progress.md` when Phase 14 completes, so you can see full run timing
+7. Outputs a final build summary with mode and next actions
 
 ### Usage
 
 ```
-/build                        # uses docs/concept.md, AI picks design defaults
-/build <design rules>         # passes design rules to Phase 7
+/build
+/build --fast-mode
+/build <design rules>
+/build --fast-mode ||| <design rules>
 ```
 
 ### Examples
 
 ```
-# Concept already defined via /discover — AI picks design defaults
+# Guarded mode, no design rules
 /build
 
-# With design rules for Phase 7
+# Fast mode, no design rules
+/build --fast-mode
+
+# Guarded mode, design rules passed to Phase 7
 /build dark mode default, minimal sidebar, mobile first
+
+# Fast mode, design rules passed to Phase 7
+/build --fast-mode ||| dark mode default, minimal sidebar, mobile first
 ```
 
 ### Before Running
@@ -204,7 +213,7 @@ The required first step before any build. Run it as many times as needed until y
 
 ## `/continue` — Resume Full Build `[BETA]`
 
-> **Beta:** Like `/build`, `/continue` runs remaining phases with no review gates and no human intervention. The difference: it reads `docs/progress.md` first and skips any phase already marked `✅ Complete`.
+> **Beta:** `/continue` resumes remaining phases in guarded mode by default. Pass `--fast-mode` to skip review and verification gates during the resumed run.
 >
 > **Requires:** `docs/concept.md` — run `/discover` first if you haven't already.
 
@@ -213,18 +222,21 @@ Use `/continue` when you've started the manual phase-by-phase flow and want to h
 ### How It Works
 
 1. Reads `docs/progress.md` to build a completion map
-2. Prints a summary of which phases will be skipped, re-run (stale), or executed
-3. Executes only the remaining phases in order — skipping complete ones, re-running stale ones
-4. Runs `/checkpoint` between phases and outputs a final build summary
+2. Parses `$ARGUMENTS` into run mode and optional Phase 7 design rules (`--fast-mode` and optional `|||` delimiter)
+3. Prints a summary of which phases will be skipped, re-run (stale), or executed
+4. Executes only the remaining phases in order — skipping complete ones, re-running stale ones
+5. Runs `/checkpoint` between phases and outputs a final build summary
 
 ### Usage
 
 ```
 /continue
-/continue ||| <design rules>
+/continue --fast-mode
+/continue <design rules>
+/continue --fast-mode ||| <design rules>
 ```
 
-The `|||` separator passes design rules to Phase 7 if it hasn't run yet. If Phase 7 is already complete, the design rules are ignored.
+Design-rule parsing mirrors `/build`: if `|||` is present, everything after it is treated as Phase 7 rules; otherwise recognized flags are removed and remaining text is used as rules. If Phase 7 is already complete, design rules are ignored.
 
 ### Examples
 
@@ -234,6 +246,9 @@ The `|||` separator passes design rules to Phase 7 if it hasn't run yet. If Phas
 
 # You've finished Phases 1-3 and want to pass design rules for Phase 7
 /continue dark mode default, minimal sidebar
+
+# Resume in fast mode
+/continue --fast-mode
 ```
 
 ### Status Output
@@ -243,6 +258,7 @@ Before executing, `/continue` prints what it found:
 ```
 === CONTINUE BUILD ===
 
+Mode: {CONTINUE_MODE}
 Completed (will skip): 1, 2, 3
 Stale (will re-run):   5
 Pending (will run):    4a, 4b, 6, 7, 8, 9, 10, 11, 12, 13, 14
@@ -341,7 +357,6 @@ Use `/fix-bugs` after `/build`, `/continue`, or any phase run that leaves compil
 │   │   ├── MODULE_TEMPLATE.md      # Backend file structure, Zod, controller patterns
 │   │   ├── API_STANDARD.md         # Frontend hooks, service layer, Zod copy rules
 │   │   ├── ARCHITECTURE_STANDARD.md
-│   │   ├── TESTING_CONVENTIONS.md
 │   │   ├── FRONTEND_TESTING.md
 │   │   ├── E2E_PATTERNS.md
 │   │   └── ...                     # More skills added as you refine conventions
@@ -403,14 +418,14 @@ Every phase automatically logs its completion to `docs/progress.md`:
 ```
 | Phase | Name            | Scope       | Status      | Timestamp           | Notes                            |
 |-------|-----------------|-------------|-------------|---------------------|----------------------------------|
-| BUILD | Build Run       | all         | 🚀 Started  | 2026-02-18 09:02:11 | /build started                   |
+| BUILD | Build Run       | all         | 🚀 Started  | 2026-02-18 09:02:11 | /build started (GUARDED)         |
 | 1     | BRD             | —           | ✅ Complete | 2026-02-18 09:08:35 | 5 modules, 32 requirements       |
 | 2     | Planning        | —           | ✅ Complete | 2026-02-18 09:15:09 | 3 sprints, 4 risks flagged       |
 | 4a    | DB Schema       | all         | ✅ Complete | 2026-02-19 10:03:27 | 6 models, prisma generate OK     |
 | 4b    | Backend Module  | AUTH        | ✅ Complete | 2026-02-19 10:24:18 | Login, register, JWT             |
 | 4b    | Backend Module  | USERS       | ✅ Complete | 2026-02-19 10:41:52 | CRUD + avatar upload             |
 | 5     | Backend Testing | AUTH        | ⚠️ Stale     | 2026-02-19 11:10:03 | Tests OK | Stale: phase 4b AUTH re-run 2026-02-20 14:32:40 |
-| BUILD | Build Run       | all         | 🏁 Finished | 2026-02-20 16:47:19 | /build finished (started: 2026-02-18 09:02:11) |
+| BUILD | Build Run       | all         | 🏁 Finished | 2026-02-20 16:47:19 | /build finished (GUARDED, started: 2026-02-18 09:02:11) |
 ```
 
 **Status values:**
@@ -552,7 +567,7 @@ Requires Phase 4a to be complete. Generates Zod schemas, routes, controllers, an
 
 Agent: QA Engineer | Skill: `TESTING_CONVENTIONS` | Reads: `docs/brd.md` (acceptance criteria), Phase 4b module code, `docs/architecture.md`
 
-Generates behavioral unit tests, integration tests, and Zod validation tests. Pass a module name for one module, or `all` to test every module. If `skills/TESTING_CONVENTIONS.md` doesn't exist yet, this phase creates it.
+Generates behavioral unit tests, integration tests, and Zod validation tests. Pass a module name for one module, or `all` to test every module. If a project-local `skills/TESTING_CONVENTIONS.md` doesn't exist yet, this phase creates it.
 
 **Gate:** Run tests. Confirm they pass AND the test quality is good.
 
@@ -767,7 +782,7 @@ Skills are reusable reference documents encoding your conventions. They survive 
 | `MODULE_TEMPLATE.md`       | ✅ Ready                       | Phase 4a, 4b      |
 | `API_STANDARD.md`          | ✅ Ready                       | Phase 8           |
 | `ARCHITECTURE_STANDARD.md` | ✅ Ready                       | Phase 3, 4a, 4b, 12 |
-| `TESTING_CONVENTIONS.md`   | Ready                          | Phase 5           |
+| Project `skills/TESTING_CONVENTIONS.md` | Created/updated per project | Phase 5 |
 | `FRONTEND_TESTING.md`      | Ready                          | Phase 10          |
 | Style Guide (in `ui-design.md`) | Created per-project by Phase 7 | Phase 9      |
 | `MIGRATION_TEMPLATE.md`    | Add when ready                 | Phase 6           |
