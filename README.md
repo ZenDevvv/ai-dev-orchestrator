@@ -132,7 +132,7 @@ The required first step before any build. Run it as many times as needed until y
 
 ## `/build` — Full Project Scaffold `[BETA]`
 
-> **Beta:** `/build` runs all 14 phases sequentially in guarded mode by default. Pass `--fast-mode` to skip review and verification gates. Requires `/discover` to have been run first.
+> **Beta:** `/build` runs all 14 phases sequentially in guarded mode by default. Pass `--fast-mode` to skip non-mandatory review prompts only; strict completion gates still apply. Requires `/discover` to have been run first.
 
 `/build` executes every phase from BRD to deployment in a single command — the fastest way to generate a complete project scaffold once your concept is defined.
 
@@ -140,11 +140,12 @@ The required first step before any build. Run it as many times as needed until y
 
 1. Reads `docs/concept.md` — fails if it doesn't exist (run `/discover` first)
 2. Parses `$ARGUMENTS` into run mode and optional Phase 7 design rules (`--fast-mode` and optional `|||` delimiter)
-3. Runs all 14 phases in order, honoring gates in guarded mode (or skipping non-mandatory gates in fast mode)
-4. Runs `/checkpoint` between phases to preserve context across the long session
-5. Writes a `BUILD Started` row to `docs/progress.md` immediately when `/build` starts
-6. Writes a `BUILD Finished` row to `docs/progress.md` when Phase 14 completes, so you can see full run timing
-7. Outputs a final build summary with mode and next actions
+3. Runs all 14 phases in order, enforcing strict completion/parity gates in both guarded and fast modes
+4. Uses fast mode only to skip non-mandatory review prompts
+5. Runs `/checkpoint` between phases to preserve context across the long session
+6. Writes a `BUILD Started` row to `docs/progress.md` immediately when `/build` starts
+7. Writes a `BUILD Finished` row only after the strict completion audit passes
+8. On strict-gate failure, outputs `=== BUILD FAILED ===`, lists missing items/blockers, and suppresses `BUILD Finished`
 
 ### Usage
 
@@ -213,7 +214,7 @@ The required first step before any build. Run it as many times as needed until y
 
 ## `/continue` — Resume Full Build `[BETA]`
 
-> **Beta:** `/continue` resumes remaining phases in guarded mode by default. Pass `--fast-mode` to skip review and verification gates during the resumed run.
+> **Beta:** `/continue` resumes remaining phases in guarded mode by default. Pass `--fast-mode` to skip non-mandatory review prompts only; strict completion gates still apply during the resumed run.
 >
 > **Requires:** `docs/concept.md` — run `/discover` first if you haven't already.
 
@@ -225,7 +226,10 @@ Use `/continue` when you've started the manual phase-by-phase flow and want to h
 2. Parses `$ARGUMENTS` into run mode and optional Phase 7 design rules (`--fast-mode` and optional `|||` delimiter)
 3. Prints a summary of which phases will be skipped, re-run (stale), or executed
 4. Executes only the remaining phases in order — skipping complete ones, re-running stale ones
-5. Runs `/checkpoint` between phases and outputs a final build summary
+5. Enforces strict completion/parity gates in both guarded and fast modes
+6. Uses fast mode only to skip non-mandatory review prompts
+7. Runs `/checkpoint` between phases and emits `=== CONTINUE COMPLETE ===` only after strict completion audit passes
+8. On strict-gate failure, outputs `=== CONTINUE FAILED ===` and stops without emitting continue-complete output
 
 ### Usage
 

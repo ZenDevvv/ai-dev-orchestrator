@@ -1,6 +1,6 @@
 # Continue - Resume Full Build From Progress
 
-> **Beta:** `/continue` resumes remaining phases in guarded mode by default. Pass `--fast-mode` to opt into the old rapid resume behavior that skips review and verification gates.
+> **Beta:** `/continue` resumes remaining phases in guarded mode by default. Pass `--fast-mode` to skip non-mandatory review prompts only; strict completion gates still apply.
 
 ## Load Concept
 
@@ -73,6 +73,72 @@ The only context risk is unlogged ad-hoc chat decisions. Use `/log-decision` to 
 
 ---
 
+## Strict Completion Contract (Mandatory In All Modes)
+
+These rules apply to both `CONTINUE_MODE=GUARDED` and `CONTINUE_MODE=FAST`:
+
+1. Any missing required scope item or required artifact is a hard failure.
+2. Partial completion is failure. Never treat placeholders, stubs, or "to-do later" outputs as complete unless a phase explicitly allows placeholders.
+3. If blocked on missing inputs, missing generated files, or unresolved gate failures, stop immediately and fail.
+4. Never output `=== CONTINUE COMPLETE ===` unless all strict checks pass.
+
+---
+
+## Strict Failure Protocol
+
+Use this protocol on any strict-gate failure:
+
+```text
+=== CONTINUE FAILED ===
+
+Mode: {CONTINUE_MODE}
+Failed Gate: {GATE_NAME}
+
+Missing required items:
+- {item 1}
+- {item 2}
+
+Blockers:
+- {blocker 1}
+- {blocker 2}
+
+Run status:
+- Continue summary complete block: NOT emitted
+- Remaining phases: not executed
+```
+
+After emitting this block, stop immediately. Do not continue phases and do not emit the continue-complete summary.
+
+---
+
+## Required Scope Derivation (Required Before Any Phase >= 4)
+
+As soon as both `docs/brd.md` and `docs/architecture.md` are available, derive and lock:
+
+1. `REQUIRED_PAGES` from BRD Page Manifest:
+   - `PAGE_NAME`
+   - `ROUTE_PATH`
+2. `REQUIRED_MODULES` from architecture route map:
+   - `MODULE_NAME`
+   - primary backend route prefix/path group
+3. Normalize module slugs for file-path checks using route prefix as source of truth when names differ.
+4. Print a checklist:
+
+```text
+=== REQUIRED CONTINUE SCOPE ===
+Modules ({N}): [module list]
+Pages ({M}): [page list]
+Routes ({M}): [route list]
+```
+
+Timing rule:
+- If Phases 1-3 are skipped, derive scope before executing Phase 4a or any later phase.
+- If Phase 3 runs during `/continue`, derive scope immediately after Phase 3.
+
+If scope cannot be derived unambiguously, fail using the strict failure protocol.
+
+---
+
 ## Global Execution Rules
 
 Apply these rules for the entire run:
@@ -81,31 +147,39 @@ Apply these rules for the entire run:
    - If a phase is complete and not stale, print `[ SKIP ] Phase N - already complete` and move on.
 2. **Re-run stale phases**
    - If a phase has `⚠️ Stale`, treat it as pending and execute it fully.
-3. **Guarded by default**
-   - If `CONTINUE_MODE=GUARDED`, honor all verification, review, and test gates from each phase.
+3. **Strict completion gates are mandatory in all modes**
+   - Enforce strict artifact and parity checks in both `GUARDED` and `FAST`.
+   - Any strict-gate failure triggers the strict failure protocol and stops the run.
+4. **Guarded by default**
+   - If `CONTINUE_MODE=GUARDED`, honor verification/review prompts from each phase.
    - If a phase tells you to run `/phase12-review`, do it before continuing.
-   - Stop the run on failed checks or critical review findings.
-4. **Fast mode is explicit**
-   - If `CONTINUE_MODE=FAST`, skip verification/review gate prompts and proceed automatically unless this command explicitly marks a check as mandatory.
-5. **npm install before prisma generate**
+5. **Fast mode is explicit**
+   - If `CONTINUE_MODE=FAST`, skip non-mandatory review prompts only.
+   - Do not skip mandatory build/test/parity/anti-mock gates.
+6. **npm install before prisma generate**
    - In Phase 4a, run `npm install` in `templates/api/` before `npx prisma generate`.
-6. **Frontend bootstrap before frontend phases**
+7. **Frontend bootstrap before frontend phases**
    - Before Phase 8 (if it will run), run in `templates/app/`: `npm install` and `npx playwright install chromium`.
-7. **Context checkpoint between phases**
+8. **Context checkpoint between phases**
    - After each phase completes (or is skipped), run `/checkpoint`.
-8. **Mandatory backend validation after Phase 5 in guarded mode**
+9. **Mandatory backend validation after Phase 5**
    - Run from `templates/api/`: `npm run build` and `npm test`.
-   - If either command fails, stop and fix before proceeding.
-9. **Mandatory frontend sanity checks**
+   - If either command fails, fail the run.
+10. **Mandatory frontend sanity checks**
    - After Phases 8, 9, 10, and 11 (when run), execute from `templates/app/`: `npm run typecheck` and `npm run build`.
-   - If either command fails, stop and fix before continuing.
-10. **Mandatory Phase 10 mocked Playwright check**
+   - If either command fails, fail the run.
+11. **Mandatory Phase 10 mocked Playwright check**
    - After Phase 10 (when run), execute from `templates/app/`: `npm run test:e2e -- --grep @phase10-mocked`.
-   - If it fails, stop and fix before continuing.
-11. **Mandatory Phase 11 live Playwright check**
+   - If it fails, fail the run.
+12. **Mandatory Phase 11 live Playwright check**
    - After Phase 11 (when run), execute from `templates/app/`: `npm run test:e2e -- --grep @phase11-live`.
-   - If it fails, stop and fix before continuing.
-
+   - If it fails, fail the run.
+13. **Per-phase artifact assertions (mandatory)**
+   - After Phase 4b, 8, 9, 10, and 11 (when run), execute the artifact/parity assertions defined in those phase sections.
+   - Missing required items is failure even if compile/tests pass.
+14. **Anti-shortcut rule**
+   - Never mark a phase complete from intent alone. Completion requires concrete artifact existence and required-scope parity.
+   - If blocked, fail with blockers; do not continue.
 ---
 
 ## Phase Sequence
@@ -131,6 +205,10 @@ Otherwise: read `.ai/.claude/commands/phase2-planning.md` and execute all instru
 If complete: `[ SKIP ] Phase 3 - already complete`.
 Otherwise: read `.ai/.claude/commands/phase3-architecture.md` and execute all instructions.
 
+If Phase 3 runs, immediately run the **Required Scope Derivation** section and lock:
+- `REQUIRED_MODULES`
+- `REQUIRED_PAGES`
+
 > Context Checkpoint: run `/checkpoint`
 
 ---
@@ -141,6 +219,8 @@ Otherwise: read `.ai/.claude/commands/phase4a-db-schema.md` and execute all inst
 Scope: `all`
 Before `npx prisma generate`, first run `npm install` in `templates/api/`.
 
+If `REQUIRED_MODULES`/`REQUIRED_PAGES` are not locked yet (because Phases 1-3 were skipped), run **Required Scope Derivation** now before continuing.
+
 > Context Checkpoint: run `/checkpoint`
 
 ---
@@ -149,6 +229,16 @@ Before `npx prisma generate`, first run `npm install` in `templates/api/`.
 If complete: `[ SKIP ] Phase 4b - already complete`.
 Otherwise: read `.ai/.claude/commands/phase4b-backend-modules.md` and execute all instructions.
 Scope: `all`
+
+If `REQUIRED_MODULES`/`REQUIRED_PAGES` are not locked yet, run **Required Scope Derivation** now before continuing.
+
+If Phase 4b runs, execute mandatory artifact assertion (strict gate):
+- For every item in `REQUIRED_MODULES`, confirm backend module artifacts exist:
+  - `templates/api/app/{moduleSlug}/index.ts`
+  - `templates/api/app/{moduleSlug}/{moduleSlug}.router.ts`
+  - `templates/api/app/{moduleSlug}/{moduleSlug}.controller.ts`
+- Confirm each required module is registered in `templates/api/index.ts` (import + `app.use(config.baseApiPath, ...)` registration path for that module).
+- If any module artifact or registration is missing, fail immediately via the strict failure protocol.
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -159,7 +249,7 @@ If complete: `[ SKIP ] Phase 5 - already complete`.
 Otherwise: read `.ai/.claude/commands/phase5-backend-testing.md` and execute all instructions.
 Scope: `all`
 
-If `CONTINUE_MODE=GUARDED`, then run from `templates/api/`:
+If Phase 5 runs, then run from `templates/api/`:
 `npm run build && npm test`
 
 > Context Checkpoint: run `/checkpoint`
@@ -194,6 +284,12 @@ If Phase 8 runs, first run from `templates/app/`:
 If Phase 8 runs, then run from `templates/app/`:
 `npm run typecheck && npm run build`
 
+If Phase 8 runs, execute mandatory artifact/parity assertion (strict gate):
+- Re-read `docs/progress.md`.
+- For Phase `8`, verify a `✅ Complete` row exists for every module in `REQUIRED_MODULES`.
+- Verify none of those Phase `8` scopes are marked `⚠️ Stale`.
+- If any required module is missing a Phase 8 complete row, fail immediately.
+
 > Context Checkpoint: run `/checkpoint`
 
 ---
@@ -205,6 +301,14 @@ Scope: `all`
 
 If Phase 9 runs, then run from `templates/app/`:
 `npm run typecheck && npm run build`
+
+If Phase 9 runs, execute mandatory artifact/parity assertions (strict gate):
+- Parse `templates/app/app/routes.ts` and collect all registered route paths plus referenced component file paths.
+- For every row in `REQUIRED_PAGES`, verify:
+  - The required route path exists in `templates/app/app/routes.ts` (or an equivalent index route for `/`).
+  - The referenced route component file exists under `templates/app/app/`.
+- Re-read `docs/progress.md` and verify Phase `9` has a `✅ Complete` row for every required page scope and no stale rows for those scopes.
+- If any required route, component file, or Phase 9 scope row is missing, fail immediately.
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -218,6 +322,11 @@ Scope: `all`
 If Phase 10 runs, then run from `templates/app/`:
 `npm run typecheck && npm run build && npm run test:e2e -- --grep @phase10-mocked`
 
+If Phase 10 runs, execute mandatory parity assertion (strict gate):
+- Re-read `docs/progress.md` and verify Phase `10` has a `✅ Complete` row for every required page scope in `REQUIRED_PAGES`.
+- Verify none of those Phase `10` scopes are marked `⚠️ Stale`.
+- If any required page is missing Phase 10 completion coverage, fail immediately.
+
 > Context Checkpoint: run `/checkpoint`
 
 ---
@@ -228,6 +337,13 @@ Otherwise: read `.ai/.claude/commands/phase11-e2e.md` and execute all instructio
 
 If Phase 11 runs, then run from `templates/app/`:
 `npm run typecheck && npm run build && npm run test:e2e -- --grep @phase11-live`
+
+If Phase 11 runs, execute mandatory live-integration assertions (strict gate):
+- Confirm there is live test coverage by finding at least one test title tagged `@phase11-live` in `templates/app/tests/e2e/`.
+- Enforce anti-mock policy for core app API calls:
+  - In files containing `@phase11-live`, fail if core API traffic is stubbed/intercepted (for example `page.route`, `route.fulfill`, `route.abort`) for backend app endpoints such as `/api`, configured base API paths, or local backend URLs.
+  - Third-party non-core stubs may remain, but core app API stubbing is not allowed in Phase 11.
+- If no live-tagged test exists, or core API stubbing is detected, fail immediately.
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -258,9 +374,30 @@ Otherwise: read `.ai/.claude/commands/phase14-deployment.md` and execute all ins
 
 ---
 
+## Pre-Complete Strict Completion Audit (Mandatory)
+
+When Phase 14 is done (or skipped), run a strict completion audit before any continue-complete output:
+
+1. Re-read `docs/progress.md` and fail if any required phase/scope is stale/changed/incomplete.
+2. Page manifest parity:
+   - `REQUIRED_PAGES` count must equal implemented required route entries in `templates/app/app/routes.ts`.
+   - Every required page route must reference a real component file under `templates/app/app/`.
+3. Backend module parity:
+   - `REQUIRED_MODULES` count must equal implemented backend module artifact sets under `templates/api/app/`.
+   - Each required module must still have `index.ts`, `{moduleSlug}.router.ts`, `{moduleSlug}.controller.ts`, and registration in `templates/api/index.ts`.
+4. Phase row parity:
+   - Phase `8` complete scopes == `REQUIRED_MODULES`
+   - Phase `9` complete scopes == `REQUIRED_PAGES`
+   - Phase `10` complete scopes == `REQUIRED_PAGES`
+5. If any parity mismatch or missing artifact is found, fail using the strict failure protocol.
+
+Only if this strict completion audit passes, continue below.
+
+---
+
 ## Continue Complete
 
-When Phase 14 is done (or skipped), output:
+After strict completion audit passes, output:
 
 Before output, run a post-run search to determine next actions:
 - Re-read `docs/progress.md` and collect any rows marked stale/changed/incomplete.
@@ -281,6 +418,9 @@ Before output, run a post-run search to determine next actions:
 === CONTINUE COMPLETE ===
 
 Mode: {CONTINUE_MODE}
+Strict completion audit: PASS
+Required modules completed: {REQUIRED_MODULE_COUNT}/{REQUIRED_MODULE_COUNT}
+Required pages completed: {REQUIRED_PAGE_COUNT}/{REQUIRED_PAGE_COUNT}
 Phases skipped (were already complete): [list]
 Phases re-run (were stale):             [list, or "none"]
 Phases run (were pending):              [list]
@@ -293,10 +433,10 @@ Artifacts:
 - docs/progress.md          - Phase completion log
 - prisma/schema/            - Prisma model files
 - prisma/seed.ts            - Seed data script
-- [backend module files]    - Zod schemas, routes, controllers
-- [frontend module files]   - Hooks, service layer, types
-- [test files]              - Unit, integration, component, E2E
-- [deployment config]       - Dockerfiles, CI/CD, .env templates
+- templates/api/app/*       - List concrete generated backend module folders and key files
+- templates/app/app/*       - List concrete generated frontend API/page artifacts
+- templates/app/tests/e2e/* - List concrete mocked/live E2E test files
+- deployment/config files   - List concrete Docker/CI/.env example files generated
 
 Post-run search findings:
 - [List concrete findings from progress scan and repo marker search. If none, say "No blockers found."]
