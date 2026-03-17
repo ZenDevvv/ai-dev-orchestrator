@@ -1,6 +1,6 @@
 # Continue - Resume Full Build From Progress
 
-> **Fast Mode:** No gates, no pauses, no review checkpoints. Continue all remaining phases sequentially from the last completed phase.
+> **Beta:** `/continue` resumes remaining phases in guarded mode by default. Pass `--fast-mode` to opt into the old rapid resume behavior that skips review and verification gates.
 
 ## Load Concept
 
@@ -8,7 +8,7 @@ Read `docs/concept.md` in full.
 
 If `docs/concept.md` does not exist, stop immediately and output:
 
-```
+```text
 ? No concept found.
 
 /continue requires a defined app concept before running.
@@ -21,9 +21,21 @@ Do not proceed without `docs/concept.md`.
 
 ## Parse Arguments
 
-`$ARGUMENTS` is optional design rules passed to Phase 7 if it has not run yet:
-- If `$ARGUMENTS` is provided, treat the entire input as design rules for Phase 7
-- If no arguments, Phase 7 will use defaults if it runs
+`$ARGUMENTS` may contain flags and optional design rules for Phase 7 if it has not run yet.
+
+1. Detect `--fast-mode` anywhere in `$ARGUMENTS`.
+   - If present, set `CONTINUE_MODE=FAST`.
+   - If absent, set `CONTINUE_MODE=GUARDED`.
+2. Parse design rules:
+   - If `|||` appears, treat everything after `|||` as design rules.
+   - If `|||` does not appear, remove recognized flags and treat the remaining text as design rules.
+3. Trim whitespace from the resulting design rules string.
+
+Examples:
+- `/continue` -> guarded mode, no design rules
+- `/continue --fast-mode` -> fast mode, no design rules
+- `/continue minimal sidebar` -> guarded mode, design rules passed to Phase 7 if needed
+- `/continue --fast-mode ||| minimal sidebar` -> fast mode, design rules passed to Phase 7 if needed
 
 ---
 
@@ -32,17 +44,18 @@ Do not proceed without `docs/concept.md`.
 Read `docs/progress.md` in full.
 
 Build a completion map from the rows:
-- Ignore non-phase meta rows where `Phase` is not one of: `1, 2, 3, 4a, 4b, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14` (for example: `BUILD` run rows, `—` change rows).
-- A **single-run phase** (1, 2, 3, 4a, 6, 7, 11, 12, 13, 14) is **complete** if it has a `? Complete` row and no `?? Stale` row for the same phase number.
-- A **per-item phase** (4b, 5, 8, 9, 10) is **complete** when the row with scope `all` is marked `? Complete`, OR when every individual scope row for that phase is `? Complete` and none are `?? Stale`.
-- Any phase with a `?? Stale` row is **not complete** and must be re-run.
+- Ignore non-phase meta rows where `Phase` is not one of: `1, 2, 3, 4a, 4b, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14` (for example: `BUILD` run rows, `-` change rows).
+- A single-run phase (`1, 2, 3, 4a, 6, 7, 11, 12, 13, 14`) is complete if it has a `✅ Complete` row and no `⚠️ Stale` row for the same phase number.
+- A per-item phase (`4b, 5, 8, 9, 10`) is complete when the row with scope `all` is marked `✅ Complete`, OR when every individual scope row for that phase is `✅ Complete` and none are `⚠️ Stale`.
+- Any phase with a `⚠️ Stale` row is not complete and must be re-run.
 - If `docs/progress.md` is empty or has no data rows, all phases are pending and execution starts from Phase 1.
 
 Before proceeding, output:
 
-```
+```text
 === CONTINUE BUILD ===
 
+Mode: {CONTINUE_MODE}
 Completed (will skip): [list phase numbers]
 Stale (will re-run):   [list phase numbers, or "none"]
 Pending (will run):    [list phase numbers in order]
@@ -62,18 +75,36 @@ The only context risk is unlogged ad-hoc chat decisions. Use `/log-decision` to 
 
 ## Global Execution Rules
 
-Apply these rules for the **entire run** - they override any per-phase instructions:
+Apply these rules for the entire run:
 
-1. **Skip complete phases** - if a phase is complete and not stale, print `[ SKIP ] Phase N - already complete` and move on.
-2. **Re-run stale phases** - if a phase has `?? Stale`, treat it as pending and execute it fully.
-3. **Skip all gates** - ignore verification/review/test gate prompts.
-4. **Skip all review prompts** - ignore "after first module/page run /phase12-review" suggestions.
-5. **npm install before prisma generate** - in Phase 4a, run `npm install` in `templates/api/` before `npx prisma generate`.
-6. **Frontend bootstrap before frontend phases** - before Phase 8 (if it will run), run in `templates/app/`: `npm install` and `npx playwright install chromium`.
-7. **Context checkpoint between phases** - after each phase completes (or is skipped), run `/checkpoint`.
-8. **Mandatory frontend sanity checks** - after Phases 8, 9, 10, and 11 (when run), execute from `templates/app/`: `npm run typecheck && npm run build`. If either command fails, stop and fix before continuing.
-9. **Mandatory Phase 10 mocked Playwright check** - after Phase 10 (when run), execute from `templates/app/`: `npm run test:e2e -- --grep @phase10-mocked`. If it fails, stop and fix before continuing.
-10. **Mandatory Phase 11 live Playwright check** - after Phase 11 (when run), execute from `templates/app/`: `npm run test:e2e -- --grep @phase11-live`. If it fails, stop and fix before continuing.
+1. **Skip complete phases**
+   - If a phase is complete and not stale, print `[ SKIP ] Phase N - already complete` and move on.
+2. **Re-run stale phases**
+   - If a phase has `⚠️ Stale`, treat it as pending and execute it fully.
+3. **Guarded by default**
+   - If `CONTINUE_MODE=GUARDED`, honor all verification, review, and test gates from each phase.
+   - If a phase tells you to run `/phase12-review`, do it before continuing.
+   - Stop the run on failed checks or critical review findings.
+4. **Fast mode is explicit**
+   - If `CONTINUE_MODE=FAST`, skip verification/review gate prompts and proceed automatically unless this command explicitly marks a check as mandatory.
+5. **npm install before prisma generate**
+   - In Phase 4a, run `npm install` in `templates/api/` before `npx prisma generate`.
+6. **Frontend bootstrap before frontend phases**
+   - Before Phase 8 (if it will run), run in `templates/app/`: `npm install` and `npx playwright install chromium`.
+7. **Context checkpoint between phases**
+   - After each phase completes (or is skipped), run `/checkpoint`.
+8. **Mandatory backend validation after Phase 5 in guarded mode**
+   - Run from `templates/api/`: `npm run build` and `npm test`.
+   - If either command fails, stop and fix before proceeding.
+9. **Mandatory frontend sanity checks**
+   - After Phases 8, 9, 10, and 11 (when run), execute from `templates/app/`: `npm run typecheck` and `npm run build`.
+   - If either command fails, stop and fix before continuing.
+10. **Mandatory Phase 10 mocked Playwright check**
+   - After Phase 10 (when run), execute from `templates/app/`: `npm run test:e2e -- --grep @phase10-mocked`.
+   - If it fails, stop and fix before continuing.
+11. **Mandatory Phase 11 live Playwright check**
+   - After Phase 11 (when run), execute from `templates/app/`: `npm run test:e2e -- --grep @phase11-live`.
+   - If it fails, stop and fix before continuing.
 
 ---
 
@@ -128,6 +159,9 @@ If complete: `[ SKIP ] Phase 5 - already complete`.
 Otherwise: read `.ai/.claude/commands/phase5-backend-testing.md` and execute all instructions.
 Scope: `all`
 
+If `CONTINUE_MODE=GUARDED`, then run from `templates/api/`:
+`npm run build && npm test`
+
 > Context Checkpoint: run `/checkpoint`
 
 ---
@@ -143,7 +177,7 @@ Otherwise: read `.ai/.claude/commands/phase6-migrations.md` and execute all inst
 ### Phase 7 - UI Design
 If complete: `[ SKIP ] Phase 7 - already complete`.
 Otherwise: read `.ai/.claude/commands/phase7-ui-design.md` and execute all instructions.
-Input: [$ARGUMENTS as design rules, or empty string if none provided]
+Input: [parsed design rules, or empty string if none provided]
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -243,9 +277,10 @@ Before output, run a post-run search to determine next actions:
   - `P0` blockers: failed checks, stale phases, missing required env/config.
   - `P1` quality: review, refactor, test hardening, docs cleanup.
 
-```
+```text
 === CONTINUE COMPLETE ===
 
+Mode: {CONTINUE_MODE}
 Phases skipped (were already complete): [list]
 Phases re-run (were stale):             [list, or "none"]
 Phases run (were pending):              [list]

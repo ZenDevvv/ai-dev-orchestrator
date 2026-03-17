@@ -1,6 +1,6 @@
-# Build - Full Project Scaffold (Fast Mode)
+# Build - Full Project Scaffold
 
-> **Fast Mode:** No gates, no pauses, no review checkpoints. Execute all 14 phases sequentially without stopping for user input.
+> **Beta:** `/build` runs all 14 phases sequentially in guarded mode by default. Pass `--fast-mode` to opt into the old rapid scaffold behavior that skips review and verification gates.
 
 ## Load Concept
 
@@ -8,7 +8,7 @@ Before doing anything, read `docs/concept.md` in full.
 
 If `docs/concept.md` does not exist, stop immediately and output:
 
-```
+```text
 ? No concept found.
 
 /build requires a defined app concept before running.
@@ -21,9 +21,21 @@ Do not proceed without `docs/concept.md`.
 
 ## Parse Arguments
 
-`$ARGUMENTS` is optional design rules passed to Phase 7:
-- If `$ARGUMENTS` is provided, treat the entire input as design rules for Phase 7
-- If no `$ARGUMENTS`, Phase 7 will use design defaults
+`$ARGUMENTS` may contain flags and optional design rules for Phase 7.
+
+1. Detect `--fast-mode` anywhere in `$ARGUMENTS`.
+   - If present, set `BUILD_MODE=FAST`.
+   - If absent, set `BUILD_MODE=GUARDED`.
+2. Parse design rules:
+   - If `|||` appears, treat everything after `|||` as design rules.
+   - If `|||` does not appear, remove recognized flags and treat the remaining text as design rules.
+3. Trim whitespace from the resulting design rules string.
+
+Examples:
+- `/build` -> guarded mode, no design rules
+- `/build --fast-mode` -> fast mode, no design rules
+- `/build mobile first, minimal sidebar` -> guarded mode, design rules passed to Phase 7
+- `/build --fast-mode ||| mobile first, minimal sidebar` -> fast mode, design rules passed to Phase 7
 
 ---
 
@@ -40,7 +52,7 @@ Before starting Phase 1, initialize run logging in `docs/progress.md`:
    - `Scope`: `all`
    - `Status`: `🚀 Started`
    - `Timestamp`: `{BUILD_START_TS}`
-   - `Notes`: `/build started`
+   - `Notes`: `/build started ({BUILD_MODE})`
 
 Keep `BUILD_START_TS` available until the run completes so the finish row can reference it.
 
@@ -50,22 +62,38 @@ Keep `BUILD_START_TS` available until the run completes so the finish row can re
 
 Each phase re-reads its required files (BRD, architecture, module code, etc.) fresh from disk, so document-based context is never lost between phases.
 
-The only thing that can be lost across a long session is **unlogged ad-hoc decisions**: corrections or clarifications made verbally in chat during a previous phase that were never written to a file. Use `/log-decision` to record manual overrides so they survive context compression.
+The only thing that can be lost across a long session is unlogged ad-hoc decisions: corrections or clarifications made verbally in chat during a previous phase that were never written to a file. Use `/log-decision` to record manual overrides so they survive context compression.
 
 ---
 
 ## Global Execution Rules
 
-Apply these rules for the **entire build** - they override any per-phase instructions:
+Apply these rules for the entire build:
 
-1. **Skip all gates** - ignore every verification/review/test gate prompt. Do not pause; continue to the next phase automatically.
-2. **Skip all review prompts** - ignore every "after first module/page run /phase12-review" suggestion.
-3. **npm install before prisma generate** - in Phase 4a, run `npm install` inside `templates/api/` before running `npx prisma generate`.
-4. **Frontend bootstrap before frontend phases** - before Phase 8, run in `templates/app/`: `npm install` and `npx playwright install chromium`.
-5. **Context checkpoint between phases** - after each phase completes, run `/checkpoint`.
-6. **Mandatory frontend sanity checks** - after Phases 8, 9, 10, and 11, run from `templates/app/`: `npm run typecheck && npm run build`. If either command fails, stop and fix before proceeding.
-7. **Mandatory Phase 10 mocked Playwright check** - after Phase 10, run from `templates/app/`: `npm run test:e2e -- --grep @phase10-mocked`. If it fails, stop and fix before proceeding.
-8. **Mandatory Phase 11 live Playwright check** - after Phase 11, run from `templates/app/`: `npm run test:e2e -- --grep @phase11-live`. If it fails, stop and fix before proceeding.
+1. **Guarded by default**
+   - If `BUILD_MODE=GUARDED`, honor all verification, review, and test gates from each phase.
+   - If a phase tells you to run `/phase12-review`, do it before continuing.
+   - Stop the build on failed checks or critical review findings.
+2. **Fast mode is explicit**
+   - If `BUILD_MODE=FAST`, skip verification/review gate prompts and proceed automatically unless this command explicitly marks a check as mandatory.
+3. **npm install before prisma generate**
+   - In Phase 4a, run `npm install` inside `templates/api/` before `npx prisma generate`.
+4. **Frontend bootstrap before frontend phases**
+   - Before Phase 8, run in `templates/app/`: `npm install` and `npx playwright install chromium`.
+5. **Context checkpoint between phases**
+   - After each phase completes, run `/checkpoint`.
+6. **Mandatory backend validation after Phase 5 in guarded mode**
+   - Run from `templates/api/`: `npm run build` and `npm test`.
+   - If either command fails, stop and fix before proceeding.
+7. **Mandatory frontend sanity checks**
+   - After Phases 8, 9, 10, and 11, run from `templates/app/`: `npm run typecheck` and `npm run build`.
+   - If either command fails, stop and fix before proceeding.
+8. **Mandatory Phase 10 mocked Playwright check**
+   - After Phase 10, run from `templates/app/`: `npm run test:e2e -- --grep @phase10-mocked`.
+   - If it fails, stop and fix before proceeding.
+9. **Mandatory Phase 11 live Playwright check**
+   - After Phase 11, run from `templates/app/`: `npm run test:e2e -- --grep @phase11-live`.
+   - If it fails, stop and fix before proceeding.
 
 ---
 
@@ -114,6 +142,9 @@ Scope: `all`
 Read `.ai/.claude/commands/phase5-backend-testing.md` and execute all instructions.
 Scope: `all`
 
+If `BUILD_MODE=GUARDED`, then run from `templates/api/`:
+`npm run build && npm test`
+
 > Context Checkpoint: run `/checkpoint`
 
 ---
@@ -127,7 +158,7 @@ Read `.ai/.claude/commands/phase6-migrations.md` and execute all instructions.
 
 ### Phase 7 - UI Design
 Read `.ai/.claude/commands/phase7-ui-design.md` and execute all instructions.
-Input: [$ARGUMENTS as design rules, or empty string if none provided]
+Input: [parsed design rules, or empty string if none provided]
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -213,7 +244,7 @@ When Phase 14 is done:
    - `Scope`: `all`
    - `Status`: `🏁 Finished`
    - `Timestamp`: `{BUILD_END_TS}`
-   - `Notes`: `/build finished (started: {BUILD_START_TS})`
+   - `Notes`: `/build finished ({BUILD_MODE}, started: {BUILD_START_TS})`
 3. Run a post-build search to determine next actions:
    - Re-read `docs/progress.md` and collect any rows marked stale/changed/incomplete.
    - Search the repo for unresolved implementation markers:
@@ -230,9 +261,10 @@ When Phase 14 is done:
      - `P1` quality: review, refactor, test hardening, docs cleanup.
 4. Output a final summary:
 
-```
+```text
 === BUILD COMPLETE ===
 
+Mode: {BUILD_MODE}
 All 14 phases completed.
 
 Artifacts:

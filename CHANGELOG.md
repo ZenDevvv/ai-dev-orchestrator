@@ -7,6 +7,20 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [Unreleased]
+
+### Changed
+- **`/build` and `/continue` default mode** - now documented and aligned as guarded-by-default, with `--fast-mode` as an explicit opt-in for skipping review and verification gates.
+- **README command docs** - updated `/build` and `/continue` usage/examples to include `--fast-mode` and `|||` parsing behavior, plus mode-aware `/continue` status output.
+- **README progress examples** - build run notes now show mode-aware logging (`/build started ({BUILD_MODE})`, `/build finished ({BUILD_MODE}, started: ...)`).
+- **Phase 9 status markers** - `.ai/.claude/commands/phase9-pages.md` now uses `✅ Complete` and `⚠️ Stale` to match `/continue` completion-map parsing.
+- **Testing conventions references** - static `.ai/skills/TESTING_CONVENTIONS.md` references were removed from orchestrator listings; Phase 5 now refers to project-local `skills/TESTING_CONVENTIONS.md`.
+
+### Why
+The command specs shifted to guarded mode, but parts of the docs still described the old fast-by-default behavior. This update brings command docs, status semantics, and skill references back into one consistent model.
+
+---
+
 ## [1.5.1] — 2026-03-05
 
 ### Changed

@@ -4,7 +4,7 @@ If `skills/E2E_PATTERNS.md` exists, read it and follow its conventions for selec
 
 Read these context files before proceeding:
 - BRD: `docs/brd.md` - full document for cross-module flows
-- Architecture: `docs/architecture.md` - route map
+- Architecture: `docs/architecture.md` - route map and auth strategy
 - UI Design: `docs/ui-design.md` - user flow diagrams
 
 Create Playwright E2E integration test suites in `templates/app/tests/e2e/`:
@@ -15,7 +15,13 @@ Create Playwright E2E integration test suites in `templates/app/tests/e2e/`:
 - Cover auth flow tests (login, logout, unauthorized access, role-based access)
 - Tag each Phase 11 integration test title with `@phase11-live`
 
+For every critical protected module with authenticated create, update, or delete routes, include live coverage for:
+- login or register -> protected mutation succeeds
+- protected mutation result is visible in the next read/list step
+- logged-out or expired-session mutation attempt is denied with the expected user-facing behavior
+
 Phase 11 is live-backend integration testing. Do not mock core API calls in this phase.
+Do not count mocked login flows or stubbed auth responses as Phase 11 coverage.
 
 ## Mandatory Test Gate
 
@@ -39,5 +45,5 @@ Record completion with:
 - `Phase`: `11`
 - `Name`: `E2E Tests`
 - `Scope`: `-`
-- `Status`: `? Complete`
-- `Notes`: one-line summary
+- `Status`: `✅ Complete`
+- `Notes`: one-line summary including authenticated mutation coverage
