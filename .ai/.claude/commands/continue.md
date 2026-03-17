@@ -102,12 +102,43 @@ Blockers:
 - {blocker 1}
 - {blocker 2}
 
+Missing concept coverage:
+- {CF-xxx} missing {story|requirement|page|module|status|notes}
+- {CF-yyy} missing {story|requirement|page|module|status|notes}
+
 Run status:
 - Continue summary complete block: NOT emitted
 - Remaining phases: not executed
 ```
 
 After emitting this block, stop immediately. Do not continue phases and do not emit the continue-complete summary.
+
+---
+
+## Concept Parity Gate (Mandatory Before Resuming)
+
+Run this gate as soon as `docs/brd.md` is available and before executing any phase >= 2.
+
+1. Parse `docs/concept.md` section `## Core Features - Must Have (MVP)` or `## Core Features — Must Have (MVP)` into ordered `CONCEPT_MVP_ITEMS`:
+   - Parse top-level bullets only.
+   - Assign deterministic IDs by order: `CF-001`, `CF-002`, ...
+2. Parse `docs/brd.md` section `### Concept Coverage Matrix (MVP Lock)` with columns:
+   - `Concept ID | Concept Feature | Story IDs | Requirement IDs | Page(s) | Module(s) | Status | Notes`
+3. Validate concept-to-BRD parity:
+   - Every concept MVP bullet must have exactly one matrix row with matching `Concept ID` and `Concept Feature`.
+   - Matrix row count must equal concept MVP item count (no missing, no extra).
+   - `Status` must be `Covered` or `Backend-Only` for every row.
+   - Every row must have non-empty `Story IDs` and `Requirement IDs`.
+   - `Covered` rows must have non-empty `Page(s)` and non-empty `Module(s)`.
+   - `Backend-Only` rows must have non-empty `Module(s)` and non-empty `Notes`.
+4. On any failure, use strict failure protocol and include detailed `Missing concept coverage` entries by `CF-xxx` and unmet link type.
+5. Lock the validated matrix as `CONCEPT_COVERAGE_LOCK` for downstream audits.
+
+Timing rules:
+- If Phase 1 runs during this `/continue`, run this gate immediately after Phase 1.
+- If Phase 1 is skipped as complete, run this gate before the first pending phase executes.
+
+No bypass flags are allowed. Missing concept MVP coverage is a hard failure.
 
 ---
 
@@ -175,11 +206,14 @@ Apply these rules for the entire run:
    - After Phase 11 (when run), execute from `templates/app/`: `npm run test:e2e -- --grep @phase11-live`.
    - If it fails, fail the run.
 13. **Per-phase artifact assertions (mandatory)**
-   - After Phase 4b, 8, 9, 10, and 11 (when run), execute the artifact/parity assertions defined in those phase sections.
-   - Missing required items is failure even if compile/tests pass.
+    - After Phase 4b, 8, 9, 10, and 11 (when run), execute the artifact/parity assertions defined in those phase sections.
+    - Missing required items is failure even if compile/tests pass.
 14. **Anti-shortcut rule**
-   - Never mark a phase complete from intent alone. Completion requires concrete artifact existence and required-scope parity.
-   - If blocked, fail with blockers; do not continue.
+    - Never mark a phase complete from intent alone. Completion requires concrete artifact existence and required-scope parity.
+    - If blocked, fail with blockers; do not continue.
+15. **Mandatory concept parity execution**
+    - If Phase 1 is skipped as complete, run the **Concept Parity Gate** immediately after the continue status output and before executing the first pending phase.
+    - If Phase 1 runs, execute the gate immediately after Phase 1.
 ---
 
 ## Phase Sequence
@@ -189,6 +223,8 @@ If complete: `[ SKIP ] Phase 1 - already complete`.
 Otherwise: read `.ai/.claude/commands/phase1-brd.md` and execute all instructions.
 If Phase 1 is pending but `docs/brd.md` already exists, treat as regeneration.
 
+If Phase 1 runs, immediately run the **Concept Parity Gate**. If it fails, stop immediately.
+
 > Context Checkpoint: run `/checkpoint`
 
 ---
@@ -196,6 +232,8 @@ If Phase 1 is pending but `docs/brd.md` already exists, treat as regeneration.
 ### Phase 2 - Planning
 If complete: `[ SKIP ] Phase 2 - already complete`.
 Otherwise: read `.ai/.claude/commands/phase2-planning.md` and execute all instructions.
+
+If the **Concept Parity Gate** has not run in this `/continue` session yet, run it now before Phase 2.
 
 > Context Checkpoint: run `/checkpoint`
 
@@ -389,7 +427,12 @@ When Phase 14 is done (or skipped), run a strict completion audit before any con
    - Phase `8` complete scopes == `REQUIRED_MODULES`
    - Phase `9` complete scopes == `REQUIRED_PAGES`
    - Phase `10` complete scopes == `REQUIRED_PAGES`
-5. If any parity mismatch or missing artifact is found, fail using the strict failure protocol.
+5. Concept parity drift check using `CONCEPT_COVERAGE_LOCK`:
+   - Re-read `docs/brd.md` and parse `Concept Coverage Matrix (MVP Lock)`.
+   - For every `CF-xxx` row, verify listed `Story IDs` and `Requirement IDs` still exist in `docs/brd.md`.
+   - For every listed module in `Module(s)`, verify backend module artifacts still exist and are registered in `templates/api/index.ts`.
+   - For `Covered` rows, verify every listed page still resolves to a route in `templates/app/app/routes.ts` and a real component file under `templates/app/app/`.
+6. If any parity mismatch or missing artifact is found, fail using the strict failure protocol and include `Missing concept coverage` entries.
 
 Only if this strict completion audit passes, continue below.
 

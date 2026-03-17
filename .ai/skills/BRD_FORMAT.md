@@ -19,9 +19,10 @@ Defines the structure for the Business Requirements Document (BRD). The BRD is t
 ## 2. Objectives
 ## 3. User Roles
 ## 4. User Stories
-### 4.x [US_ID] — [Story Title]
+### 4.x [US_ID] - [Story Title]
+### Concept Coverage Matrix (MVP Lock)
 ## 5. Modules
-### 5.x [MODULE_ID] — [Module Name]
+### 5.x [MODULE_ID] - [Module Name]
 #### Requirements
 ##### [REQ_ID] — [Requirement Title]
 #### Error States
@@ -179,6 +180,26 @@ After writing all stories, collect the unique page names from the **Pages** fiel
 ```
 
 This table is the source of truth for Phase 7 (what to design) and Phase 10 (what to build).
+
+### Concept Coverage Matrix (MVP Lock)
+
+After the page manifest, add a concept-to-BRD traceability table:
+
+```markdown
+### Concept Coverage Matrix (MVP Lock)
+
+| Concept ID | Concept Feature | Story IDs | Requirement IDs | Page(s) | Module(s) | Status | Notes |
+|------------|-----------------|-----------|-----------------|---------|-----------|--------|-------|
+| CF-001 | User sign in and sign out | US-001, US-002 | AUTH-001, AUTH-002 | LoginPage | AUTH | Covered | - |
+| CF-002 | Background alert scheduler | US-010 | NOTIFY-001 | - | NOTIFY | Backend-Only | Runs as background worker, no direct page |
+```
+
+Rules:
+- One row per concept MVP item (`CF-001`, `CF-002`, ...), no missing and no extra rows.
+- Allowed `Status` values: `Covered`, `Backend-Only`.
+- Every row must include non-empty `Story IDs` and `Requirement IDs`.
+- `Covered` rows require non-empty `Page(s)` and `Module(s)`.
+- `Backend-Only` rows require non-empty `Module(s)` and explicit `Notes`.
 
 ### Acceptance Criteria
 
@@ -349,6 +370,13 @@ Long BRDs consume more tokens in every downstream phase that loads them. Keep th
 | RegisterPage | US-001 | /register |
 | LoginPage | US-002 | /login |
 | DashboardPage | US-003 | /dashboard |
+
+### Concept Coverage Matrix (MVP Lock)
+
+| Concept ID | Concept Feature | Story IDs | Requirement IDs | Page(s) | Module(s) | Status | Notes |
+|------------|-----------------|-----------|-----------------|---------|-----------|--------|-------|
+| CF-001 | Register and log in | US-001, US-002 | AUTH-001, AUTH-002 | RegisterPage, LoginPage | AUTH | Covered | - |
+| CF-002 | View dashboard summary | US-003 | DASHBOARD-001 | DashboardPage | DASHBOARD | Covered | - |
 
 ## 5. Modules
 
