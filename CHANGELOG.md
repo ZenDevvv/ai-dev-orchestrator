@@ -10,14 +10,14 @@ Versioning: [Semantic Versioning](https://semver.org/)
 ## [Unreleased]
 
 ### Changed
-- **`/build` and `/continue` default mode** - now documented and aligned as guarded-by-default, with `--fast-mode` as an explicit opt-in for skipping review and verification gates.
-- **README command docs** - updated `/build` and `/continue` usage/examples to include `--fast-mode` and `|||` parsing behavior, plus mode-aware `/continue` status output.
-- **README progress examples** - build run notes now show mode-aware logging (`/build started ({BUILD_MODE})`, `/build finished ({BUILD_MODE}, started: ...)`).
-- **Phase 9 status markers** - `.ai/.claude/commands/phase9-pages.md` now uses `✅ Complete` and `⚠️ Stale` to match `/continue` completion-map parsing.
+- **`/build` and `/continue` mode semantics** - documented as strict-gated in both guarded and fast modes; `--fast-mode` now means skip non-mandatory review prompts only.
+- **Strict completion contract docs alignment** - README now reflects audit-gated completion: `BUILD Finished`/`CONTINUE COMPLETE` are emitted only after strict completion audit passes.
+- **Failure-path docs alignment** - README now documents strict failure outputs (`=== BUILD FAILED ===`, `=== CONTINUE FAILED ===`) and suppression of finish/complete output on strict-gate failure.
+- **Phase 9 status markers** - `.ai/.claude/commands/phase9-pages.md` now uses explicit `Complete` and `Stale` status markers to match `/continue` completion-map parsing.
 - **Testing conventions references** - static `.ai/skills/TESTING_CONVENTIONS.md` references were removed from orchestrator listings; Phase 5 now refers to project-local `skills/TESTING_CONVENTIONS.md`.
 
 ### Why
-The command specs shifted to guarded mode, but parts of the docs still described the old fast-by-default behavior. This update brings command docs, status semantics, and skill references back into one consistent model.
+The command specs were hardened with strict completion and parity gates, but parts of docs still described older fast-mode and completion semantics. This alignment keeps behavior, docs, and runbook expectations consistent.
 
 ---
 
